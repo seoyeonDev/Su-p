@@ -1,7 +1,23 @@
 import logo from './logo.svg';
 import './App.css';
 
+import { useState, useEffect } from 'react';
+import React from "react";
+
 function App() {
+
+  const [message, setMessage] = useState([]);
+
+  useEffect(()=>{
+    fetch("/test")
+      .then((response)=>{
+        return response.json();
+      })
+      .then((data)=>{
+        setMessage(data);
+      })
+  },[]);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +33,10 @@ function App() {
         >
           Learn React
         </a>
+
+        <div>
+          {message}
+        </div>
       </header>
     </div>
   );
