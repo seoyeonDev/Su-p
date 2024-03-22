@@ -1,44 +1,26 @@
-import logo from './logo.svg';
+import React from "react";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+
+import Header from './components/Header';
+import Home from "./routes/Home";
+import Login from "./pages/member/Login";
+import AddPost from "./pages/mystudy/CreatePost"
+
 import './App.css';
 
-import { useState, useEffect } from 'react';
-import React from "react";
 
 function App() {
 
-  const [message, setMessage] = useState([]);
-
-  useEffect(()=>{
-    fetch("/test")
-      .then((response)=>{
-        return response.json();
-      })
-      .then((data)=>{
-        setMessage(data);
-      })
-  },[]);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-
-        <div>
-          {message}
-        </div>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home/>}></Route>
+        <Route path="/login" element={<Login/>}></Route>
+        <Route path="/addpost" element={<AddPost/>}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
