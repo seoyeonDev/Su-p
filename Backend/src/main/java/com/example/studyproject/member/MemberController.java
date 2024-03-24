@@ -25,6 +25,7 @@ public class MemberController {
 			LOGGER.info("================[MemberController.login] Member null");
 		} else {
 			LOGGER.info("================[MemberController.login] Member not null");
+			LOGGER.info("================Commit & Push Test");
 		}
 		
 	}
