@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
 
-    <Appenders>
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d [%-5p] %c %m%n" />
-        </Console>
-    </Appenders>
-    <Loggers>
-         <Logger name="jdbc.sqlonly" level="INFO" additivity="false">
-            <AppenderRef ref="console" />
-        </Logger>
-      <Logger name="openapi" level="INFO" additivity="false">
-            <AppenderRef ref="console" />
-       </Logger>  
-        <Logger name="jdbc.sqltiming" level="INFO" additivity="false">
-            <AppenderRef ref="console" />
-        </Logger>
-        <Logger name="org.springframework" level="INFO" additivity="false">
-            <AppenderRef ref="console" />
-        </Logger>
-        <Root level="INFO">
-            <AppenderRef ref="console" />
-        </Root>
-        
-    </Loggers>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d [%-5p] %c %m%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="org.springframework.boot" level="INFO"
+			additivity="false">
+			<AppenderRef ref="console" />
+		</Logger>
+		<Logger name="org.springframework.core" level="INFO"
+			additivity="false">
+			<AppenderRef ref="console" />
+		</Logger>
+		<Logger name="com.example.studyproject" level="INFO"
+			additivity="false">
+			<AppenderRef ref="console" />
+		</Logger>
+		<Root level="INFO">
+			<AppenderRef ref="console" />
+		</Root>
+	</Loggers>
 </Configuration>

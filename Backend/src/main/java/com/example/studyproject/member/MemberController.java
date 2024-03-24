@@ -12,7 +12,8 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
-	
+
+	// log4j2 로그 찍기
 	private static final Logger LOGGER = LogManager.getLogger(MemberController.class);
 	
 	@GetMapping("/member/{userId}")
@@ -25,7 +26,6 @@ public class MemberController {
 			LOGGER.info("================[MemberController.login] Member null");
 		} else {
 			LOGGER.info("================[MemberController.login] Member not null");
-			LOGGER.info("================Commit & Push Test");
 		}
 		
 	}
