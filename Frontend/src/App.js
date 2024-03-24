@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import Header from './components/Header';
 import Home from "./routes/Home";
+import Join from "./pages/member/Join"
 import Login from "./pages/member/Login";
 import AddPost from "./pages/mystudy/CreatePost"
 import MyStudy from "./pages/mystudy/MyStudy";
@@ -24,6 +25,7 @@ function App() {
         <Route path="/addpost" element={<AddPost/>}></Route>
 
         {/* 멤버 */}
+        <Route path="/join" element={<Join/>}></Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/mypage" element={<MyPage/>}></Route>
 
