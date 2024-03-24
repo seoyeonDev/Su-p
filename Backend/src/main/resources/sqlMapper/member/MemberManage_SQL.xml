@@ -5,7 +5,7 @@
         
 <!-- namespace에 mapper가 생성되어 있는 패키지 경로를 적어준다. -->
 <mapper namespace="com.example.studyproject.member.MemberDao">
-	<!-- id에 Dao의 메서드명을 맵핑해주고, resultType에 vo의 패키지 경로를 적어 db의 컬럼명을 서칭하도록 한다. -->
+	<!-- id에 Dao의 메서드명을 맵핑해주고, resultType에 vo의 패키지 경로를 적어준다. -->
 	<select id="getMemberById" resultType="com.example.studyproject.member.Member">
 		SELECT * FROM member WHERE user_id = #{userId}
 	</select>
