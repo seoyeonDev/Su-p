@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+        
+<!-- namespace에 mapper가 생성되어 있는 패키지 경로를 적어준다. -->
+<mapper namespace="com.example.studyproject.member.MemberDao">
+	<!-- id에 Dao의 메서드명을 맵핑해주고, resultType에 vo의 패키지 경로를 적어준다. -->
+	<select id="getMemberById" resultType="com.example.studyproject.member.Member">
+		SELECT * FROM member WHERE user_id = #{userId}
+	</select>
+</mapper>
