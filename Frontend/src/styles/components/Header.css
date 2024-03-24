@@ -1,3 +1,51 @@
-h2 {
-    color :blueviolet;
+* {
+	box-sizing : content-box;
 }
+
+#sup-header{
+    display:flex; /* 로고랑 메뉴 나란히 */
+    justify-content: space-between; /* 로고랑 메뉴 띄워놓기 */
+    height : 100px; /* header 크기 */
+    align-items: center; /* nav 수직 중앙 정렬 */
+    box-shadow: 0px 2px 5px 0 rgb(226, 226, 226); /* 그림자 */
+}
+
+#sup-header ul {
+    list-style : none; /* list . 없애기 */
+    display: flex; /* 메뉴 요소 나란히 */
+    margin-right : 50px; 
+    padding : 0;
+}
+
+#sup-header h1 {
+    margin-left: 50px;
+    font-size : 2.5rem;
+    cursor: pointer;
+}
+
+#sup-header a:hover {
+    color :#444444;
+}
+
+#sup-header a{
+    text-decoration: none; /* 밑줄 없애기 */
+    color : #000000;
+}
+
+
+.header-list {
+    padding-right : 40px;
+}
+
+.header-list a, .header-list div {
+    text-decoration: none; /* 밑줄 없애기 */
+    color : #000000;
+    font-size: 20px;
+    margin : 0;
+    cursor: pointer;
+}
+
+.header-list a:hover, .header-list div:hover{
+    color :#5c5c5c;
+}
+
