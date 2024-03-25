@@ -1,0 +1,25 @@
+* {
+
+}
+
+#join-template{
+    display:flex;
+}
+
+#join-template, #img{
+    flex: 2;
+}
+#join-template, #join-name{
+    flex: 1;
+}
+#join-template, #join-input{
+    flex: 2;
+}
+#join-template, #join-button{
+    flex: 1;
+}
+
+#joinAgreeChk {
+    height: 200px;
+    width: 800px;
+}
