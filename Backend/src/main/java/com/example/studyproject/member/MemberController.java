@@ -21,6 +21,7 @@ public class MemberController {
 		Member member = memberService.getMemberById(userId);
 		
 		LOGGER.info("================[MemberController.login.userid] " + userId);
+		LOGGER.info("pr test");
 		
 		if(member == null) {
 			LOGGER.info("================[MemberController.login] Member null");
