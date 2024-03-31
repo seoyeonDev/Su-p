@@ -6,7 +6,7 @@
 <!-- namespace에 mapper가 생성되어 있는 패키지 경로를 적어준다. -->
 <mapper namespace="com.example.studyproject.member.MemberDao">
 
-
+	<!-- 회원가입 -->
 	<insert id="insertMember">
 		INSERT INTO member
 		(
@@ -27,7 +27,29 @@
 			#{profileImg}
 		);
 	</insert>
-
+	
+	<!-- 로그인 -->
+	<select id="loginMember" resultType="com.example.studyproject.member.Member">
+		SELECT *
+		FROM member
+		WHERE user_id = #{userId}
+		AND password = #{password}
+	</select>
+	
+	<!-- 실패횟수 업데이트 -->
+	<update id="updateFailNum">
+		UPDATE member
+		SET fail_num = #{failNum}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<!-- 잠금여부 업데이트 -->
+	<update id="updateLockYn">
+		UPDATE member
+		SET lock_yn = #{lockYn}
+		WHERE user_id = #{userId}
+	</update>
+	
 	<!-- id에 Dao의 메서드명을 맵핑해주고, resultType에 vo의 패키지 경로를 적어준다. -->
 	<select id="getMemberById" resultType="com.example.studyproject.member.Member">
 		SELECT * FROM member WHERE user_id = #{userId}

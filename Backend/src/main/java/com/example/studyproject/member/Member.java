@@ -26,13 +26,11 @@ public class Member {
 	private String lockYn;
 	
 	public Member() {
-		super();
 		// TODO Auto-generated constructor stub
 	}
 	
 	public Member(String userId, String password, String name, String nickname, String email, LocalDateTime joinDate,
 			String profileImg, int failNum, String lockYn) {
-		super();
 		this.userId = userId;
 		this.password = password;
 		this.name = name;

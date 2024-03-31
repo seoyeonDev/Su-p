@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -35,6 +38,30 @@ public class MemberController {
 		}
 	}
 	
+	// 로그인
+	@SuppressWarnings("null")
+	@PostMapping("/login")
+	public String login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
+		Member member = memberService.loginMember(vo);
+		
+		String test = "";
+		if(member != null) {
+			HttpSession session = request.getSession();
+			session.setAttribute("loginSession", member);
+			test = "unlocked";
+			LOGGER.info("================ " + test);
+			return test;
+		} else if(member.getLockYn().equals("Y")) {
+			test = "locked";
+			LOGGER.info("================ " + test);
+			return test;
+		} else {
+			test = "null";
+			LOGGER.info("================ " + test);
+			return test;
+		}
+	}
+	
 	// 유저검색
 	@GetMapping("/{userId}")
 	public void login(@PathVariable String userId) {
@@ -43,9 +70,11 @@ public class MemberController {
 		LOGGER.info("================ " + userId);
 		
 		if(member == null) {
-			LOGGER.info("================[MemberController.login] Member null");
+			LOGGER.info("================ Member null");
 		} else {
-			LOGGER.info("================[MemberController.login] Member not null");
+			LOGGER.info("================ Member not null");
+			LOGGER.info("================ " + member.getFailNum());
+			LOGGER.info("================ " + member);
 		}
 		
 	}
