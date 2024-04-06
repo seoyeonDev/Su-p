@@ -19,12 +19,12 @@
 		)
 		VALUES
 		(
-			#{userId},
+			#{user_id},
 			#{password},
 			#{name},
 			#{nickname},
 			#{email},
-			#{profileImg}
+			#{profile_img}
 		);
 	</insert>
 	
@@ -32,26 +32,26 @@
 	<select id="loginMember" resultType="com.example.studyproject.member.Member">
 		SELECT *
 		FROM member
-		WHERE user_id = #{userId}
+		WHERE user_id = #{user_id}
 		AND password = #{password}
 	</select>
 	
 	<!-- 실패횟수 업데이트 -->
 	<update id="updateFailNum">
 		UPDATE member
-		SET fail_num = #{failNum}
-		WHERE user_id = #{userId}
+		SET fail_num = #{fail_num}
+		WHERE user_id = #{user_id}
 	</update>
 	
 	<!-- 잠금여부 업데이트 -->
 	<update id="updateLockYn">
 		UPDATE member
-		SET lock_yn = #{lockYn}
-		WHERE user_id = #{userId}
+		SET lock_yn = #{lock_yn}
+		WHERE user_id = #{user_id}
 	</update>
 	
 	<!-- id에 Dao의 메서드명을 맵핑해주고, resultType에 vo의 패키지 경로를 적어준다. -->
 	<select id="getMemberById" resultType="com.example.studyproject.member.Member">
-		SELECT * FROM member WHERE user_id = #{userId}
+		SELECT * FROM member WHERE user_id = #{user_id}
 	</select>
 </mapper>

@@ -25,56 +25,53 @@ public class MemberController {
 	// log4j2 로그 찍기
 	private static final Logger LOGGER = LogManager.getLogger(MemberController.class);
 	
+	// 20240406 커밋 테스트
+	
 	// 회원가입
 	@PostMapping("/join")
 	public void join(@RequestBody Member vo) throws NoSuchAlgorithmException {
-		Member member = memberService.getMemberById(vo.getUserId());
+		Member member = memberService.getMemberById(vo.getUser_id());
 		if(member == null) {
 			memberService.insertMember(vo);
 			LOGGER.info("================ " + "Join");
 			LOGGER.info("================ " + vo);
-		} else {
+		} else {	
 			LOGGER.info("================ " + "Join failed");
 		}
 	}
 	
 	// 로그인
-	@SuppressWarnings("null")
 	@PostMapping("/login")
 	public String login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
 		Member member = memberService.loginMember(vo);
 		
 		String test = "";
-		if(member != null) {
+		if(member != null && member.getLock_yn().equals("N")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginSession", member);
 			test = "unlocked";
 			LOGGER.info("================ " + test);
 			return test;
-		} else if(member.getLockYn().equals("Y")) {
-			test = "locked";
-			LOGGER.info("================ " + test);
-			return test;
 		} else {
-			test = "null";
+			test = "locked";
 			LOGGER.info("================ " + test);
 			return test;
 		}
 	}
 	
 	// 유저검색
-	@GetMapping("/{userId}")
-	public void login(@PathVariable String userId) {
-		Member member = memberService.getMemberById(userId);
+	@GetMapping("/{user_id}")
+	public void login(@PathVariable String user_id) {
+		Member member = memberService.getMemberById(user_id);
 		
-		LOGGER.info("================ " + userId);
+		LOGGER.info("================ User_id: " + user_id);
 		
 		if(member == null) {
 			LOGGER.info("================ Member null");
 		} else {
 			LOGGER.info("================ Member not null");
-			LOGGER.info("================ " + member.getFailNum());
-			LOGGER.info("================ " + member);
+			LOGGER.info("================ Fail_num: " + member.getFail_num());
+			LOGGER.info("================ Member: " + member);
 		}
 		
 	}

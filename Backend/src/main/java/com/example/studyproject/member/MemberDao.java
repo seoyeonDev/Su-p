@@ -20,7 +20,7 @@ public interface MemberDao {
 	public void updateLockYn(Member vo);
 	
 	// 유저검색
-	public Member getMemberById(String userId);
+	public Member getMemberById(String user_id);
 	
 	
 }
