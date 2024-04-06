@@ -32,11 +32,6 @@ public class MemberController {
         return "test success";
 	}
 
-	@GetMapping("/member/{userId}")
-	public void login(@PathVariable String userId) {
-		Member member = memberService.getMemberById(userId);
-	
-    
 	// 20240406 커밋 테스트
 	
 	// 회원가입
