@@ -37,41 +37,39 @@ public class MemberService {
 		String encPwd = Sha256.encrypt(vo.getPassword());
 		vo.setPassword(encPwd);
 
-		Member idVo = getMemberById(vo.getUserId());
+		Member idVo = getMemberById(vo.getUser_id());
 		Member loginVo = memberDao.loginMember(vo);
 
 		if (idVo == null) {
 			loginVo = null;
-			LOGGER.info("================ 1");
+			LOGGER.info("================ idVo is null.");
 		} else {
 			if (loginVo != null) {
-				vo.setFailNum(0);
-				vo.setLockYn("N");
-				LOGGER.info("================ 2");
+				vo.setFail_num(0);
+				vo.setLock_yn("N");
+				LOGGER.info("================ Login successed.");
 			} else {
-				int cnt = idVo.getFailNum();
-				LOGGER.info("================ " + cnt);
-				vo.setFailNum(cnt + 1);
-				vo.setLockYn("N");
-				LOGGER.info("================ 3");
+				int cnt = idVo.getFail_num();
+				vo.setFail_num(cnt + 1);
+				vo.setLock_yn("N");
+				LOGGER.info("================ Current Fail_num: " + cnt);
 				if (cnt >= 2) {
-					vo.setLockYn("Y");
-					LOGGER.info("================ 4");
+					vo.setLock_yn("Y");
+					LOGGER.info("================ Id locked.");
 				}
 			}
 			memberDao.updateFailNum(vo);
 			memberDao.updateLockYn(vo);
 			loginVo = idVo;
+			LOGGER.info("================ LoginVo: " + loginVo);
 		}
 
 		return loginVo;
 	}
 
 	// 유저 검색용
-	public Member getMemberById(String userId) {
+	public Member getMemberById(String user_id) {
 
-		LOGGER.info("================[MemberService.getMemberById.userid] " + userId);
-
-		return memberDao.getMemberById(userId);
+		return memberDao.getMemberById(user_id);
 	}
 }
