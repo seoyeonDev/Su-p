@@ -24,7 +24,19 @@ public class MemberController {
 
 	// log4j2 로그 찍기
 	private static final Logger LOGGER = LogManager.getLogger(MemberController.class);
+
+
+	@GetMapping("/member/test")
+	public String test(){
+		LOGGER.info ("ttttttteeeeeesssssssttttt");
+        return "test success";
+	}
+
+	@GetMapping("/member/{userId}")
+	public void login(@PathVariable String userId) {
+		Member member = memberService.getMemberById(userId);
 	
+    
 	// 20240406 커밋 테스트
 	
 	// 회원가입
