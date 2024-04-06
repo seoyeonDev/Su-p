@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import '../../styles/components/Member.css';
 
+
 class Join extends Component {
     idChk = () => {
         axios.post('/idCheck')
@@ -84,6 +85,8 @@ class Join extends Component {
                 </div>
                 <div id={"joinAgreeChk"}>
                     <input id="joinAgreeChk" type={"textarea"}/> <br/>
+                </div>
+                <div>
                     <input id={"joinChkbox"} type={"checkbox"}/> 위 약관에 동의합니다.
 
                 </div>
