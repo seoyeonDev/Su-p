@@ -25,6 +25,8 @@ public class MemberController {
 	// log4j2 로그 찍기
 	private static final Logger LOGGER = LogManager.getLogger(MemberController.class);
 	
+	// 20240406 커밋 테스트
+	
 	// 회원가입
 	@PostMapping("/join")
 	public void join(@RequestBody Member vo) throws NoSuchAlgorithmException {
