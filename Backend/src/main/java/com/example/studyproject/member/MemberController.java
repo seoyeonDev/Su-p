@@ -82,4 +82,13 @@ public class MemberController {
 		}
 		
 	}
+
+	@GetMapping("/findId")
+	public String findId(String name, String email){
+		String user_id = memberService.findId(name, email);
+
+		LOGGER.info("=========== IDCHK : " + user_id);
+		return user_id;
+	}
+
 }

@@ -72,4 +72,13 @@ public class MemberService {
 
 		return memberDao.getMemberById(user_id);
 	}
+
+	// 아이디찾기
+	public String findId (String name, String email){
+		String user_id = memberDao.findId(name, email);
+		if (user_id != null || user_id.equals("N")){
+			return "존재하지 않는 회원 정보입니다.";
+		}
+        return user_id;
+	}
 }

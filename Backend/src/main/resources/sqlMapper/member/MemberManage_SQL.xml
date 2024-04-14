@@ -54,4 +54,13 @@
 	<select id="getMemberById" resultType="com.example.studyproject.member.Member">
 		SELECT * FROM member WHERE user_id = #{user_id}
 	</select>
+
+	<!-- 아이디찾기 -->
+	<select id="findId" resultType="com.example.studyproject.member.Member">
+		SELECT (CASE WHEN count(user_id) = 1 THEN user_id ELSE 'N' END) FROM member
+		               WHERE 1=1
+							AND name = #{name}
+							AND email = #{email}
+					   GROUP BY user_id
+	</select>
 </mapper>
