@@ -56,11 +56,29 @@
 	</select>
 
 	<!-- 아이디찾기 -->
-	<select id="findId" resultType="com.example.studyproject.member.Member">
-		SELECT (CASE WHEN count(user_id) = 1 THEN user_id ELSE 'N' END) FROM member
+	<select id="findId" resultType="String">
+		SELECT (CASE WHEN count(user_id) = 1 THEN user_id ELSE 'N' END) as user_id
+		FROM member
 		               WHERE 1=1
 							AND name = #{name}
 							AND email = #{email}
 					   GROUP BY user_id
 	</select>
+	<select id="chkId" resultType="com.example.studyproject.member.Member">
+
+		 SELECT user_id FROM member
+		         WHERE user_id = #{user_id}
+-- 		           		AND name = #{name}
+-- 						AND email = #{email}
+
+	</select>
+
+	<update id="resetPwd">
+
+		SELECT user_id FROM member
+		WHERE user_id = #{user_id}
+		  AND name = #{name}
+		  AND email = #{email}
+
+	</update>
 </mapper>

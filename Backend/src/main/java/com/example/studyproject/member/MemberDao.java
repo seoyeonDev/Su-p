@@ -26,6 +26,6 @@ public interface MemberDao {
 	public String findId(String name, String email);
 
 	// 비밀번호찾기
-	
+	public String resetPwd();
 	
 }
