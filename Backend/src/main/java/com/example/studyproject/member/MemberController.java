@@ -5,12 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -32,10 +27,6 @@ public class MemberController {
         return "test success";
 	}
 
-	@GetMapping("/member/{userId}")
-	public void login(@PathVariable String userId) {
-		Member member = memberService.getMemberById(userId);
-	
     
 	// 20240406 커밋 테스트
 	
@@ -87,4 +78,18 @@ public class MemberController {
 		}
 		
 	}
+
+
+    @DeleteMapping("/{user_id}")
+    public String deleteMember (@PathVariable String user_id){
+        boolean success = memberService.deleteMember(user_id);
+
+        if (success) {
+            LOGGER.info("================ Member deleted: " + user_id);
+            return "회원 탈퇴 완료";
+        } else {
+            LOGGER.info("================ Member deletion failed: " + user_id);
+            return "회원 탈퇴 실패";
+        }
+    }
 }

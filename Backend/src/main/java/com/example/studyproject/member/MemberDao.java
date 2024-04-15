@@ -22,5 +22,6 @@ public interface MemberDao {
 	// 유저검색
 	public Member getMemberById(String user_id);
 	
-	
+	// 회원 탈퇴
+	public int deleteMember(String user_id);
 }

@@ -54,4 +54,10 @@
 	<select id="getMemberById" resultType="com.example.studyproject.member.Member">
 		SELECT * FROM member WHERE user_id = #{user_id}
 	</select>
+
+	<!-- 회원 탈퇴 -->
+	<delete id="deleteMember">
+		DELETE FROM member
+		WHERE user_id = #{user_id}
+	</delete>
 </mapper>
