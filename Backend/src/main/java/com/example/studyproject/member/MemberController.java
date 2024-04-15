@@ -1,16 +1,19 @@
 package com.example.studyproject.member;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -21,10 +24,12 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
-
+	@Value("${spring.servlet.multipart.location}")
+	private String path;
+	
 	// log4j2 로그 찍기
 	private static final Logger LOGGER = LogManager.getLogger(MemberController.class);
-
+	
 
 	@GetMapping("/member/test")
 	public String test(){
@@ -36,9 +41,27 @@ public class MemberController {
 	
 	// 회원가입
 	@PostMapping("/join")
-	public void join(@RequestBody Member vo) throws NoSuchAlgorithmException {
+	public void join(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
 		if(member == null) {
+			path = path + "/" + vo.getUser_id();
+			LOGGER.info("File path: " + path);
+			File dir = new File(path);
+			dir.mkdir();
+			String fname = f.getOriginalFilename();
+			
+			String imgPath = "";
+			if(fname != null && !fname.equals("")) {
+				imgPath = path + "/" + fname;
+				File imgSave = new File(imgPath);
+				try {
+					f.transferTo(imgSave);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+			vo.setProfile_img(imgPath);
 			memberService.insertMember(vo);
 			LOGGER.info("================ " + "Join");
 			LOGGER.info("================ " + vo);
@@ -64,6 +87,33 @@ public class MemberController {
 			LOGGER.info("================ " + test);
 			return test;
 		}
+	}
+	
+	// 수정
+	@PostMapping("/update")
+	public void update(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
+		Member member = memberService.getMemberById(vo.getUser_id());
+		
+		String oldImg = member.getProfile_img();
+		String fname = f.getOriginalFilename();
+		
+		String imgPath = "";
+		if(fname != null && !fname.equals("")) {
+			imgPath = path + "/" + vo.getUser_id();
+			File imgSave = new File(imgPath);
+			File imgDel = new File(oldImg);
+			imgDel.delete();
+			try {
+				f.transferTo(imgSave);
+				vo.setProfile_img(imgPath);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		} else {
+			vo.setProfile_img(oldImg);
+		}
+		memberService.updateMember(vo);
 	}
 	
 	// 유저검색
