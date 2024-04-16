@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -132,4 +133,16 @@ public class MemberController {
 		}
 		
 	}
+
+	@GetMapping("/findId")
+	public String findId(String name, String email){
+		String user_id = memberService.findId(name, email);
+
+		if (user_id == null || user_id.equals("N")){
+			return "존재하지 않는 회원 정보입니다.";
+		}
+		LOGGER.info("=========== IDCHK : " + user_id);
+		return user_id;
+	}
+
 }

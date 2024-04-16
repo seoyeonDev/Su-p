@@ -87,4 +87,10 @@ public class MemberService {
 
 		return memberDao.getMemberById(user_id);
 	}
+
+	// 아이디찾기
+	public String findId (String name, String email){
+
+        return memberDao.findId(name, email);
+	}
 }

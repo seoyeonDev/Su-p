@@ -24,6 +24,11 @@ public interface MemberDao {
 	
 	// 유저검색
 	public Member getMemberById(String user_id);
-	
+
+	// 아이디찾기
+	public String findId(String name, String email);
+
+	// 비밀번호찾기
+	public String resetPwd();
 	
 }
