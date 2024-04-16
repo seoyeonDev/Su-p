@@ -44,20 +44,25 @@ public class MemberService {
 			loginVo = null;
 			LOGGER.info("================ idVo is null.");
 		} else {
-			if (loginVo != null) {
-				vo.setFail_num(0);
-				vo.setLock_yn("N");
-				LOGGER.info("================ Login successed.");
-			} else {
+			if(loginVo == null ) {
 				int cnt = idVo.getFail_num();
 				vo.setFail_num(cnt + 1);
 				vo.setLock_yn("N");
 				LOGGER.info("================ Current Fail_num: " + cnt);
 				if (cnt >= 2) {
 					vo.setLock_yn("Y");
+					LOGGER.info("================ Id locked by miss.");
+				}
+			} else {
+				vo.setFail_num(0);
+				vo.setLock_yn("N");
+				if(idVo.getLock_yn().equals("Y")) {
 					LOGGER.info("================ Id locked.");
+				} else if(idVo.getLock_yn().equals("N")) {
+					LOGGER.info("================ Login successed.");
 				}
 			}
+			
 			memberDao.updateFailNum(vo);
 			memberDao.updateLockYn(vo);
 			loginVo = idVo;
@@ -67,6 +72,16 @@ public class MemberService {
 		return loginVo;
 	}
 
+	// 멤버수정
+	public void updateMember(Member vo) throws NoSuchAlgorithmException {
+		
+		// 입력받은 비밀번호 암호화
+		String encPwd = Sha256.encrypt(vo.getPassword());
+		vo.setPassword(encPwd);
+		
+		memberDao.updateMember(vo);
+	}
+	
 	// 유저 검색용
 	public Member getMemberById(String user_id) {
 

@@ -13,6 +13,9 @@ public interface MemberDao {
 	// 로그인
 	public Member loginMember(Member vo);
 	
+	// 수정
+	public void updateMember(Member vo);
+	
 	// 실패횟수 업데이트
 	public void updateFailNum(Member vo);
 	

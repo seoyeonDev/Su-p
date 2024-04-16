@@ -36,6 +36,16 @@
 		AND password = #{password}
 	</select>
 	
+	<!-- 수정 -->
+	<update id="updateMember">
+		UPDATE member
+		SET
+			password = #{password},
+			nickname = #{nickname},
+			profile_img = #{profile_img}
+		WHERE user_id = #{user_id}
+	</update>
+	
 	<!-- 실패횟수 업데이트 -->
 	<update id="updateFailNum">
 		UPDATE member
