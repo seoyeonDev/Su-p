@@ -93,4 +93,10 @@ public class MemberService {
 
         return memberDao.findId(name, email);
 	}
+
+	// 회원 삭제
+	public boolean deleteMember(String user_id) {
+		int rowsAffected = memberDao.deleteMember(user_id);
+		return rowsAffected > 0;
+	}
 }
