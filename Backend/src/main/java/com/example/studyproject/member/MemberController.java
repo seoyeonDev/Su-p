@@ -145,4 +145,26 @@ public class MemberController {
 		return user_id;
 	}
 
+	@GetMapping("/chkPwd")
+	public int chkPwd(String id, String name, String email){
+		int chk = memberService.chkPwd(id, name, email);
+		return chk;
+	}
+    @PostMapping("/changePwd")
+	public int changePwd(Member vo, String newPassword) throws NoSuchAlgorithmException {
+		String id = vo.getUser_id();
+		String name = vo.getName();
+		String email = vo.getEmail();
+		int chk = memberService.chkPwd(id, name, email);
+
+		vo.setPassword(newPassword);
+		if ( chk == 1){
+			// 결과가 한개일 때
+			memberService.changePwd(vo);
+			return 1;
+		}
+
+		return 0;
+	}
+
 }
