@@ -1,0 +1,16 @@
+CREATE TABLE studygroup (
+group_id VARCHAR(255)	NOT NULL primary key,
+leader_id VARCHAR(255)	NOT NULL,
+title VARCHAR(1000)	NOT NULL,
+name VARCHAR(255)	NOT NULL,
+groupdesc VARCHAR(4000)	NOT NULL,
+kind VARCHAR(100)	NULL,
+status BOOLEAN	NOT NULL	DEFAULT false,
+mem_cnt INT	NOT NULL	DEFAULT 0,
+startdate TIMESTAMP	NOT NULL,
+enddate TIMESTAMP	NOT NULL,
+view_cnt INT	NOT NULL DEFAULT 0,
+chk_m CHAR	NOT NULL,
+chk_d VARCHAR(100)	NOT NULL,
+chk_cnt	INT	NULL
+);
