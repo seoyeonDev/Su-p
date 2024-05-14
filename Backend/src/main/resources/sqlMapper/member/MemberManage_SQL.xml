@@ -97,4 +97,13 @@
 		DELETE FROM member
 		WHERE user_id = #{user_id}
 	</delete>
+
+	<!-- 비밀번호 일치 여부 -->
+	<select id="isPasswordCorrect">
+		SELECT count(*)
+		FROM member
+		WHERE 1=1
+			AND user_id = #{user_id}
+			AND password = #{password}
+	</select>
 </mapper>

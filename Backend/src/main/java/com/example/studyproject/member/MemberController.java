@@ -6,19 +6,23 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
+/**
+ * @Class Name : MemberController.java
+ * @Description : 멤버 관리를 위한 Controller
+ * @Modification Information
+ * @
+ * @ 수정일           수정자        수정내용
+ * @ -----------    --------    ---------------------------
+ * @ 2024.05.15     김혜원        회원 탈퇴 비밀번호 검사 기능 추가
+ *
+ */
 
 @RestController
 @RequestMapping("/member")
@@ -146,13 +150,28 @@ public class MemberController {
 		return user_id;
 	}
 
-	// 멤버 탈퇴
-	@DeleteMapping("/{user_id}")
-	public String deleteMember (@PathVariable String user_id){
-		boolean success = memberService.deleteMember(user_id);
+	/**
+	 * 멤버 탈퇴
+	 * @param user_id - 사용자의 id
+	 * @param password - input 창에서 입력받은 password
+	 * @return - 회원 탈퇴 성공 여부에 대한 결과값 (String)
+	 * @throws NoSuchAlgorithmException
+	 */
+	@DeleteMapping("/delete/{user_id}")
+	public String deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
+
+		boolean success;
+
+		if(memberService.isPasswordCorrect(user_id, password)){	// 비밀번호 일치
+			success = memberService.deleteMember(user_id);
+		} else{
+			success = false;
+			LOGGER.info("================ Member deleted: 비밀번호 일치하지 않음");
+		}
+
 
 		if (success) {
-			LOGGER.info("================ Member deleted: " + user_id);
+			LOGGER.info("================ Member delete success : " + user_id);
 			return "회원 탈퇴 완료";
 		} else {
 			LOGGER.info("================ Member deletion failed: " + user_id);
