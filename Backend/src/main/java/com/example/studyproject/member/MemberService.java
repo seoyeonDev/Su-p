@@ -100,11 +100,14 @@ public class MemberService {
 
 	public void changePwd(Member vo) throws NoSuchAlgorithmException {
 
-
-
 		// 비밀번호 단방향 암호화(SHA-256 알고리즘)
 		String encPwd = Sha256.encrypt(vo.getPassword());
 		vo.setPassword(encPwd);
 		memberDao.changePwd(vo);
+    
+	// 회원 삭제
+	public boolean deleteMember(String user_id) {
+		int rowsAffected = memberDao.deleteMember(user_id);
+		return rowsAffected > 0;
 	}
 }
