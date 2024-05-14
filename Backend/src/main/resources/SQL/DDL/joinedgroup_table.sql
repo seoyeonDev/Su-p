@@ -1,6 +1,6 @@
 CREATE TABLE joinedgroup
 (
-	group_id	VARCHAR(255)	NOT NULL PRIMARY KEY,
+	group_id	VARCHAR(255)	NOT NULL,
 	user_id	VARCHAR(255)	NOT NULL,
 	role	VARCHAR(10)	NOT NULL DEFAULT '200',
 	joinstatus	VARCHAR(10)	NULL,
