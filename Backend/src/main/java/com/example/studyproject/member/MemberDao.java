@@ -29,6 +29,9 @@ public interface MemberDao {
 	String findId(String name, String email);
 
 	// 비밀번호찾기
+	public int chkPwd(String user_id, String name, String email);
+	public void changePwd(Member vo);
+	
 	String resetPwd();
 
 	// 회원 탈퇴
