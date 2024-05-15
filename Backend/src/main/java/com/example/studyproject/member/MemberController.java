@@ -160,13 +160,14 @@ public class MemberController {
 		int chk = memberService.chkPwd(id, name, email);
 
 		vo.setPassword(newPassword);
-		if ( chk == 1){
+		if (chk == 1) {
 			// 결과가 한개일 때
 			memberService.changePwd(vo);
 			return 1;
 		}
 
 		return 0;
+	}
 
 	// 멤버 탈퇴
 	@DeleteMapping("/{user_id}")

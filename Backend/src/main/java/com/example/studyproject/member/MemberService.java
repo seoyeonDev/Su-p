@@ -104,6 +104,7 @@ public class MemberService {
 		String encPwd = Sha256.encrypt(vo.getPassword());
 		vo.setPassword(encPwd);
 		memberDao.changePwd(vo);
+	}
     
 	// 회원 삭제
 	public boolean deleteMember(String user_id) {
