@@ -18,7 +18,7 @@ public interface CodeMnDao {
     void insertCdType(CodeMn codeMn);
 
     // 분류 수정
-    CodeMn updateCdType(CodeMn codeMn);
+    void updateCdType(CodeMn codeMn);
 
     // 분류 삭제
     int deleteCdType(String cd_type);
