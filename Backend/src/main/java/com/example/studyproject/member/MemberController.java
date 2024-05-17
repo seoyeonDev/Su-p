@@ -81,6 +81,7 @@ public class MemberController {
 		if(member != null && member.getLock_yn().equals("N")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginSession", member);
+			LOGGER.info("================ session: " + session.getAttribute("loginSession"));
 			test = "unlocked";
 			LOGGER.info("================ " + test);
 			return test;
