@@ -135,8 +135,7 @@ public class MemberController {
 			return chkImpl = 0;
 		} else {
 			LOGGER.info("================ Member not null");
-			LOGGER.info("================ Fail_num: " + member.getFail_num());
-			LOGGER.info("================ Member: " + member);
+			LOGGER.info("================ User_id: " + member.getUser_id());
 			return chkImpl = 1;
 		}
 	}
@@ -148,10 +147,17 @@ public class MemberController {
 	 */
 	@GetMapping("/checkNickNm/{nickname}")
 	public int checkNickNm(@PathVariable String nickname) {
+		Member member = memberService.getMemberByNickNm(nickname);
+		
+		LOGGER.info("================ nickname: " + nickname);
 		
 		int chkImpl;
-		
-		return chkImpl = 0;
+		if(member == null) {
+			return chkImpl = 0;
+		} else {
+			LOGGER.info("================ nickname: " + member.getNickname());
+			return chkImpl = 1;
+		}
 	}
 	
 	@GetMapping("/findId")
