@@ -1,7 +1,8 @@
 package com.example.studyproject.joinedgroup;
 
-import com.example.studyproject.group.Group;
 import com.example.studyproject.member.Member;
+import com.example.studyproject.studygroup.StudyGroup;
+
 import lombok.*;
 
 @Getter
@@ -10,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Joinedgroup {
-    private Group group;
+    private StudyGroup group;
     private Member member;
     private String role;
     private String joinstatus;
