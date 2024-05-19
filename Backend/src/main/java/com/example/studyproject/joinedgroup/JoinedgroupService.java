@@ -39,5 +39,12 @@ public class JoinedgroupService {
         return joinedgroupDao.createJoinedGroup(vo);
     }
 
+    /**
+     * 그룹 상태 변경
+     */
+    public boolean updateJoinedStatus(Joinedgroup vo, String status){
+        vo.setJoinstatus(status);
 
+        return joinedgroupDao.updateJoinedStatus(vo);
+    }
 }

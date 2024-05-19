@@ -2,6 +2,7 @@ package com.example.studyproject.joinedgroup;
 
 import com.example.studyproject.member.MemberService;
 import com.example.studyproject.member.Member;
+import org.apache.ibatis.annotations.Update;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @ -----------    --------    ---------------------------
  * @ 2024.05.13     김혜원        최초 생성
  * @ 2024.05.14     김혜원        그룹 가입 신청하기
+ * @ 2024.05.19     김혜원        그룹 상태 변경
  *
  */
 
@@ -58,4 +60,30 @@ public class JoinedgroupController {
             LOGGER.info("================ join failed");
         }
     }
+
+
+    /**
+     * 그룹 상태 변경
+     * @param vo - joinedgroup의 vo
+     * @param status - 수정할 값
+     */
+    @PutMapping("/updateStatus/{status}")
+    public void updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") String status){
+        LOGGER.info("================ joinedgroup join");
+
+        // get 메소드 만들어서 vo 유효한지 검사
+        // status가 code 테이블에 있는지 검사
+
+
+
+        boolean success = joinedgroupService.updateJoinedStatus(vo, status);
+
+        if(success){
+            LOGGER.info("================ join update success");
+        } else {
+            LOGGER.info("================ join update failed");
+        }
+
+    }
+
 }
