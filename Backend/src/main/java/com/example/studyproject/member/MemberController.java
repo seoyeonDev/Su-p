@@ -77,18 +77,27 @@ public class MemberController {
 	public String login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
 		Member member = memberService.loginMember(vo);
 		
-		String test = "";
+		String msg = "";
 		if(member != null && member.getLock_yn().equals("N")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginSession", member);
-			test = "unlocked";
-			LOGGER.info("================ " + test);
-			return test;
+			msg = "unlocked";
+
+			// 틀린 횟수 알림
+			if (member.getFail_num() > 0){
+				msg = "비밀번호 오류입니다. 3회 이상 오류 시 계정이 잠금됩니다. \n" +
+						"틀린 횟수 : " + member.getFail_num();
+			}
+
+			LOGGER.info("================ " + msg);
+			return msg;
+		} else if(member != null && member.getLock_yn().equals("Y")){
+			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
 		} else {
-			test = "locked";
-			LOGGER.info("================ " + test);
-			return test;
+			msg = "존재하지 않는 계정입니다. 회원가입을 진행해주세요.";
 		}
+		LOGGER.info("================ " + msg);
+		return msg;
 	}
 	
 	// 수정
