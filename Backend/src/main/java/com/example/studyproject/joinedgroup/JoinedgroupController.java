@@ -58,4 +58,18 @@ public class JoinedgroupController {
             LOGGER.info("================ join failed");
         }
     }
+
+    @DeleteMapping("/user/{user_id}/group/{group_id}")
+    public void deleteJoinedgroup(@PathVariable("user_id") String user_id, @PathVariable("group_id") String group_id){
+
+        // joinedgroup getbyid~ 만들기
+
+        int success = joinedgroupService.deleteJoinedgroup(user_id, group_id);
+
+        if(success>0){
+            LOGGER.info("================ joingroup delete success");
+        }else{
+            LOGGER.info("================ joingroup delete failed");
+        }
+    }
 }

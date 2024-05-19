@@ -39,5 +39,8 @@ public class JoinedgroupService {
         return joinedgroupDao.createJoinedGroup(vo);
     }
 
+    public int deleteJoinedgroup(String user_id, String group_id){
 
+        return joinedgroupDao.deleteJoinedgroup(user_id, group_id);
+    }
 }

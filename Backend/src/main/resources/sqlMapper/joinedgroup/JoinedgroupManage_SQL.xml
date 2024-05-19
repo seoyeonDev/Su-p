@@ -23,4 +23,12 @@
             #{submission_cnt}
      );
     </insert>
+
+    <delete id="deleteJoinedgroup">
+        DELETE FROM joinedgroup
+        WHERE 1=1
+            AND user_id = #{user_id}
+            AND group_id = #{group_id}
+    </delete>
+
 </mapper>
