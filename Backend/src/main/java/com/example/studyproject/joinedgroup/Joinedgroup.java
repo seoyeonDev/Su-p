@@ -10,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Joinedgroup {
-    private Group group;
-    private Member member;
+    private Group group_id;
+    private Member user_id;
     private String role;
     private String joinstatus;
     private int submission_cnt;
