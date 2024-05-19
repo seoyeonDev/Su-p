@@ -47,7 +47,7 @@ public class JoinedgroupController {
         boolean success;
 
         if(memberVo != null){
-            success = joinedgroupService.createJoinedGroup(vo);
+            success = joinedgroupService.createJoinedGroup(vo, false);
         } else {
             success = false;
         }
