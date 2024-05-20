@@ -38,4 +38,12 @@ public class GroupController {
 		groupService.createGroup(vo);
 		
 	}
+	
+	//  그룹 수정
+	@PostMapping("(/updateGroup")
+	public void updateGroup(@RequestBody Group vo) {
+		
+		
+	}
+	
 }
