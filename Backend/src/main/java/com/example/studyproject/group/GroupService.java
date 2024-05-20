@@ -24,4 +24,11 @@ public class GroupService {
 		
 		groupDao.createGroup(vo);
 	}
+	
+	
+	// 그룹 삭제
+	public void deleteGroup(Group vo) {
+		
+		groupDao.deleteGroup(vo);
+	}
 }

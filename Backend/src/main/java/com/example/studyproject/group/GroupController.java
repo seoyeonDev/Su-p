@@ -3,6 +3,7 @@ package com.example.studyproject.group;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,13 @@ public class GroupController {
 		
 		groupService.createGroup(vo);
 		
+	}
+	
+	
+	// 그룹 삭제
+	@Delete("/deleteGroup")
+	public void deleteGroup(@RequestBody Group vo) {
+		
+		groupService.deleteGroup(vo);
 	}
 }
