@@ -24,4 +24,10 @@ public class GroupService {
 		
 		groupDao.createGroup(vo);
 	}
+	
+	// 그룹 수정
+	public void updateGroup(Group vo) {
+		
+		groupDao.updateGroup(vo);
+	}
 }

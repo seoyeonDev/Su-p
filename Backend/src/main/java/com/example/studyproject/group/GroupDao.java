@@ -9,4 +9,6 @@ public interface GroupDao {
 	// 그룹 추가
 	public void createGroup(Group vo);
 	
+	// 그룹 수정
+	void updateGroup(Group vo);
 }
