@@ -87,6 +87,8 @@
 	<update id="changePwd">
 		UPDATE member
 		SET password = #{password}
+		  	, lock_yn = #{lock_yn}
+			, fail_num = #{fail_num}
 		WHERE user_id = #{user_id}
 		  AND name = #{name}
 		  AND email = #{email}
