@@ -82,10 +82,16 @@ public class MemberService {
 		memberDao.updateMember(vo);
 	}
 	
-	// 유저 검색용
+	// 아이디 중복검사
 	public Member getMemberById(String user_id) {
 
 		return memberDao.getMemberById(user_id);
+	}
+
+	// 유저 검색용
+	public Member getMemberByNickNm(String nickname) {
+		
+		return memberDao.getMemberByNickNm(nickname);
 	}
 
 	// 아이디찾기
