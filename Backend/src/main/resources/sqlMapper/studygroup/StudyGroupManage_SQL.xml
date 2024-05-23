@@ -67,4 +67,14 @@
 		WHERE
 			leader_id = #{leader_id}
 	</update>
+	
+	<!-- 그룹 삭제 -->
+	<delete id="deleteGroup">
+		DELETE
+		FROM studygroup
+		WHERE
+			group_id = #{group_id}
+		AND
+			leader_id = #{leader_id}
+	</delete>
 </mapper>
