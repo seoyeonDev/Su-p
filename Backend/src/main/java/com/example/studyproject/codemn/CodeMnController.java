@@ -40,17 +40,13 @@ public class CodeMnController {
     @PostMapping("/insertType")
     public void insertCdType(@RequestBody CodeMn codeMn){
         String cd_type = codeMn.getCd_type();
-//        ArrayList<CodeMn> chk = codeMnService.selectCdType(cd_type);
-        LOGGER.info(" ==== insert ing");
-        boolean codemn = codeMnService.insertCdType(codeMn);
-        if(codemn){
+        ArrayList<CodeMn> chk = codeMnService.selectCdType(cd_type);
+        if (chk == null){
+            boolean codemn = codeMnService.insertCdType(codeMn);
             LOGGER.info(codemn + " ========= INSERT SUCCESS");
-
-        }else {
+        } else {
             LOGGER.debug("========== INSERT FAIL");
         }
-
-
     }
 
     // 분류 수정 (이름만 수정가능)
