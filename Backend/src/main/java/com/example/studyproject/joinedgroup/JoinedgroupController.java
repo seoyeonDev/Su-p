@@ -62,6 +62,21 @@ public class JoinedgroupController {
     }
 
 
+    @DeleteMapping("/user/{user_id}/group/{group_id}")
+    public void deleteJoinedgroup(@PathVariable("user_id") String user_id, @PathVariable("group_id") String group_id){
+
+        // joinedgroup getbyid~ 만들기
+
+        int success = joinedgroupService.deleteJoinedgroup(user_id, group_id);
+
+        if(success>0){
+            LOGGER.info("================ joingroup delete success");
+        }else{
+            LOGGER.info("================ joingroup delete failed");
+        }
+    }
+
+
     /**
      * 그룹 상태 변경
      * @param vo - joinedgroup의 vo
@@ -85,5 +100,6 @@ public class JoinedgroupController {
         }
 
     }
+
 
 }

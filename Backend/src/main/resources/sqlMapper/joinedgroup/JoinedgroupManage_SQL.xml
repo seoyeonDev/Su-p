@@ -24,6 +24,14 @@
      );
     </insert>
 
+
+    <delete id="deleteJoinedgroup">
+        DELETE FROM joinedgroup
+        WHERE 1=1
+            AND user_id = #{user_id}
+            AND group_id = #{group_id}
+    </delete>
+
     <!-- 참여 상태 변경 -->
     <update id="updateJoinedStatus">
         UPDATE joinedgroup
@@ -32,5 +40,6 @@
             AND user_id = #{user_id.user_id}
             AND group_id = #{group_id.group_id}
     </update>
+
 
 </mapper>

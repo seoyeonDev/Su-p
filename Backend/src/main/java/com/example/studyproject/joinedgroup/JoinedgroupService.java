@@ -53,6 +53,11 @@ public class JoinedgroupService {
         return joinedgroupDao.createJoinedGroup(vo);
     }
 
+
+    public int deleteJoinedgroup(String user_id, String group_id){
+        return joinedgroupDao.deleteJoinedgroup(user_id, group_id);
+    }
+  
     /**
      * 그룹 상태 변경
      */
@@ -60,5 +65,6 @@ public class JoinedgroupService {
         vo.setJoinstatus(status);
 
         return joinedgroupDao.updateJoinedStatus(vo);
+
     }
 }
