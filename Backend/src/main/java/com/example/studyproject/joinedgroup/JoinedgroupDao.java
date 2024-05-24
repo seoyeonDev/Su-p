@@ -18,4 +18,7 @@ public interface JoinedgroupDao {
 
     // 그룹 참여 신청 (참여자)
     boolean createJoinedGroup(Joinedgroup vo);
+
+    // 그룹 참여 상태 수정
+    boolean updateJoinedStatus(Joinedgroup vo);
 }
