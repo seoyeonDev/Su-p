@@ -30,11 +30,25 @@ public class JoinedgroupService {
     /**
      * 그룹 가입 신청
      */
-    public boolean createJoinedGroup(Joinedgroup vo){
+    public boolean createJoinedGroup(Joinedgroup vo, boolean role){
+        // 그룹장이라면 true 넣으면 됩니다요
+
+        String roleStatus;
+
+        if(role){ // 그룹장 true : 11
+            // 코드 테이블로 검사하는 logic 구현해야함
+            roleStatus = "11";
+        } else { // 참여자 false : 12
+            roleStatus = "12";
+        }
 
         vo.setSubmission_cnt(0); // 총 제출 횟수
+        /*
+        0 : 가입 대기
+        1 : 가입 승인
+         */
         vo.setJoinstatus("0"); // 가입 신청 상태
-        vo.setRole("200"); // 역할
+        vo.setRole(roleStatus); // 역할
 
         return joinedgroupDao.createJoinedGroup(vo);
     }
