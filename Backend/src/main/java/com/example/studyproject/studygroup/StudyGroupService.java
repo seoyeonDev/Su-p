@@ -55,9 +55,4 @@ public class StudyGroupService {
 		groupDao.createGroup(vo);
 	}
 	
-	// 그룹 수정
-	public void updateGroup(StudyGroup vo) {
-		
-		groupDao.updateGroup(vo);
-	}
 }

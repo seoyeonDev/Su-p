@@ -23,7 +23,4 @@ public interface StudyGroupDao {
 	// 그룹 추가
 	void createGroup(StudyGroup vo);
 	
-	// 그룹 수정
-	void updateGroup(StudyGroup vo);
-	
 }
