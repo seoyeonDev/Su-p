@@ -22,8 +22,11 @@ public interface MemberDao {
 	// 잠금여부 업데이트
 	void updateLockYn(Member vo);
 	
-	// 유저검색
+	// 아이디 중복검사
 	Member getMemberById(String user_id);
+
+	// 닉네임 중복검사
+	Member getMemberByNickNm(String nickname);
 
 	// 아이디찾기
 	String findId(String name, String email);

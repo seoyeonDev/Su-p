@@ -50,21 +50,4 @@
 		);
 	</insert>
 
-	<!-- 그룹 수정 -->
-	<update id="updateGroup">
-		UPDATE studygroup
-		SET
-			title = #{title},
-			name = #{name},
-			desc = #{desc},
-			kind = #{kind},
-			mem_cnt = #{mem_cnt},
-			startdate = #{startdate},
-			enddate = #{enddate},
-			chk_m = #{chk_m},
-			chk_min_cnt = #{chk_min_cnt},
-			chk_total_cnt = #{chk_total_cnt}
-		WHERE
-			leader_id = #{leader_id}
-	</update>
 </mapper>
