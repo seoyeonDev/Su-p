@@ -49,7 +49,7 @@ public class MemberService {
 				vo.setFail_num(cnt + 1);
 				vo.setLock_yn("N");
 				LOGGER.info("================ Current Fail_num: " + cnt);
-				if (cnt >= 3) {
+				if (cnt >= 2) {
 					vo.setLock_yn("Y");
 					LOGGER.info("================ Id locked by miss.");
 				}
