@@ -1,6 +1,6 @@
 package com.example.studyproject.codemn;
 
-import com.example.studyproject.codemn.CodeMn;
+import com.example.studyproject.codemn.CodeM;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
@@ -12,29 +12,38 @@ public interface CodeMnDao {
     boolean chkCdType(String cd_type);
 
     // 분류 조회
-    ArrayList<CodeMn> selectCdType(String cd_type);    // 코드분류 검색 파라미터
+    ArrayList<CodeM> selectCdType(String cd_type);    // 코드분류 검색 파라미터
 
     // 분류 추가
-    void insertCdType(CodeMn codeMn);
+    void insertCdType(CodeM codeM);
 
     // 분류 수정
-    void updateCdType(CodeMn codeMn);
+    void updateCdType(CodeM codeM);
 
     // 분류 삭제
     int deleteCdType(String cd_type);
+
+    /**
+     * 상세코드 관
+     * @param cd_type
+     * @return
+     */
 
     // 분류 삭제 시 상세코드 전체삭제
     int deleteAllCommCd(String cd_type);
 
     // 상세코드 조회
-    CodeMn selectCommCd(String cd_type);    // 세부 코드는 검색 없이 구현 계획 (미정)
+    ArrayList<CodeD> selectCommCd(String cd_type);
+
+    // 상세코드 값 중복조회
+    boolean chkCommCd(String comm_cd);
 
     // 상세코드 추가
-    boolean insertCommCd(CodeMn vo);
+    void insertCommCd(CodeD codeD);
 
     // 상세코드 수정
-    CodeMn updateCommCd(CodeMn vo);
+    void updateCommCd(CodeD codeD);
 
     // 상세코드 하나삭제
-    boolean deleteOneCommCd(CodeMn vo);
+    int deleteOneCommCd(String comm_cd, String cd_type);
 }
