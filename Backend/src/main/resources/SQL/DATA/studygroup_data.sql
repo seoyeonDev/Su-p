@@ -1,0 +1,28 @@
+-- member 데이터가 들어가져 있어야 합니다.
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGeunji387240601101010', 'eunji387', '어떠한 지식이든 상관 없습니다. 배움을 배고파하는 자들이 모인 스터디입니다. 어서오십시오', '지식탐구', '지식을 탐구하는 그룹입니다.', null, 'STAT20', 10, '2024-06-01 10:10:10.000000', '2024-12-01 00:00:00.000000', 0, 'SUBM10', 3, 0, 2);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGjungsoo123240701112233', 'jungsoo123', '나랑 같이 수학 정복할 사람 구함(1/304920)', '수학정복', '수학을 정복하는 그룹입니다.', null, 'STAT20', 15, '2024-07-01 11:22:33.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM20', 4, 0, 3);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGminji456240801205822', 'minji456', '영어 회화 부족한사람 들어오세요! 해외 나가서 회화 하기 마스터할 수 있습니다.', '영어마스터', '영어를 마스터하는 그룹입니다.', null, 'STAT20', 12, '2024-08-01 20:58:22.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM10', 5, 0, 1);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGseungwoo789240901000000', 'seungwoo789', '개발에 관심 있는 사람 누구나 들어와도 됩니다! 처음이어도 되고, 잘 몰라도 괜찮습니다. 같이 배워가봐요 ^__^', '프로그래밍기초', '프로그래밍 기초를 배우는 그룹입니다.', null, 'STAT20', 20, '2024-09-01 00:00:00.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM20', 2, 0, 2);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGyeonhee101241231000000', 'yeonhee101', '과거를 공부하여 현재를 이해하고 더 나은 미래를 설계합시다.', '한국사', '한국사를 배우는 그룹입니다.', null, 'STAT20', 8, '2024-10-01 00:00:00.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM10', 3, 0, 1);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGjaehyun112241231111111', 'jaehyun112', '과학에 대해 물음표를 가지고 있는 사람들의 모임입니다. 같이 탐구해보아요!', '과학탐구', '과학을 탐구하는 그룹입니다.', null, 'STAT20', 9, '2024-11-01 00:00:00.000000', '2024-12-31 11:11:11.000000', 0, 'SUBM20', 4, 0, 2);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGjiwon131240601000000', 'jiwon131', '여러 장르의 책을 읽고 그 책에 대해 토론을 가지는 스터디입니다. 책 읽는 걸 좋아하는 누구나! 책을 읽어야겠다는 다짐을 한 누구나! 들어와도 됩니다. ', '독서토론', '책을 읽고 토론하는 그룹입니다.', null, 'STAT20', 7, '2024-06-01 00:00:00.000000', '2024-12-01 00:00:00.000000', 0, 'SUBM10', 5, 0, 1);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGhyunwoo141240701000000', 'hyunwoo141', '코딩 마스터를 위한 스터디입니다. 기본 지식은 알고 있는 수준으로 진행합니다.', '코딩마스터', '코딩을 마스터하는 그룹입니다.', null, 'STAT20', 10, '2024-07-01 00:00:00.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM20', 3, 0, 2);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGsuyeon155240801000000', 'suyeon155', '영화, 음악, 미술관, 전시관, 뮤지컬 등등 예술에 대한 모든 것을 감상해봅시다.', '예술감상', '예술을 감상하는 그룹입니다.', null, 'STAT20', 6, '2024-08-01 00:00:00.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM10', 4, 0, 1);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGjungho201240901000000', 'jungho201', '여행 가려면 필수인 프랑스어 같이 함께 배워봐요', '프랑스어', '프랑스어를 배우는 그룹입니다.', null, 'STAT20', 5, '2024-09-01 00:00:00.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM20', 2, 0, 2);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGhyejin223241001000000', 'hyejin223', '독일어 같이 공부할 스터디원 모집합니다.', '독일어', '독일어를 배우는 그룹입니다.', null, 'STAT20', 4, '2024-10-01 00:00:00.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM10', 3, 0, 1);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGjaemin251241101000000', 'jaemin251', '배우기 어렵다고 알려진 스페인어, 여자명사, 남자명사 너무 헷갈렸죠? 같이 배워봅시다!', '스페인어', '스페인어를 배우는 그룹입니다.', null, 'STAT20', 12, '2024-11-01 00:00:00.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM20', 4, 0, 2);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGsooyeon275240601000000', 'sooyeon275', '바로 옆나라인 일본어, 같이 배울 스터디원 모집합니다.', '일본어', '일본어를 배우는 그룹입니다.', null, 'STAT20', 8, '2024-06-01 00:00:00.000000', '2024-12-01 00:00:00.000000', 0, 'SUBM10', 5, 0, 1);
+
+INSERT INTO public.studygroup (group_id, leader_id, title, name, study_desc, kind, status, mem_cnt, startdate, enddate, view_cnt, chk_m, chk_min_cnt, chk_total_cnt, penalty) VALUES ('SGdonghyuk301240701000000', 'donghyuk301', '마라탕 먹으러 가기 위해 중국어 공부할 스터디원 모집합니다.!', '중국어', '중국어를 배우는 그룹입니다.', null, 'STAT20', 15, '2024-07-01 00:00:00.000000', '2024-12-31 00:00:00.000000', 0, 'SUBM20', 4, 0, 3);
