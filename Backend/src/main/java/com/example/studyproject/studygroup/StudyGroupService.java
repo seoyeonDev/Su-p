@@ -55,4 +55,16 @@ public class StudyGroupService {
 		groupDao.createGroup(vo);
 	}
 	
+	// 그룹 수정
+	public void updateGroup(StudyGroup vo) {
+
+		groupDao.updateGroup(vo);
+	}
+	
+	// 그룹 삭제
+	public void deleteGroup(StudyGroup vo) {
+
+		groupDao.deleteGroup(vo);
+	}
+	
 }
