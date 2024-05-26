@@ -96,9 +96,9 @@ public class MemberController {
 			session.setAttribute("loginId", member.getUser_id());
 			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
 			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
-			test = "unlocked";
-			LOGGER.info("================ " + test);
-			return test;
+			msg = "unlocked";
+			LOGGER.info("================ " + msg);
+			return msg;
 		} else {
 			msg = "존재하지 않는 계정입니다. 회원가입을 진행해주세요.";
 		}
