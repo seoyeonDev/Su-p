@@ -53,6 +53,7 @@ public class MemberService {
 					vo.setLock_yn("Y");
 					LOGGER.info("================ Id locked by miss.");
 				}
+
 			} else {
 				vo.setFail_num(0);
 				vo.setLock_yn("N");
