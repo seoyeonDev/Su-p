@@ -83,10 +83,16 @@ public class MemberService {
 		memberDao.updateMember(vo);
 	}
 	
-	// 유저 검색용
+	// 아이디 중복검사
 	public Member getMemberById(String user_id) {
 
 		return memberDao.getMemberById(user_id);
+	}
+
+	// 유저 검색용
+	public Member getMemberByNickNm(String nickname) {
+		
+		return memberDao.getMemberByNickNm(nickname);
 	}
 
 	// 아이디찾기
@@ -104,6 +110,8 @@ public class MemberService {
 		// 비밀번호 단방향 암호화(SHA-256 알고리즘)
 		String encPwd = Sha256.encrypt(vo.getPassword());
 		vo.setPassword(encPwd);
+		vo.setFail_num(0);
+		vo.setLock_yn("N");
 		memberDao.changePwd(vo);
 	}
     

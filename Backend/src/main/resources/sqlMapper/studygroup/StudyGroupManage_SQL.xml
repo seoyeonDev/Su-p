@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.example.studyproject.studygroup.GroupDao">
+	
+	<!-- 그룹ID 최대값 찾기 -->
+	<select id="selectMaxGroupId" resultType="String">
+		SELECT
+			MAX(group_id) as group_id
+		FROM studygroup
+		WHERE SUBSTRING(group_id, 1, 6) = #{yrmd};
+	</select>
+	
+	<!-- 그룹 추가 -->
+	<insert id="createGroup">
+		INSERT INTO group
+		(
+			group_id,
+			leader_id,
+			title,
+			name,
+			desc,
+			kind,
+			status,
+			mem_cnt,
+			startdate,
+			enddate,
+			chk_m,
+			chk_min_cnt,
+			chk_total_cnt,
+			penalty
+		)
+		VALUES
+		(
+			#{group_id},
+			#{leader_id},
+			#{title},
+			#{name},
+			#{desc},
+			#{kind},
+			#{status},
+			#{mem_cnt},
+			#{startdate},
+			#{enddate},
+			#{chk_m},
+			#{chk_min_cnt},
+			#{chk_total_cnt},
+			#{penalty}
+		);
+	</insert>
+
+</mapper>

@@ -93,6 +93,12 @@ public class MemberController {
 			return msg;
 		} else if(member != null && member.getLock_yn().equals("Y")){
 			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
+			session.setAttribute("loginId", member.getUser_id());
+			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
+			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
+			test = "unlocked";
+			LOGGER.info("================ " + test);
+			return test;
 		} else {
 			msg = "존재하지 않는 계정입니다. 회원가입을 진행해주세요.";
 		}
@@ -127,23 +133,48 @@ public class MemberController {
 		memberService.updateMember(vo);
 	}
 	
-	// 유저검색
-	@GetMapping("/{user_id}")
-	public void login(@PathVariable String user_id) {
+    /**
+	 * 유저 검색_회원가입 시 아이디 중복 검사
+	 * @param user_id - 유저 아이디
+	 * @return chkImpl - 아이디 존재 유무에 따라 0 또는 1 리턴(임시)
+	 */
+	@GetMapping("/checkId/{user_id}")
+	public int checkId(@PathVariable String user_id) {
 		Member member = memberService.getMemberById(user_id);
 		
 		LOGGER.info("================ User_id: " + user_id);
 		
+		int chkImpl;
 		if(member == null) {
 			LOGGER.info("================ Member null");
+			return chkImpl = 0;
 		} else {
 			LOGGER.info("================ Member not null");
-			LOGGER.info("================ Fail_num: " + member.getFail_num());
-			LOGGER.info("================ Member: " + member);
+			LOGGER.info("================ User_id: " + member.getUser_id());
+			return chkImpl = 1;
 		}
-		
 	}
 
+    /**
+	 * 유저 검색_회원가입 및 정보 수정 시 닉네임 중복 검사
+	 * @param nickname - 유저 닉네임
+	 * @return chkImpl - 닉네임 존재 유무에 따라 0 또는 1 리턴(임시)
+	 */
+	@GetMapping("/checkNickNm/{nickname}")
+	public int checkNickNm(@PathVariable String nickname) {
+		Member member = memberService.getMemberByNickNm(nickname);
+		
+		LOGGER.info("================ nickname: " + nickname);
+		
+		int chkImpl;
+		if(member == null) {
+			return chkImpl = 0;
+		} else {
+			LOGGER.info("================ nickname: " + member.getNickname());
+			return chkImpl = 1;
+		}
+	}
+	
 	@GetMapping("/findId")
 	public String findId(String name, String email){
 		String user_id = memberService.findId(name, email);
