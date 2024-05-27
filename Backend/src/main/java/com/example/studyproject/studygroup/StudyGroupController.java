@@ -68,10 +68,12 @@ public class StudyGroupController {
 		// 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
 		// 주단위: (종료일-시작일)/7 * 최소제출횟수
 		// 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
-		DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate startDate = LocalDate.parse((String.valueOf(vo.getStartdate())).substring(0, 7), DATE_FORMATTER);
-        LocalDate endDate = LocalDate.parse((String.valueOf(vo.getEnddate())).substring(0, 7), DATE_FORMATTER).plusDays(1); // 두 번째 날짜를 포함하기 위해 1일 추가
+        LocalDateTime startDateTime = vo.getStartdate();
+        LocalDateTime endDateTime = vo.getEnddate();
 
+        LocalDate startDate = startDateTime.toLocalDate();
+        LocalDate endDate = endDateTime.toLocalDate();
+		
         int totCnt = 0;
         if ((vo.getChk_m()).equals("SUBM10")) {
             long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
@@ -97,10 +99,12 @@ public class StudyGroupController {
 		// 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
 		// 주단위: (종료일-시작일)/7 * 최소제출횟수
 		// 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
-		DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate startDate = LocalDate.parse((String.valueOf(vo.getStartdate())).substring(0, 7), DATE_FORMATTER);
-        LocalDate endDate = LocalDate.parse((String.valueOf(vo.getEnddate())).substring(0, 7), DATE_FORMATTER).plusDays(1); // 두 번째 날짜를 포함하기 위해 1일 추가
+        LocalDateTime startDateTime = vo.getStartdate();
+        LocalDateTime endDateTime = vo.getEnddate();
 
+        LocalDate startDate = startDateTime.toLocalDate();
+        LocalDate endDate = endDateTime.toLocalDate();
+		
         int totCnt = 0;
         if ((vo.getChk_m()).equals("SUBM10")) {
             long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
