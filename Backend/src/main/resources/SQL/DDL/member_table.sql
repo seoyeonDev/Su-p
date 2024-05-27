@@ -31,6 +31,14 @@ comment on column member.profile_img is '프로필사진';
 comment on column member.fail_num is '비밀번호 오류 횟수';
 
 comment on column member.lock_yn is '계정 잠금여부';
+--
+-- alter table member
+--     owner to postgres;
 
-alter table member
-    owner to postgres;
+-- 사용자 계정 권한 추가
+
+alter table public.member
+    add "authorization" varchar(100);
+
+comment on column public.member."authorization" is '사용자 계정 권한';
+
