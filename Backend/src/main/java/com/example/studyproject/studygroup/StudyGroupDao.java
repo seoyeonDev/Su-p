@@ -1,5 +1,7 @@
 package com.example.studyproject.studygroup;
 
+import java.util.List;
+
 /**
  * @Class Name : StudyGroupDao.java
  * @Description : StudyGroupDao DAO
@@ -23,4 +25,6 @@ public interface StudyGroupDao {
 	// 그룹 추가
 	void createGroup(StudyGroup vo);
 	
+	// 그룹 목록
+	List<?> selectListStudyGroup();
 }

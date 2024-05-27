@@ -14,6 +14,7 @@ package com.example.studyproject.studygroup;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,5 +83,17 @@ public class StudyGroupController {
 		
 		// JoinedGroup에 그룹장ID로 동시에 추가
 		// 혜원 pr 후 추가
+	}
+
+	// 그룹 목록 호출
+	@PostMapping("/studyGroupList")
+	public void studyGroupList() {
+
+		LOGGER.info("======================= 리스트 포스트 호출");
+
+		List<?> studyGroupList = groupService.selectListStudyGroup();
+		LOGGER.info("studyGroup 리스트: " + studyGroupList);
+		
+		// 리턴 변수 클라이언트단 작업하면서 수정
 	}
 }
