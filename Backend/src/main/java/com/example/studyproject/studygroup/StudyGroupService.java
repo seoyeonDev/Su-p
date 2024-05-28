@@ -56,8 +56,20 @@ public class StudyGroupService {
 		groupDao.createGroup(vo);
 	}
 	
-	// 그룹 리스트 호출
+	// 그룹 수정
+	public void updateGroup(StudyGroup vo) {
+
+		groupDao.updateGroup(vo);
+	}
+	
+	// 그룹 삭제
+	public void deleteGroup(StudyGroup vo) {
+
+		groupDao.deleteGroup(vo);
+	}
+  
+  	// 그룹 리스트 호출
 	public List<?> selectListStudyGroup() {
 		return groupDao.selectListStudyGroup();
-	}
+	}  
 }

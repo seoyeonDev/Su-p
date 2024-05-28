@@ -81,6 +81,9 @@ public class MemberController {
 		if(member != null && member.getLock_yn().equals("N")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginSession", member);
+			session.setAttribute("loginId", member.getUser_id());
+			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
+			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
 			msg = "unlocked";
 
 			// 틀린 횟수 알림
@@ -93,9 +96,6 @@ public class MemberController {
 			return msg;
 		} else if(member != null && member.getLock_yn().equals("Y")){
 			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
-			session.setAttribute("loginId", member.getUser_id());
-			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
-			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
 			msg = "unlocked";
 			LOGGER.info("================ " + msg);
 			return msg;

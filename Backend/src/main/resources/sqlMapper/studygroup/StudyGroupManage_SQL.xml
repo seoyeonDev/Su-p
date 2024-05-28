@@ -49,6 +49,34 @@
 			#{penalty}
 		);
 	</insert>
+	
+	<!-- 그룹 수정 -->
+	<update id="updateGroup">
+		UPDATE studygroup
+		SET
+			title = #{title},
+			name = #{name},
+			desc = #{desc},
+			kind = #{kind},
+			mem_cnt = #{mem_cnt},
+			startdate = #{startdate},
+			enddate = #{enddate},
+			chk_m = #{chk_m},
+			chk_min_cnt = #{chk_min_cnt},
+			chk_total_cnt = #{chk_total_cnt}
+		WHERE
+			leader_id = #{leader_id}
+	</update>
+	
+	<!-- 그룹 삭제 -->
+	<delete id="deleteGroup">
+		DELETE
+		FROM studygroup
+		WHERE
+			group_id = #{group_id}
+		AND
+			leader_id = #{leader_id}
+	</delete>
 
 	<select id="selectListStudyGroup" resultType="List">
 		SELECT
