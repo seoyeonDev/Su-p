@@ -12,6 +12,7 @@ package com.example.studyproject.studygroup;
  */
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -66,5 +67,9 @@ public class StudyGroupService {
 
 		groupDao.deleteGroup(vo);
 	}
-	
+  
+  	// 그룹 리스트 호출
+	public List<?> selectListStudyGroup() {
+		return groupDao.selectListStudyGroup();
+	}  
 }

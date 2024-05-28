@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
@@ -119,6 +120,18 @@ public class StudyGroupController {
 		groupService.updateGroup(vo);
 	}
 	
+  	// 그룹 목록 호출
+	@PostMapping("/studyGroupList")
+	public void studyGroupList() {
+
+		LOGGER.info("======================= 리스트 포스트 호출");
+
+		List<?> studyGroupList = groupService.selectListStudyGroup();
+		LOGGER.info("studyGroup 리스트: " + studyGroupList);
+		
+		// 리턴 변수 클라이언트단 작업하면서 수정
+  }  
+  
 	// 그룹 삭제
 	@Delete("/deleteGroup")
 	public void deleteGroup(@RequestBody StudyGroup vo) {
