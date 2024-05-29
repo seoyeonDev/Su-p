@@ -120,4 +120,9 @@ public class MemberService {
 		int rowsAffected = memberDao.deleteMember(user_id);
 		return rowsAffected > 0;
 	}
+
+	// 사용자 계정 권한 확인
+	public String chkAUTH (String user_id){
+		return memberDao.chkAUTH(user_id);
+	}
 }

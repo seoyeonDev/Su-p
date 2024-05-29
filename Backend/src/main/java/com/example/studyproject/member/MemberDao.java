@@ -39,4 +39,7 @@ public interface MemberDao {
 
 	// 회원 탈퇴
 	int deleteMember(String user_id);
+
+	// 사용자 계정 권한 확인
+	String chkAUTH(String user_id);
 }

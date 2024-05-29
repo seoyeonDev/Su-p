@@ -75,13 +75,21 @@ public class MemberController {
 	// 로그인
 	@PostMapping("/login")
 	public String login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
-		Member member = memberService.loginMember(vo);
-		
-		String msg = "";
-		if(member != null && member.getLock_yn().equals("N")) {
-			HttpSession session = request.getSession();
+        Member member = memberService.loginMember(vo);
+
+        String msg = "";
+        HttpSession session = null;
+        if (member != null && member.getLock_yn().equals("N")) {
+
+			String auth = memberService.chkAUTH(vo.getUser_id());
+			msg = "login success " + auth;
+
+			session = request.getSession();
 			session.setAttribute("loginSession", member);
+          
 			session.setAttribute("loginId", member.getUser_id());
+      session.setAttribute("authorization", auth);		// 사용자 계정권한 세션에 추가
+  
 			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
 			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
 			msg = "unlocked";
@@ -105,6 +113,7 @@ public class MemberController {
 		LOGGER.info("================ " + msg);
 		return msg;
 	}
+
 	
 	// 수정
 	@PostMapping("/update")

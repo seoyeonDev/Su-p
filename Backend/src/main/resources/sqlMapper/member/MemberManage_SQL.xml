@@ -31,9 +31,14 @@
 	<!-- 로그인 -->
 	<select id="loginMember" resultType="com.example.studyproject.member.Member">
 		SELECT *
-		FROM member
+		     , a.authorization
+			 , b.comm_cdnm
+		FROM member a
+		JOIN code_d b
+		    ON a.authorization = b.comm_cd
 		WHERE user_id = #{user_id}
 		AND password = #{password}
+
 	</select>
 	
 	<!-- 수정 -->
@@ -104,4 +109,15 @@
 		DELETE FROM member
 		WHERE user_id = #{user_id}
 	</delete>
+
+	<!-- 사용자 계정 권한 확인 -->
+	<select id="chkAUTH" resultType = "String">
+		SELECT a.authorization
+			, b.comm_cdnm
+		FROM member a
+		JOIN code_d b
+			ON a.authorization = b.comm_cd
+		WHERE a.user_id = #{user_id}
+	</select>
+
 </mapper>
