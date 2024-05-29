@@ -2,7 +2,7 @@
 name: Feature request
 about: 기능 추가를 위한 Issue 템플릿
 title: "[Feature/ 화면명] 기능요약"
-labels: todo
+labels: feature
 assignees: ''
 
 ---

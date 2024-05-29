@@ -86,30 +86,34 @@ public class MemberController {
 
 			session = request.getSession();
 			session.setAttribute("loginSession", member);
-			session.setAttribute("authorization", auth);		// 사용자 계정권한 세션에 추가
+          
+			session.setAttribute("loginId", member.getUser_id());
+      session.setAttribute("authorization", auth);		// 사용자 계정권한 세션에 추가
+  
+			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
+			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
+			msg = "unlocked";
 
 			// 틀린 횟수 알림
-            if (member.getFail_num() > 0) {
-                msg = "비밀번호 오류입니다. 3회 이상 오류 시 계정이 잠금됩니다. \n" +
-                        "틀린 횟수 : " + member.getFail_num();
-            }
+			if (member.getFail_num() > 0){
+				msg = "비밀번호 오류입니다. 3회 이상 오류 시 계정이 잠금됩니다. \n" +
+						"틀린 횟수 : " + member.getFail_num();
+			}
 
-            LOGGER.info("================ " + msg);
-            return msg;
-        } else if (member != null && member.getLock_yn().equals("Y")) {
-            msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
-            session.setAttribute("loginId", member.getUser_id());
-            LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
-            LOGGER.info("================ session id: " + session.getAttribute("loginId"));
-            msg = "unlocked";
-            LOGGER.info("================ " + msg);
-            return msg;
-        } else {
-            msg = "존재하지 않는 계정입니다. 회원가입을 진행해주세요.";
-        }
-        LOGGER.info("================ " + msg);
-        return msg;
-    }
+			LOGGER.info("================ " + msg);
+			return msg;
+		} else if(member != null && member.getLock_yn().equals("Y")){
+			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
+			msg = "unlocked";
+			LOGGER.info("================ " + msg);
+			return msg;
+		} else {
+			msg = "존재하지 않는 계정입니다. 회원가입을 진행해주세요.";
+		}
+		LOGGER.info("================ " + msg);
+		return msg;
+	}
+
 	
 	// 수정
 	@PostMapping("/update")

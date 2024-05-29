@@ -15,7 +15,7 @@ package com.example.studyproject.studygroup;
 import com.example.studyproject.member.Member;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,8 +31,8 @@ public class StudyGroup {
     private String kind;        	// 스터디 종류 => 코드 테이블 참조
     private String status;   	  	// 활성화상태 => 코드 테이블 참조
     private int mem_cnt;        	// 최대멤버수
-    private Timestamp startdate;	// 스터디시작일
-    private Timestamp enddate;  	// 스터디종료일
+    private LocalDateTime startdate;	// 스터디시작일
+    private LocalDateTime enddate;  	// 스터디종료일
     private int view_cnt;       	// 조회수
     private String chk_m;   	    // 제출기준 => 코드 테이블 참조
     private int chk_min_cnt;		// 제출최소횟수
@@ -44,7 +44,7 @@ public class StudyGroup {
 	}
 
 	public StudyGroup(String group_id, Member leader_id, String title, String name, String desc, String kind,
-			String status, int mem_cnt, Timestamp startdate, Timestamp enddate, int view_cnt, String chk_m,
+			String status, int mem_cnt, LocalDateTime startdate, LocalDateTime enddate, int view_cnt, String chk_m,
 			int chk_min_cnt, int chk_total_cnt, int penalty) {
 		super();
 		this.group_id = group_id;
@@ -128,19 +128,19 @@ public class StudyGroup {
 		this.mem_cnt = mem_cnt;
 	}
 
-	public Timestamp getStartdate() {
+	public LocalDateTime getStartdate() {
 		return startdate;
 	}
 
-	public void setStartdate(Timestamp startdate) {
+	public void setStartdate(LocalDateTime startdate) {
 		this.startdate = startdate;
 	}
 
-	public Timestamp getEnddate() {
+	public LocalDateTime getEnddate() {
 		return enddate;
 	}
 
-	public void setEnddate(Timestamp enddate) {
+	public void setEnddate(LocalDateTime enddate) {
 		this.enddate = enddate;
 	}
 
