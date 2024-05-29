@@ -1,7 +1,7 @@
 package com.example.studyproject.codemn;
 
 
-import com.example.studyproject.codemn.CodeMn;
+import com.example.studyproject.codemn.CodeM;
 import com.example.studyproject.codemn.CodeMnDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,25 +22,31 @@ public class CodeMnService {
     }
 
 
+    /**
+     * 코드 대분류
+     * @table code_m
+     * @param cd_type, CodeM
+     * @return
+     */
     // 분류 조회
-    public ArrayList<CodeMn> selectCdType(String cd_type) {
+    public ArrayList<CodeM> selectCdType(String cd_type) {
 
         return codeMnDao.selectCdType(cd_type);
     };
 
     // 분류 추가
-    public boolean insertCdType(CodeMn codeMn){
+    public boolean insertCdType(CodeM codeM){
         // 중복 검사
-        if (!codeMnDao.chkCdType(codeMn.getCd_type())){
+        if (!codeMnDao.chkCdType(codeM.getCd_type())){
             return false;
         }
-        codeMnDao.insertCdType(codeMn);
+        codeMnDao.insertCdType(codeM);
         return true;
     }
 
     // 분류 수정
-    public void updateCdType(CodeMn codeMn){
-        codeMnDao.updateCdType(codeMn);
+    public void updateCdType(CodeM codeM){
+        codeMnDao.updateCdType(codeM);
     }
 
     // 분류 삭제
@@ -52,17 +58,40 @@ public class CodeMnService {
         return affectedRow > 0;
     }
 
-    // 코드 조회
-    public CodeMn selectCommCd(String cd_type){
-        return codeMnDao.selectCommCd(cd_type);
+
+    /**
+     * 코드 소분류
+     * @table code_d
+     * @return
+     */
+
+    // 분류 삭제 시 상세코드 전체삭제
+//    public int deleteAllCommCd(String cd_type){
+//        return codeMnDao.deleteAllCommCd(cd_type);
+//    }
+
+    // 상세코드 조회
+    public ArrayList<CodeD> selectCommCd(String comm_cd){
+        return codeMnDao.selectCommCd(comm_cd);
     }
 
-    // 코드 추가
+    // 상세코드 추가
+    public boolean insertCommCd(CodeD codeD) {
+        if (!codeMnDao.chkCommCd(codeD.getComm_cd())){
+            return false;
+        }
+        codeMnDao.insertCommCd(codeD);
+        return true;
+    }
 
 
-    // 코드 수정
+    // 상세코드 수정
+    public void updateCommCd(CodeD codeD){
+        codeMnDao.updateCommCd(codeD);
+    }
 
-
-    // 코드 삭제
-
+    // 상세코드 삭제
+    public int deleteOneCommCd(String comm_cd, String cd_type){
+        return codeMnDao.deleteOneCommCd(comm_cd, cd_type);
+    }
 }

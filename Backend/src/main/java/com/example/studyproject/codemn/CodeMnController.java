@@ -1,6 +1,6 @@
 package com.example.studyproject.codemn;
 
-import com.example.studyproject.codemn.CodeMn;
+import com.example.studyproject.codemn.CodeM;
 import com.example.studyproject.member.Member;
 import com.example.studyproject.member.MemberController;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class CodeMnController {
     // 분류 조회
     @GetMapping("/selectType")
     public Map selectCdType(String cd_type) {
-        ArrayList<CodeMn> list = codeMnService.selectCdType(cd_type);
+        ArrayList<CodeM> list = codeMnService.selectCdType(cd_type);
         Map map = new HashMap();
         map.put("list",list);
         return map;
@@ -38,13 +38,13 @@ public class CodeMnController {
 
     // 분류 추가
     @PostMapping("/insertType")
-    public void insertCdType(@RequestBody CodeMn codeMn){
-        String cd_type = codeMn.getCd_type();
+    public void insertCdType(@RequestBody CodeM codeM){
+        String cd_type = codeM.getCd_type();
 //        ArrayList<CodeMn> chk = codeMnService.selectCdType(cd_type);
         LOGGER.info(" ==== insert ing");
-        boolean codemn = codeMnService.insertCdType(codeMn);
-        if(codemn){
-            LOGGER.info(codemn + " ========= INSERT SUCCESS");
+        boolean codem = codeMnService.insertCdType(codeM);
+        if(codem){
+            LOGGER.info(codem + " ========= INSERT SUCCESS");
 
         }else {
             LOGGER.debug("========== INSERT FAIL");
@@ -55,9 +55,9 @@ public class CodeMnController {
 
     // 분류 수정 (이름만 수정가능)
     @PostMapping("/type/update")
-    public void updateCdType(CodeMn codeMn){
+    public void updateCdType(CodeM codeM){
         // String cd_type = codeMn.getCd_type();
-        codeMnService.updateCdType(codeMn);
+        codeMnService.updateCdType(codeM);
     }
 
 
@@ -73,5 +73,47 @@ public class CodeMnController {
         }
     }
 
+    /**
+     * 코드 소분류
+     * @table code_d
+     * @return
+     */
 
+    // 상세코드 조회
+    @GetMapping("/detail/{comm_cd}")
+    public Map selectCommCd(String comm_cd) {
+        ArrayList<CodeD> list = codeMnService.selectCommCd(comm_cd);
+        Map map = new HashMap();
+        map.put("list", list);
+        return map;
+    }
+
+    // 상세코드 추가
+    @PostMapping("/detail/insert")
+    public void insertComCd(@RequestBody CodeD codeD){
+        String comm_cd = codeD.getComm_cd();
+        boolean coded = codeMnService.insertCommCd(codeD);
+        if(coded){
+            LOGGER.info(coded + " ===== INSERT SUCCESS");
+        } else {
+            LOGGER.debug("===== INSERT FAIL");
+        }
+    }
+
+    // 상세코드 수정
+    @PostMapping("/detail/update")
+    public void updateCommCd(CodeD codeD){
+        codeMnService.updateCommCd(codeD);
+    }
+
+    // 상세코드 하나삭제
+    @DeleteMapping("/detail/{comm_cd}")
+    public String deleteCommCd(@PathVariable String comm_cd, String cd_type) {
+        int result = codeMnService.deleteOneCommCd(comm_cd, cd_type);
+        if (result > 0){
+            return "삭제 완료";
+        }else {
+            return "삭제 실패";
+        }
+    }
 }
