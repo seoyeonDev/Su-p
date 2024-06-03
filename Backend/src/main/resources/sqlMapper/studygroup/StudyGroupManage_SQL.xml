@@ -90,6 +90,7 @@
 			mem_cnt,
 			startdate,
 			enddate,
+			view_cnt,
 			chk_m,
 			chk_min_cnt,
 			chk_total_cnt,
