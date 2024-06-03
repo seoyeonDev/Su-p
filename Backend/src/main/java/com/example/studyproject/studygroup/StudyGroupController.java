@@ -9,7 +9,7 @@ package com.example.studyproject.studygroup;
  * @ -----------    --------    ---------------------------
  * @ 2024.05.01     봉선호        최초 생성
  * @ 2024.05.17		봉선호		그룹 추가 메서드 수정
- *
+ * @ 2024.06.03     김혜원       그룹 추가시 joinedgroup도 생성
  */
 
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import com.example.studyproject.joinedgroup.Joinedgroup;
+import com.example.studyproject.joinedgroup.JoinedgroupService;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +38,9 @@ public class StudyGroupController {
 	
 	@Autowired
 	private StudyGroupService groupService;
+
+	@Autowired
+	private JoinedgroupService joinedgroupService;
 	
 	// log4j2 로그 찍기
 	private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
@@ -53,10 +58,12 @@ public class StudyGroupController {
 		String year = String.valueOf(now.getYear());
 		String month = groupService.addZero(now.getMonthValue());
 		String day = groupService.addZero(now.getDayOfMonth());
+		// hyewon : year.substring(2,3) -> year.substring(2,4) 로 변경해야 할 것 같음
 		String yrmd = year.substring(2, 3) + month + day;
 		
 		String maxGroupId = groupService.getMaxGroupId(yrmd);
-		if(!maxGroupId.equals("") && maxGroupId != null) {
+		if( maxGroupId != null && !maxGroupId.equals("")) {
+			// hyewon : 2405170001이면 int의 범위를 벗어나기 때문에 long 타입으로 하는 것이 적합해보임
 			int nextValue = Integer.valueOf(maxGroupId) + 1;
 			maxGroupId = String.valueOf(nextValue);
 			vo.setGroup_id(maxGroupId);
@@ -85,11 +92,11 @@ public class StudyGroupController {
             totCnt = (int) (monthsBetween * vo.getChk_min_cnt());
             vo.setChk_total_cnt(totCnt);
         }
-
 		groupService.createGroup(vo);
-		
-		// JoinedGroup에 그룹장ID로 동시에 추가
-		// 혜원 pr 후 추가
+
+		Joinedgroup joinedgroupVo = new Joinedgroup(vo, vo.getLeader_id(), null,null,0);
+		// joinedgroupVo로 joinedgroup 생성, true : 그룹장
+		joinedgroupService.createJoinedGroup(joinedgroupVo,true);
 	}
 	
 	//  그룹 수정
