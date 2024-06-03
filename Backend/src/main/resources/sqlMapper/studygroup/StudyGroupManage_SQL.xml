@@ -98,4 +98,28 @@
 		WHERE 1=1
 		ORDER BY group_id desc;
 	</select>
+	
+	<!-- 그룹 제목으로 리스트 호출 -->
+	<select id="selectListByTitle" resultType="hashmap">
+		SELECT
+			group_id,
+			leader_id,
+			title,
+			name,
+			study_desc,
+			kind,
+			status,
+			mem_cnt,
+			startdate,
+			enddate,
+			view_cnt
+			chk_m,
+			chk_min_cnt,
+			chk_total_cnt,
+			penalty
+		FROM studygroup
+		WHERE 1=1
+		AND title like '%'||#{title}||'%'
+		ORDER BY group_id desc;
+	</select>
 </mapper>

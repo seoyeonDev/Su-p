@@ -72,4 +72,9 @@ public class StudyGroupService {
 	public List<?> selectListStudyGroup() {
 		return groupDao.selectListStudyGroup();
 	}  
+	
+	// 그룹 제목으로 검색
+	public List<?> selectListByTitle(String title) {
+		return groupDao.selectListByTitle(title);
+	}
 }
