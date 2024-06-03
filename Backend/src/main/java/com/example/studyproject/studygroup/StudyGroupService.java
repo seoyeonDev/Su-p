@@ -71,5 +71,15 @@ public class StudyGroupService {
   	// 그룹 리스트 호출
 	public List<?> selectListStudyGroup() {
 		return groupDao.selectListStudyGroup();
-	}  
+	}
+	
+	// 그룹 상세 조회
+	public StudyGroup selectStudyGroup(String group_id) {
+		return groupDao.selectStudyGroup(group_id);
+	}
+	
+	// 조회수 업데이트
+	public void updateViewCnt(StudyGroup vo) {
+		groupDao.updateViewCnt(vo);
+	}
 }

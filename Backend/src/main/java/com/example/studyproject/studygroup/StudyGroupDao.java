@@ -25,11 +25,17 @@ public interface StudyGroupDao {
 	// 그룹 추가
 	void createGroup(StudyGroup vo);
 	
-  // 그룹 수정
+	// 그룹 수정
 	void updateGroup(StudyGroup vo);
 	
   	// 그룹 목록
 	List<?> selectListStudyGroup();
+	
+	// 그룹 상세 조회
+	StudyGroup selectStudyGroup(String group_id);
+	
+	// 조회수 업데이트
+	void updateViewCnt(StudyGroup vo);
   
 	// 그룹 삭제
 	void deleteGroup(StudyGroup vo);

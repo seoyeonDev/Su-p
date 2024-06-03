@@ -23,6 +23,8 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -130,8 +132,26 @@ public class StudyGroupController {
 		LOGGER.info("studyGroup 리스트: " + studyGroupList);
 		
 		// 리턴 변수 클라이언트단 작업하면서 수정
-  }  
+	}  
   
+	// 그룹 상세 조회 + 조회수 증가
+	@GetMapping("/studyDetail/{group_id}")
+	public void studyDetail(@PathVariable String group_id) {
+		StudyGroup vo = groupService.selectStudyGroup(group_id);
+		LOGGER.info("sg vo: " + vo);
+		
+		// 조회수 +1 카운트
+		int newViewCnt = vo.getView_cnt() + 1;
+		vo.setGroup_id(group_id);
+		vo.setView_cnt(newViewCnt);
+		groupService.updateViewCnt(vo);
+		
+		StudyGroup newVo = groupService.selectStudyGroup(group_id);
+		LOGGER.info("sg newVo: " + newVo);
+		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
+		
+	}
+	
 	// 그룹 삭제
 	@Delete("/deleteGroup")
 	public void deleteGroup(@RequestBody StudyGroup vo) {
