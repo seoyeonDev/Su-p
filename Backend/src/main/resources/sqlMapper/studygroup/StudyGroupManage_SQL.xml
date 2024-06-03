@@ -78,13 +78,13 @@
 			leader_id = #{leader_id}
 	</delete>
 
-	<select id="selectListStudyGroup" resultType="List">
+	<select id="selectListStudyGroup" resultType="hashmap">
 		SELECT
 			group_id,
 			leader_id,
 			title,
 			name,
-			desc,
+			study_desc,
 			kind,
 			status,
 			mem_cnt,

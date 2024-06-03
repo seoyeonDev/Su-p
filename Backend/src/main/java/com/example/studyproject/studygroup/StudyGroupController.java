@@ -15,7 +15,6 @@ package com.example.studyproject.studygroup;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -51,13 +50,17 @@ public class StudyGroupController {
 		// 그룹ID 240517 + 0001 형식 로직.. 가장 큰 숫자 불러와서 없으면 만들어주고 있으면 +1
 		LocalDateTime now = LocalDateTime.now();
 		String year = String.valueOf(now.getYear());
+		LOGGER.info("year: " + year.substring(2, 4));
 		String month = groupService.addZero(now.getMonthValue());
+		LOGGER.info("month: " + month);
 		String day = groupService.addZero(now.getDayOfMonth());
-		String yrmd = year.substring(2, 3) + month + day;
+		LOGGER.info("day: " + day);
+		String yrmd = year.substring(2, 4) + month + day;
+		LOGGER.info("yrmd: " + yrmd);
 		
 		String maxGroupId = groupService.getMaxGroupId(yrmd);
 		if(!maxGroupId.equals("") && maxGroupId != null) {
-			int nextValue = Integer.valueOf(maxGroupId) + 1;
+			long nextValue = Long.valueOf(maxGroupId) + 1;
 			maxGroupId = String.valueOf(nextValue);
 			vo.setGroup_id(maxGroupId);
 		} else {
