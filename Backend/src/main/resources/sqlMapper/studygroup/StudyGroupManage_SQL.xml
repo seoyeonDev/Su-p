@@ -14,7 +14,7 @@
 	
 	<!-- 그룹 추가 -->
 	<insert id="createGroup">
-		INSERT INTO group
+		INSERT INTO studygroup
 		(
 			group_id,
 			leader_id,
