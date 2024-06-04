@@ -134,7 +134,7 @@ public class StudyGroupController {
 		// 리턴 변수 클라이언트단 작업하면서 수정
   }  
   
-	// 그룹 제목으로 검색
+	// 그룹 제목으로 검색 
 	@GetMapping("/listByTitle/{title}")
 	public void listByTitle(@PathVariable String title) {
 		List<?> listByTitle = groupService.selectListByTitle(title);
