@@ -1,5 +1,8 @@
 package com.example.studyproject.penaltylog;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * @Class Name : PenaltylogService.java
  * @Description : PenaltylogService SERVICE
@@ -16,4 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PenaltylogService {
 
+    // log4j2 로그 찍기
+    public static final Logger LOGGER = LogManager.getLogger(PenaltylogService.class);
+	
 }
