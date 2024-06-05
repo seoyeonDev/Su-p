@@ -64,6 +64,7 @@ public class MemberService {
 					vo.setLock_yn("Y");
 					LOGGER.info("================ Id locked by miss.");
 				}
+
 			} else {
 				vo.setFail_num(0);
 				vo.setLock_yn("N");
@@ -93,10 +94,16 @@ public class MemberService {
 		memberDao.updateMember(vo);
 	}
 	
-	// 유저 검색용
+	// 아이디 중복검사
 	public Member getMemberById(String user_id) {
 
 		return memberDao.getMemberById(user_id);
+	}
+
+	// 유저 검색용
+	public Member getMemberByNickNm(String nickname) {
+		
+		return memberDao.getMemberByNickNm(nickname);
 	}
 
 	// 아이디찾기
@@ -105,11 +112,26 @@ public class MemberService {
         return memberDao.findId(name, email);
 	}
 
+	public int chkPwd (String id, String name, String email){
+		return memberDao.chkPwd(id, name, email);
+	}
+
+	public void changePwd(Member vo) throws NoSuchAlgorithmException {
+
+		// 비밀번호 단방향 암호화(SHA-256 알고리즘)
+		String encPwd = Sha256.encrypt(vo.getPassword());
+		vo.setPassword(encPwd);
+		vo.setFail_num(0);
+		vo.setLock_yn("N");
+		memberDao.changePwd(vo);
+	}
+    
 	// 회원 삭제
 	public boolean deleteMember(String user_id) {
 		int rowsAffected = memberDao.deleteMember(user_id);
 		return rowsAffected > 0;
 	}
+
 
 	// 비밀번호 일치 여부
 	public boolean isPasswordCorrect(String user_id, String password) throws NoSuchAlgorithmException {
@@ -117,5 +139,10 @@ public class MemberService {
 		String encPwd = Sha256.encrypt(password);
 
 		return (memberDao.isPasswordCorrect(user_id, encPwd) > 0);
+  }
+  
+	// 사용자 계정 권한 확인
+	public String chkAUTH (String user_id){
+		return memberDao.chkAUTH(user_id);
 	}
 }

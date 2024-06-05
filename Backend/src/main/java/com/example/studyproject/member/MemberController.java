@@ -79,21 +79,45 @@ public class MemberController {
 	// 로그인
 	@PostMapping("/login")
 	public String login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
-		Member member = memberService.loginMember(vo);
-		
-		String test = "";
-		if(member != null && member.getLock_yn().equals("N")) {
-			HttpSession session = request.getSession();
+        Member member = memberService.loginMember(vo);
+
+        String msg = "";
+        HttpSession session = null;
+        if (member != null && member.getLock_yn().equals("N")) {
+
+			String auth = memberService.chkAUTH(vo.getUser_id());
+			msg = "login success " + auth;
+
+			session = request.getSession();
 			session.setAttribute("loginSession", member);
-			test = "unlocked";
-			LOGGER.info("================ " + test);
-			return test;
+          
+			session.setAttribute("loginId", member.getUser_id());
+      session.setAttribute("authorization", auth);		// 사용자 계정권한 세션에 추가
+  
+			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
+			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
+			msg = "unlocked";
+
+			// 틀린 횟수 알림
+			if (member.getFail_num() > 0){
+				msg = "비밀번호 오류입니다. 3회 이상 오류 시 계정이 잠금됩니다. \n" +
+						"틀린 횟수 : " + member.getFail_num();
+			}
+
+			LOGGER.info("================ " + msg);
+			return msg;
+		} else if(member != null && member.getLock_yn().equals("Y")){
+			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
+			msg = "unlocked";
+			LOGGER.info("================ " + msg);
+			return msg;
 		} else {
-			test = "locked";
-			LOGGER.info("================ " + test);
-			return test;
+			msg = "존재하지 않는 계정입니다. 회원가입을 진행해주세요.";
 		}
+		LOGGER.info("================ " + msg);
+		return msg;
 	}
+
 	
 	// 수정
 	@PostMapping("/update")
@@ -122,23 +146,48 @@ public class MemberController {
 		memberService.updateMember(vo);
 	}
 	
-	// 유저검색
-	@GetMapping("/{user_id}")
-	public void login(@PathVariable String user_id) {
+    /**
+	 * 유저 검색_회원가입 시 아이디 중복 검사
+	 * @param user_id - 유저 아이디
+	 * @return chkImpl - 아이디 존재 유무에 따라 0 또는 1 리턴(임시)
+	 */
+	@GetMapping("/checkId/{user_id}")
+	public int checkId(@PathVariable String user_id) {
 		Member member = memberService.getMemberById(user_id);
 		
 		LOGGER.info("================ User_id: " + user_id);
 		
+		int chkImpl;
 		if(member == null) {
 			LOGGER.info("================ Member null");
+			return chkImpl = 0;
 		} else {
 			LOGGER.info("================ Member not null");
-			LOGGER.info("================ Fail_num: " + member.getFail_num());
-			LOGGER.info("================ Member: " + member);
+			LOGGER.info("================ User_id: " + member.getUser_id());
+			return chkImpl = 1;
 		}
-		
 	}
 
+    /**
+	 * 유저 검색_회원가입 및 정보 수정 시 닉네임 중복 검사
+	 * @param nickname - 유저 닉네임
+	 * @return chkImpl - 닉네임 존재 유무에 따라 0 또는 1 리턴(임시)
+	 */
+	@GetMapping("/checkNickNm/{nickname}")
+	public int checkNickNm(@PathVariable String nickname) {
+		Member member = memberService.getMemberByNickNm(nickname);
+		
+		LOGGER.info("================ nickname: " + nickname);
+		
+		int chkImpl;
+		if(member == null) {
+			return chkImpl = 0;
+		} else {
+			LOGGER.info("================ nickname: " + member.getNickname());
+			return chkImpl = 1;
+		}
+	}
+	
 	@GetMapping("/findId")
 	public String findId(String name, String email){
 		String user_id = memberService.findId(name, email);
@@ -150,7 +199,32 @@ public class MemberController {
 		return user_id;
 	}
 
-	/**
+
+	@GetMapping("/chkPwd")
+	public int chkPwd(String id, String name, String email){
+		int chk = memberService.chkPwd(id, name, email);
+		return chk;
+	}
+  
+  
+  @PostMapping("/changePwd")
+	public int changePwd(Member vo, String newPassword) throws NoSuchAlgorithmException {
+		String id = vo.getUser_id();
+		String name = vo.getName();
+		String email = vo.getEmail();
+		int chk = memberService.chkPwd(id, name, email);
+
+		vo.setPassword(newPassword);
+		if (chk == 1) {
+			// 결과가 한개일 때
+			memberService.changePwd(vo);
+			return 1;
+		}
+
+		return 0;
+	}
+  
+  	/**
 	 * 멤버 탈퇴
 	 * @param user_id - 사용자의 id
 	 * @param password - input 창에서 입력받은 password
@@ -169,7 +243,6 @@ public class MemberController {
 			LOGGER.info("================ Member deleted: 비밀번호 일치하지 않음");
 		}
 
-
 		if (success) {
 			LOGGER.info("================ Member delete success : " + user_id);
 			return "회원 탈퇴 완료";
@@ -177,6 +250,7 @@ public class MemberController {
 			LOGGER.info("================ Member deletion failed: " + user_id);
 			return "회원 탈퇴 실패";
 		}
+
 	}
 
 }

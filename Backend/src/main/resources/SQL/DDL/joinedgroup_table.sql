@@ -1,23 +1,35 @@
-CREATE TABLE joinedgroup
+-- Table: public.joinedgroup
+
+-- DROP TABLE IF EXISTS public.joinedgroup;
+
+CREATE TABLE IF NOT EXISTS public.joinedgroup
 (
-	group_id	VARCHAR(255)	NOT NULL PRIMARY KEY,
-	user_id	VARCHAR(255)	NOT NULL,
-	role	VARCHAR(10)	NOT NULL DEFAULT '200',
-	joinstatus	VARCHAR(10)	NULL,
-	submission_cnt	INT	NULL
-);
+    group_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    user_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    role character varying(10) COLLATE pg_catalog."default" NOT NULL DEFAULT '200'::character varying,
+    joinstatus character varying(10) COLLATE pg_catalog."default",
+    submission_cnt integer
+)
 
-comment on table joinedgroup is '가입한 그룹';
+TABLESPACE pg_default;
 
-comment on column joinedgroup.group_id is '스터디그룹 ID';
+ALTER TABLE IF EXISTS public.joinedgroup
+    OWNER to postgres;
 
-comment on column joinedgroup.user_id is '회원 ID';
+COMMENT ON TABLE public.joinedgroup
+    IS '가입한 그룹';
 
-comment on column joinedgroup.role is '권한';
+COMMENT ON COLUMN public.joinedgroup.group_id
+    IS '스터디그룹 ID';
 
-comment on column joinedgroup.joinstatus is '신청 상태';
+COMMENT ON COLUMN public.joinedgroup.user_id
+    IS '회원 ID';
 
-comment on column joinedgroup.submission_cnt is '제출 횟수';
+COMMENT ON COLUMN public.joinedgroup.role
+    IS '권한';
 
-alter table member
-    owner to postgres;
+COMMENT ON COLUMN public.joinedgroup.joinstatus
+    IS '신청 상태';
+
+COMMENT ON COLUMN public.joinedgroup.submission_cnt
+    IS '제출 횟수';

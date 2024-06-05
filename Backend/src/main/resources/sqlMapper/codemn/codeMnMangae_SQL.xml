@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- namespace에 mapper가 생성되어 있는 패키지 경로를 적어준다. -->
+<mapper namespace="com.example.studyproject.codemn.CodeMnDao">
+
+    <!-- 분류 조회 -->
+    <select id="selectCdType" resultType="com.example.studyproject.codemn.CodeM">
+
+        SELECT CD_TYPE
+             , CD_TYPE_NM
+        FROM CODE_M
+        WHERE COALESCE(#{cd_type},'')='' OR cd_type = #{cd_type}
+
+    </select>
+
+    <!-- 분류 추가 중복검사 -->
+    <select id="chkCdType" resultType="boolean">
+        SELECT COUNT(cd_type) = 0
+        FROM code_m
+        WHERE cd_type = #{cd_type}
+    </select>
+
+    <!--     분류 추가 -->
+    <insert id="insertCdType">
+
+        INSERT INTO code_m
+        (
+            CD_TYPE
+        , CD_TYPE_NM
+        )
+        VALUES
+            (
+                #{cd_type}
+            , #{cd_type_nm}
+            )
+
+    </insert>
+
+    <!-- 분류 수정 -->
+    <update id="updateCdType">
+        UPDATE code_m
+        SET
+            cd_type_nm = #{cd_type_nm}
+        WHERE cd_type = #{cd_type}
+    </update>
+
+    <!-- 분류 삭제 -->
+    <delete id="deleteCdType" >
+        DELETE FROM code_m
+        WHERE cd_type = #{cd_type}
+    </delete>
+
+    <!-- 분류 삭제 시 상세코드 전체삭제 -->
+    <delete id="deleteAllCommCd">
+        DELETE FROM code_d
+        WHERE cd_type = #{cd_type}
+    </delete>
+
+
+
+
+    <!-- 상세코드 조회 -->
+    <select id="selectCommCd" resultType="com.example.studyproject.codemn.CodeD">
+        SELECT
+            cd_type
+            , comm_cd
+            , comm_cdnm
+        FROM code_d
+        where COALESCE(#{cd_type},'') = '' OR cd_type = #{cd_type}
+    </select>
+
+    <!-- 상세코드 유효성 체크 -->
+    <select id="chkCommCd" resultType="boolean">
+        SELECT COUNT(comm_cd) = 0
+        FROM code_d
+        where comm_cd = #{comm_cd}
+    </select>
+
+    <!-- 상세코드 추가 -->
+    <insert id="insertCommCd">
+        INSERT INTO code_d ( cd_type
+                           , comm_cd
+                           , comm_cdnm
+        )
+        VALUES (
+                #{cd_type}
+               , #{comm_cd}
+               , #{comm_cdnm}
+               )
+    </insert>
+
+    <!-- 상세코드 수정 -->
+    <update id="updateCommCd">
+        UPDATE code_d
+        SET comm_cdnm = #{comm_cdnm}
+        WHERE comm_cd = #{comm_cd}
+            AND cd_type = #{cd_type}
+    </update>
+
+    <!-- 상세코드 삭제 -->
+    <delete id="deleteOneCommCd">
+        DELETE FROM code_d
+        WHERE comm_cd = #{comm_cd}
+            AND cd_type = #{cd_type}
+    </delete>
+</mapper>

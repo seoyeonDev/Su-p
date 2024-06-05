@@ -31,9 +31,14 @@
 	<!-- 로그인 -->
 	<select id="loginMember" resultType="com.example.studyproject.member.Member">
 		SELECT *
-		FROM member
+		     , a.authorization
+			 , b.comm_cdnm
+		FROM member a
+		JOIN code_d b
+		    ON a.authorization = b.comm_cd
 		WHERE user_id = #{user_id}
 		AND password = #{password}
+
 	</select>
 	
 	<!-- 수정 -->
@@ -60,9 +65,14 @@
 		WHERE user_id = #{user_id}
 	</update>
 	
-	<!-- id에 Dao의 메서드명을 맵핑해주고, resultType에 vo의 패키지 경로를 적어준다. -->
+	<!-- 아이디 중복검사 -->
 	<select id="getMemberById" resultType="com.example.studyproject.member.Member">
 		SELECT * FROM member WHERE user_id = #{user_id}
+	</select>
+	
+	<!-- 닉네임 중복검사 -->
+	<select id="getMemberByNickNm" resultType="com.example.studyproject.member.Member">
+		SELECT * FROM member WHERE nickname = #{nickname}
 	</select>
 
 	<!-- 아이디찾기 -->
@@ -74,22 +84,24 @@
 							AND email = #{email}
 					   GROUP BY user_id
 	</select>
-	<select id="chkId" resultType="com.example.studyproject.member.Member">
 
-		 SELECT user_id FROM member
-		         WHERE user_id = #{user_id}
--- 		           		AND name = #{name}
--- 						AND email = #{email}
-
-	</select>
-
-	<update id="resetPwd">
-
-		SELECT user_id FROM member
+	<!-- 비밀번호 찾기 - 계정찾기-->
+	<select id="chkPwd" resultType="integer">
+		SELECT count(user_id) FROM member
 		WHERE user_id = #{user_id}
 		  AND name = #{name}
 		  AND email = #{email}
+	</select>
 
+	<!-- 비밀번호 찾기 - 비밀번호 변경 -->
+	<update id="changePwd">
+		UPDATE member
+		SET password = #{password}
+		  	, lock_yn = #{lock_yn}
+			, fail_num = #{fail_num}
+		WHERE user_id = #{user_id}
+		  AND name = #{name}
+		  AND email = #{email}
 	</update>
 
 	<!-- 회원 탈퇴 -->
@@ -97,6 +109,7 @@
 		DELETE FROM member
 		WHERE user_id = #{user_id}
 	</delete>
+
 
 	<!-- 비밀번호 일치 여부 -->
 	<select id="isPasswordCorrect">
@@ -106,4 +119,16 @@
 			AND user_id = #{user_id}
 			AND password = #{password}
 	</select>
+
+	<!-- 사용자 계정 권한 확인 -->
+	<select id="chkAUTH" resultType = "String">
+		SELECT a.authorization
+			, b.comm_cdnm
+		FROM member a
+		JOIN code_d b
+			ON a.authorization = b.comm_cd
+		WHERE a.user_id = #{user_id}
+	</select>
+
+
 </mapper>

@@ -33,18 +33,29 @@ public interface MemberDao {
 	// 잠금여부 업데이트
 	void updateLockYn(Member vo);
 	
-	// 유저검색
+	// 아이디 중복검사
 	Member getMemberById(String user_id);
+
+	// 닉네임 중복검사
+	Member getMemberByNickNm(String nickname);
 
 	// 아이디찾기
 	String findId(String name, String email);
 
 	// 비밀번호찾기
+	public int chkPwd(String user_id, String name, String email);
+	public void changePwd(Member vo);
+	
 	String resetPwd();
 
 	// 회원 탈퇴
 	int deleteMember(String user_id);
 
+
 	// 비밀번호 일치 여부
 	int isPasswordCorrect(String user_id, String password);
+
+	// 사용자 계정 권한 확인
+	String chkAUTH(String user_id);
+
 }
