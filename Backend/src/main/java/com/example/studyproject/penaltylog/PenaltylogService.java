@@ -16,10 +16,17 @@ import org.apache.logging.log4j.Logger;
 
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class PenaltylogService {
-
+	
     // log4j2 로그 찍기
     public static final Logger LOGGER = LogManager.getLogger(PenaltylogService.class);
 	
+	private final PenaltylogDao penaltyLogDao;
+
+	public PenaltylogService(PenaltylogDao penaltyLogDao) {
+		this.penaltyLogDao = penaltyLogDao;
+	}
+    
 }
