@@ -18,7 +18,7 @@ public class StudyLogsController {
     private StudyLogsService studyLogsService;
 
     // log4j2 로그 찍기
-    private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
+    private static final Logger LOGGER = LogManager.getLogger(StudyLogsController.class);
 
     // 결과물 신규추가
     @PostMapping("/insert")
