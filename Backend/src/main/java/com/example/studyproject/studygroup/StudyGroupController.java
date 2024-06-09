@@ -15,7 +15,6 @@ package com.example.studyproject.studygroup;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -45,35 +44,39 @@ public class StudyGroupController {
     // log4j2 로그 찍기
     private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
 
-    /**
-     * 시퀀스 생성 및 전체체출횟수 계산해서 그룹 추가 & JoinedGroup에 그룹장 추가
-     * @param vo - StudyGroup vo
-     */
-    @PostMapping("/createGroup")
-    public void createGroup(@RequestBody StudyGroup vo) throws NoSuchAlgorithmException {
-
-        // 그룹장의 id는 로그인 시 세션에 아이디 저장하고, 프론트단에서 아이디 세션 불러서 vo로 넘기기
-        // 그룹ID 240517 + 0001 형식 로직.. 가장 큰 숫자 불러와서 없으면 만들어주고 있으면 +1
-        LocalDateTime now = LocalDateTime.now();
-        String year = String.valueOf(now.getYear());
-        String month = groupService.addZero(now.getMonthValue());
-        String day = groupService.addZero(now.getDayOfMonth());
-        String yrmd = year.substring(2, 3) + month + day;
-
-        String maxGroupId = groupService.getMaxGroupId(yrmd);
-        if (!maxGroupId.equals("") && maxGroupId != null) {
-            int nextValue = Integer.valueOf(maxGroupId) + 1;
-            maxGroupId = String.valueOf(nextValue);
-            vo.setGroup_id(maxGroupId);
-        } else {
-            maxGroupId = yrmd + "0001";
-            vo.setGroup_id(maxGroupId);
-        }
-
-        // 총제출횟수
-        // 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
-        // 주단위: (종료일-시작일)/7 * 최소제출횟수
-        // 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
+  /**
+   * 시퀀스 생성 및 전체체출횟수 계산해서 그룹 추가 & JoinedGroup에 그룹장 추가
+	 * @param vo - StudyGroup vo
+	 */
+	@PostMapping("/createGroup")
+	public void createGroup(@RequestBody StudyGroup vo) throws NoSuchAlgorithmException {
+		
+		// 그룹장의 id는 로그인 시 세션에 아이디 저장하고, 프론트단에서 아이디 세션 불러서 vo로 넘기기
+		// 그룹ID 240517 + 0001 형식 로직.. 가장 큰 숫자 불러와서 없으면 만들어주고 있으면 +1
+		LocalDateTime now = LocalDateTime.now();
+		String year = String.valueOf(now.getYear());
+		LOGGER.info("year: " + year.substring(2, 4));
+		String month = groupService.addZero(now.getMonthValue());
+		LOGGER.info("month: " + month);
+		String day = groupService.addZero(now.getDayOfMonth());
+		LOGGER.info("day: " + day);
+		String yrmd = year.substring(2, 4) + month + day;
+		LOGGER.info("yrmd: " + yrmd);
+		
+		String maxGroupId = groupService.getMaxGroupId(yrmd);
+		if(!maxGroupId.equals("") && maxGroupId != null) {
+			long nextValue = Long.valueOf(maxGroupId) + 1;
+			maxGroupId = String.valueOf(nextValue);
+			vo.setGroup_id(maxGroupId);
+		} else {
+			maxGroupId = yrmd + "0001";
+			vo.setGroup_id(maxGroupId);
+		}
+		
+		// 총제출횟수
+		// 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
+		// 주단위: (종료일-시작일)/7 * 최소제출횟수
+		// 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
         LocalDateTime startDateTime = vo.getStartdate();
         LocalDateTime endDateTime = vo.getEnddate();
 

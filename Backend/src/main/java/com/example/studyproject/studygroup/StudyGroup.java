@@ -24,10 +24,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class StudyGroup {
     private String group_id;    	// 스터디그룹ID
-    private Member leader_id;   	// 스터디장ID
+    private String leader_id;   	// 스터디장ID
     private String title;       	// 스터디제목
     private String name;			// 스터디명
-    private String desc;        	// 스터디 소개
+    private String study_desc;        	// 스터디 소개
     private String kind;        	// 스터디 종류 => 코드 테이블 참조
     private String status;   	  	// 활성화상태 => 코드 테이블 참조
     private int mem_cnt;        	// 최대멤버수
@@ -43,7 +43,7 @@ public class StudyGroup {
 		// TODO Auto-generated constructor stub
 	}
 
-	public StudyGroup(String group_id, Member leader_id, String title, String name, String desc, String kind,
+	public StudyGroup(String group_id, String leader_id, String title, String name, String study_desc, String kind,
 			String status, int mem_cnt, LocalDateTime startdate, LocalDateTime enddate, int view_cnt, String chk_m,
 			int chk_min_cnt, int chk_total_cnt, int penalty) {
 		super();
@@ -51,7 +51,7 @@ public class StudyGroup {
 		this.leader_id = leader_id;
 		this.title = title;
 		this.name = name;
-		this.desc = desc;
+		this.study_desc = study_desc;
 		this.kind = kind;
 		this.status = status;
 		this.mem_cnt = mem_cnt;
@@ -72,11 +72,11 @@ public class StudyGroup {
 		this.group_id = group_id;
 	}
 
-	public Member getLeader_id() {
+	public String getLeader_id() {
 		return leader_id;
 	}
 
-	public void setLeader_id(Member leader_id) {
+	public void setLeader_id(String leader_id) {
 		this.leader_id = leader_id;
 	}
 
@@ -96,12 +96,13 @@ public class StudyGroup {
 		this.name = name;
 	}
 
-	public String getDesc() {
-		return desc;
+
+	public String getStudy_desc() {
+		return study_desc;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setStudy_desc(String study_desc) {
+		this.study_desc = study_desc;
 	}
 
 	public String getKind() {
@@ -187,7 +188,7 @@ public class StudyGroup {
 	@Override
 	public String toString() {
 		return "StudyGroup [group_id=" + group_id + ", leader_id=" + leader_id + ", title=" + title + ", name=" + name
-				+ ", desc=" + desc + ", kind=" + kind + ", status=" + status + ", mem_cnt=" + mem_cnt + ", startdate="
+				+ ", study_desc=" + study_desc + ", kind=" + kind + ", status=" + status + ", mem_cnt=" + mem_cnt + ", startdate="
 				+ startdate + ", enddate=" + enddate + ", view_cnt=" + view_cnt + ", chk_m=" + chk_m + ", chk_min_cnt="
 				+ chk_min_cnt + ", chk_total_cnt=" + chk_total_cnt + ", penalty=" + penalty + "]";
 	}
