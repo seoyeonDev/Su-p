@@ -67,7 +67,7 @@
 		WHERE
 			leader_id = #{leader_id}
 	</update>
-	
+
 	<!-- 그룹 삭제 -->
 	<delete id="deleteGroup">
 		DELETE
@@ -77,7 +77,8 @@
 		AND
 			leader_id = #{leader_id}
 	</delete>
-
+	
+	<!-- 그룹 리스트 전체 조회 -->
 	<select id="selectListStudyGroup" resultType="List">
 		SELECT
 			group_id,
@@ -98,4 +99,13 @@
 		WHERE 1=1
 		ORDER BY group_id desc;
 	</select>
+
+	<update id="changeStatus">
+		UPDATE studygroup
+		SET status = (CASE WHEN now() &lt; DATE(startdate) THEN 'STAT10'
+							WHEN now() &gt; DATE(startdate) THEN 'STAT20'
+		    				WHEN now() &gt; DATE(enddate) THEN 'STAT30' END
+		    )
+		WHERE status != 'STAT30'
+	</update>
 </mapper>

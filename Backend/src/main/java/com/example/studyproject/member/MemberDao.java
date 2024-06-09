@@ -2,6 +2,17 @@ package com.example.studyproject.member;
 
 import org.apache.ibatis.annotations.Mapper;
 
+/**
+ * @Class Name : MemberController.java
+ * @Description : 멤버 관리를 위한 Dao
+ * @Modification Information
+ * @
+ * @ 수정일           수정자        수정내용
+ * @ -----------    --------    ---------------------------
+ * @ 2024.05.15     김혜원        회원 탈퇴 비밀번호 검사 기능 추가
+ *
+ */
+
 @Mapper
 public interface MemberDao {
 	
@@ -40,6 +51,11 @@ public interface MemberDao {
 	// 회원 탈퇴
 	int deleteMember(String user_id);
 
+
+	// 비밀번호 일치 여부
+	int isPasswordCorrect(String user_id, String password);
+
 	// 사용자 계정 권한 확인
 	String chkAUTH(String user_id);
+
 }

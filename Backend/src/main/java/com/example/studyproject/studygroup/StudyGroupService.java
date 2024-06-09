@@ -71,5 +71,10 @@ public class StudyGroupService {
   	// 그룹 리스트 호출
 	public List<?> selectListStudyGroup() {
 		return groupDao.selectListStudyGroup();
-	}  
+	}
+
+	// 그룹 상태 변경
+	public void changeStatus(){
+		groupDao.changeStatus();
+	}
 }
