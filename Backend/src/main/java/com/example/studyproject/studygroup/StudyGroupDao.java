@@ -33,5 +33,8 @@ public interface StudyGroupDao {
   
 	// 그룹 삭제
 	void deleteGroup(StudyGroup vo);
+
+	// 그룹 상태 변경
+	void changeStatus();
 	
 }
