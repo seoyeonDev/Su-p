@@ -77,7 +77,8 @@
 		AND
 			leader_id = #{leader_id}
 	</delete>
-
+  
+  <!-- 그룹 리스트 호출 -->
 	<select id="selectListStudyGroup" resultType="hashmap">
 		SELECT
 			group_id,
@@ -100,6 +101,30 @@
 		ORDER BY group_id desc;
 	</select>
 	
+	<!-- 그룹 제목으로 리스트 호출 --> 
+	<select id="selectListByTitle" resultType="hashmap">
+		SELECT
+			group_id,
+			leader_id,
+			title,
+			name,
+			study_desc,
+			kind,
+			status,
+			mem_cnt,
+			startdate,
+			enddate,
+			view_cnt,
+			chk_m,
+			chk_min_cnt,
+			chk_total_cnt,
+			penalty
+		FROM studygroup
+		WHERE 1=1
+		AND title like '%'||#{title}||'%'
+		ORDER BY group_id desc;
+	</select>
+    
 	<!-- 그룹 상세 조회 -->
 	<select id="selectStudyGroup" resultType="com.example.studyproject.studygroup.StudyGroup">
 		SELECT
@@ -131,7 +156,7 @@
 		WHERE
 			group_id = #{group_id}
 	</update>
-    
+
 	<update id="changeStatus">
 		UPDATE studygroup
 		SET status = (CASE WHEN now() &lt; DATE(startdate) THEN 'STAT10'

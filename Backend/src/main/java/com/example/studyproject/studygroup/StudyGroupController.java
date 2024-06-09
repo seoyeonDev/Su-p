@@ -16,7 +16,9 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
@@ -141,6 +143,19 @@ public class StudyGroupController {
 		LOGGER.info("studyGroup 리스트: " + studyGroupList);
 		
 		// 리턴 변수 클라이언트단 작업하면서 수정
+    }  
+  
+	// 그룹 제목으로 검색 
+	@GetMapping("/listByTitle/{title}")
+	public Map<String, Object> listByTitle(@PathVariable String title) {
+		List<?> listByTitle = groupService.selectListByTitle(title);
+		LOGGER.info("studyGroup 리스트: " + listByTitle);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("listByTitle", listByTitle);
+		
+		// 리턴 변수 map으로 지정
+		return map;
 	}  
   
 	// 그룹 상세 조회 + 조회수 증가
@@ -154,7 +169,6 @@ public class StudyGroupController {
 		LOGGER.info("sg vo: " + vo);
 		
 		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
-		
 	}
 	
 	// 그룹 삭제

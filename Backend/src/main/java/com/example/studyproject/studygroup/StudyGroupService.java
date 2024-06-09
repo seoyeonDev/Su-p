@@ -71,6 +71,11 @@ public class StudyGroupService {
   	// 그룹 리스트 호출
 	public List<?> selectListStudyGroup() {
 		return groupDao.selectListStudyGroup();
+	}  
+	
+	// 그룹 제목으로 검색 
+	public List<?> selectListByTitle(String title) {
+		return groupDao.selectListByTitle(title);
 	}
 	
 	// 그룹 상세 조회

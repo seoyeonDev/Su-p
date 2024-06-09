@@ -43,4 +43,6 @@ public interface StudyGroupDao {
 	// 그룹 상태 변경
 	void changeStatus();
 	
+	// 그룹 제목으로 검색 
+	List<?> selectListByTitle(String title);
 }
