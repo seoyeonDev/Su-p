@@ -8,6 +8,17 @@ import org.springframework.stereotype.Service;
 
 import com.example.studyproject.util.Sha256;
 
+/**
+ * @Class Name : MemberService.java
+ * @Description : 멤버 관리를 위한 Service
+ * @Modification Information
+ * @
+ * @ 수정일           수정자        수정내용
+ * @ -----------    --------    ---------------------------
+ * @ 2024.05.15     김혜원        회원 탈퇴 비밀번호 검사 기능 추가
+ *
+ */
+
 @Service
 public class MemberService {
 
@@ -121,6 +132,15 @@ public class MemberService {
 		return rowsAffected > 0;
 	}
 
+
+	// 비밀번호 일치 여부
+	public boolean isPasswordCorrect(String user_id, String password) throws NoSuchAlgorithmException {
+
+		String encPwd = Sha256.encrypt(password);
+
+		return (memberDao.isPasswordCorrect(user_id, encPwd) > 0);
+  }
+  
 	// 사용자 계정 권한 확인
 	public String chkAUTH (String user_id){
 		return memberDao.chkAUTH(user_id);
