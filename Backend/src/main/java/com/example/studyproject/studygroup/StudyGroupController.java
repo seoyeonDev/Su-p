@@ -16,7 +16,9 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
@@ -145,11 +147,15 @@ public class StudyGroupController {
   
 	// 그룹 제목으로 검색 
 	@GetMapping("/listByTitle/{title}")
-	public void listByTitle(@PathVariable String title) {
+	public Map<String, Object> listByTitle(@PathVariable String title) {
 		List<?> listByTitle = groupService.selectListByTitle(title);
 		LOGGER.info("studyGroup 리스트: " + listByTitle);
 		
-		// 리턴 변수 클라이언트단 작업하면서 수정
+		Map<String, Object> map = new HashMap<>();
+		map.put("listByTitle", listByTitle);
+		
+		// 리턴 변수 map으로 지정
+		return map;
 	}
 	
 	// 그룹 삭제
