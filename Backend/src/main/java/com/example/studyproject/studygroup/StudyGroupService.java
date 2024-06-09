@@ -77,6 +77,15 @@ public class StudyGroupService {
 	public List<?> selectListByTitle(String title) {
 		return groupDao.selectListByTitle(title);
 	}
+	
+	// 그룹 상세 조회
+	public StudyGroup selectStudyGroup(String group_id) {
+		return groupDao.selectStudyGroup(group_id);
+	}
+	
+	// 조회수 업데이트
+	public void updateViewCnt(String group_id) {
+		groupDao.updateViewCnt(group_id);
 
 	// 그룹 상태 변경
 	public void changeStatus(){
