@@ -15,5 +15,8 @@ public class StudyLogsService {
         this.studyLogsDao = studyLogsDao;
     }
 
-
+    // 스터디로그 상세 조회
+    public StudyLogs selectStudyLogs(String post_id) {
+    	return studyLogsDao.selectStudyLogs(post_id);
+    }
 }
