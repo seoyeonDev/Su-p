@@ -14,13 +14,13 @@
 	
 	<!-- 그룹 추가 -->
 	<insert id="createGroup">
-		INSERT INTO group
+		INSERT INTO studygroup
 		(
 			group_id,
 			leader_id,
 			title,
 			name,
-			desc,
+			study_desc,
 			kind,
 			status,
 			mem_cnt,
@@ -37,7 +37,7 @@
 			#{leader_id},
 			#{title},
 			#{name},
-			#{desc},
+			#{study_desc},
 			#{kind},
 			#{status},
 			#{mem_cnt},
@@ -56,7 +56,7 @@
 		SET
 			title = #{title},
 			name = #{name},
-			desc = #{desc},
+			study_desc = #{study_desc},
 			kind = #{kind},
 			mem_cnt = #{mem_cnt},
 			startdate = #{startdate},
@@ -67,7 +67,7 @@
 		WHERE
 			leader_id = #{leader_id}
 	</update>
-	
+
 	<!-- 그룹 삭제 -->
 	<delete id="deleteGroup">
 		DELETE
@@ -78,18 +78,19 @@
 			leader_id = #{leader_id}
 	</delete>
 
-	<select id="selectListStudyGroup" resultType="List">
+	<select id="selectListStudyGroup" resultType="hashmap">
 		SELECT
 			group_id,
 			leader_id,
 			title,
 			name,
-			desc,
+			study_desc,
 			kind,
 			status,
 			mem_cnt,
 			startdate,
 			enddate,
+			view_cnt,
 			chk_m,
 			chk_min_cnt,
 			chk_total_cnt,
@@ -122,4 +123,13 @@
 		AND title like '%'||#{title}||'%'
 		ORDER BY group_id desc;
 	</select>
+
+	<update id="changeStatus">
+		UPDATE studygroup
+		SET status = (CASE WHEN now() &lt; DATE(startdate) THEN 'STAT10'
+							WHEN now() &gt; DATE(startdate) THEN 'STAT20'
+		    				WHEN now() &gt; DATE(enddate) THEN 'STAT30' END
+		    )
+		WHERE status != 'STAT30'
+	</update>
 </mapper>

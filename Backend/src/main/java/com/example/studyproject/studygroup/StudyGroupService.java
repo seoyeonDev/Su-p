@@ -77,4 +77,9 @@ public class StudyGroupService {
 	public List<?> selectListByTitle(String title) {
 		return groupDao.selectListByTitle(title);
 	}
+
+	// 그룹 상태 변경
+	public void changeStatus(){
+		groupDao.changeStatus();
+	}
 }
