@@ -12,43 +12,43 @@
 		WHERE SUBSTRING(group_id, 1, 6) = #{yrmd};
 	</select>
 	
-<!--	&lt;!&ndash; 그룹 추가 &ndash;&gt;-->
-<!--	<insert id="createGroup">-->
-<!--		INSERT INTO group-->
-<!--		(-->
-<!--			group_id,-->
-<!--			leader_id,-->
-<!--			title,-->
-<!--			name,-->
-<!--			desc,-->
-<!--			kind,-->
-<!--			status,-->
-<!--			mem_cnt,-->
-<!--			startdate,-->
-<!--			enddate,-->
-<!--			chk_m,-->
-<!--			chk_min_cnt,-->
-<!--			chk_total_cnt,-->
-<!--			penalty-->
-<!--		)-->
-<!--		VALUES-->
-<!--		(-->
-<!--			#{group_id},-->
-<!--			#{leader_id},-->
-<!--			#{title},-->
-<!--			#{name},-->
-<!--			#{desc},-->
-<!--			#{kind},-->
-<!--			#{status},-->
-<!--			#{mem_cnt},-->
-<!--			#{startdate},-->
-<!--			#{enddate},-->
-<!--			#{chk_m},-->
-<!--			#{chk_min_cnt},-->
-<!--			#{chk_total_cnt},-->
-<!--			#{penalty}-->
-<!--		);-->
-<!--	</insert>-->
+	<!-- 그룹 추가 -->
+	<insert id="createGroup">
+		INSERT INTO studygroup
+		(
+			group_id,
+			leader_id,
+			title,
+			name,
+			study_desc,
+			kind,
+			status,
+			mem_cnt,
+			startdate,
+			enddate,
+			chk_m,
+			chk_min_cnt,
+			chk_total_cnt,
+			penalty
+		)
+		VALUES
+		(
+			#{group_id},
+			#{leader_id},
+			#{title},
+			#{name},
+			#{study_desc},
+			#{kind},
+			#{status},
+			#{mem_cnt},
+			#{startdate},
+			#{enddate},
+			#{chk_m},
+			#{chk_min_cnt},
+			#{chk_total_cnt},
+			#{penalty}
+		);
+	</insert>
 	
 	<!-- 그룹 수정 -->
 	<update id="updateGroup">
@@ -56,7 +56,7 @@
 		SET
 			title = #{title},
 			name = #{name},
-			desc = #{desc},
+			study_desc = #{study_desc},
 			kind = #{kind},
 			mem_cnt = #{mem_cnt},
 			startdate = #{startdate},
