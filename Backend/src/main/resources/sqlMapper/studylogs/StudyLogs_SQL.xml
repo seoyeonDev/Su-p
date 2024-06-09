@@ -16,7 +16,8 @@
 			content,
 			create_date,
 			update_date,
-			file_id
+			file_id,
+			img_id
 		FROM studylogs
 		WHERE 1=1
 		AND post_id = #{post_id}
