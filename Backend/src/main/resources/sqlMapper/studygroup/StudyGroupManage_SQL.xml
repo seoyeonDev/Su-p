@@ -12,43 +12,43 @@
 		WHERE SUBSTRING(group_id, 1, 6) = #{yrmd};
 	</select>
 	
-	<!-- 그룹 추가 -->
-	<insert id="createGroup">
-		INSERT INTO group
-		(
-			group_id,
-			leader_id,
-			title,
-			name,
-			desc,
-			kind,
-			status,
-			mem_cnt,
-			startdate,
-			enddate,
-			chk_m,
-			chk_min_cnt,
-			chk_total_cnt,
-			penalty
-		)
-		VALUES
-		(
-			#{group_id},
-			#{leader_id},
-			#{title},
-			#{name},
-			#{desc},
-			#{kind},
-			#{status},
-			#{mem_cnt},
-			#{startdate},
-			#{enddate},
-			#{chk_m},
-			#{chk_min_cnt},
-			#{chk_total_cnt},
-			#{penalty}
-		);
-	</insert>
+<!--	&lt;!&ndash; 그룹 추가 &ndash;&gt;-->
+<!--	<insert id="createGroup">-->
+<!--		INSERT INTO group-->
+<!--		(-->
+<!--			group_id,-->
+<!--			leader_id,-->
+<!--			title,-->
+<!--			name,-->
+<!--			desc,-->
+<!--			kind,-->
+<!--			status,-->
+<!--			mem_cnt,-->
+<!--			startdate,-->
+<!--			enddate,-->
+<!--			chk_m,-->
+<!--			chk_min_cnt,-->
+<!--			chk_total_cnt,-->
+<!--			penalty-->
+<!--		)-->
+<!--		VALUES-->
+<!--		(-->
+<!--			#{group_id},-->
+<!--			#{leader_id},-->
+<!--			#{title},-->
+<!--			#{name},-->
+<!--			#{desc},-->
+<!--			#{kind},-->
+<!--			#{status},-->
+<!--			#{mem_cnt},-->
+<!--			#{startdate},-->
+<!--			#{enddate},-->
+<!--			#{chk_m},-->
+<!--			#{chk_min_cnt},-->
+<!--			#{chk_total_cnt},-->
+<!--			#{penalty}-->
+<!--		);-->
+<!--	</insert>-->
 	
 	<!-- 그룹 수정 -->
 	<update id="updateGroup">
@@ -67,7 +67,7 @@
 		WHERE
 			leader_id = #{leader_id}
 	</update>
-	
+
 	<!-- 그룹 삭제 -->
 	<delete id="deleteGroup">
 		DELETE
@@ -99,4 +99,13 @@
 		WHERE 1=1
 		ORDER BY group_id desc;
 	</select>
+
+	<update id="changeStatus">
+		UPDATE studygroup
+		SET status = (CASE WHEN now() &lt; DATE(startdate) THEN 'STAT10'
+							WHEN now() &gt; DATE(startdate) THEN 'STAT20'
+		    				WHEN now() &gt; DATE(enddate) THEN 'STAT30' END
+		    )
+		WHERE status != 'STAT30'
+	</update>
 </mapper>
