@@ -35,7 +35,7 @@ public interface StudyGroupDao {
 	StudyGroup selectStudyGroup(String group_id);
 	
 	// 조회수 업데이트
-	void updateViewCnt(StudyGroup vo);
+	void updateViewCnt(String group_id);
   
 	// 그룹 삭제
 	void deleteGroup(StudyGroup vo);

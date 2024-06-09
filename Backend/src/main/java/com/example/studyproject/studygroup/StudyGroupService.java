@@ -79,7 +79,7 @@ public class StudyGroupService {
 	}
 	
 	// 조회수 업데이트
-	public void updateViewCnt(StudyGroup vo) {
-		groupDao.updateViewCnt(vo);
+	public void updateViewCnt(String group_id) {
+		groupDao.updateViewCnt(group_id);
 	}
 }

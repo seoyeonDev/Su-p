@@ -126,7 +126,7 @@
 	<update id="updateViewCnt">
 		UPDATE studygroup
 		SET
-			view_cnt = #{view_cnt}
+			view_cnt = view_cnt + 1
 		WHERE
 			group_id = #{group_id}
 	</update>
