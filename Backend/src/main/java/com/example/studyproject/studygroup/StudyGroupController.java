@@ -22,10 +22,15 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -132,21 +137,32 @@ public class StudyGroupController {
     @PostMapping("/studyGroupList")
     public void studyGroupList() {
 
-        LOGGER.info("======================= 리스트 포스트 호출");
+		List<?> studyGroupList = groupService.selectListStudyGroup();
+		LOGGER.info("studyGroup 리스트: " + studyGroupList);
+		
+		// 리턴 변수 클라이언트단 작업하면서 수정
+	}  
+  
+	// 그룹 상세 조회 + 조회수 증가
+	@GetMapping("/studyDetail/{group_id}")
+	public void studyDetail(@PathVariable String group_id) {
 
-        List<?> studyGroupList = groupService.selectListStudyGroup();
-        LOGGER.info("studyGroup 리스트: " + studyGroupList);
+		// 조회수 +1 카운트
+		groupService.updateViewCnt(group_id);
+		
+		StudyGroup vo = groupService.selectStudyGroup(group_id);
+		LOGGER.info("sg vo: " + vo);
+		
+		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
+		
+	}
+	
+	// 그룹 삭제
+	@Delete("/deleteGroup")
+	public void deleteGroup(@RequestBody StudyGroup vo) {
 
-        // 리턴 변수 클라이언트단 작업하면서 수정
-    }
-
-    // 그룹 삭제
-    @Delete("/deleteGroup")
-    public void deleteGroup(@RequestBody StudyGroup vo) {
-
-        groupService.deleteGroup(vo);
-    }
-
+		groupService.deleteGroup(vo);
+	}
 
     // 그룹 상태 변경
     @Scheduled(cron = "0 0 0 * * *")

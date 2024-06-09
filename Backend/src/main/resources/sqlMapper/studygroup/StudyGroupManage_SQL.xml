@@ -99,7 +99,39 @@
 		WHERE 1=1
 		ORDER BY group_id desc;
 	</select>
-
+	
+	<!-- 그룹 상세 조회 -->
+	<select id="selectStudyGroup" resultType="com.example.studyproject.studygroup.StudyGroup">
+		SELECT
+			group_id,
+			leader_id,
+			title,
+			name,
+			study_desc,
+			kind,
+			status,
+			mem_cnt,
+			startdate,
+			enddate,
+			view_cnt,
+			chk_m,
+			chk_min_cnt,
+			chk_total_cnt,
+			penalty
+		FROM studygroup
+		WHERE 1=1
+		AND group_id = #{group_id};
+	</select>
+	
+	<!-- 조회수 업데이트 -->
+	<update id="updateViewCnt">
+		UPDATE studygroup
+		SET
+			view_cnt = view_cnt + 1
+		WHERE
+			group_id = #{group_id}
+	</update>
+    
 	<update id="changeStatus">
 		UPDATE studygroup
 		SET status = (CASE WHEN now() &lt; DATE(startdate) THEN 'STAT10'
