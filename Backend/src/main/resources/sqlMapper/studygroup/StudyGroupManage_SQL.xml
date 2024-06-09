@@ -77,28 +77,28 @@
 		AND
 			leader_id = #{leader_id}
 	</delete>
-
-<!--	<select id="selectListStudyGroup" resultType="List">-->
-<!--		SELECT-->
-<!--			group_id,-->
-<!--			leader_id,-->
-<!--			title,-->
-<!--			name,-->
-<!--			desc,-->
-<!--			kind,-->
-<!--			status,-->
-<!--			mem_cnt,-->
-<!--			startdate,-->
-<!--			enddate,-->
-<!--			chk_m,-->
-<!--			chk_min_cnt,-->
-<!--			chk_total_cnt,-->
-<!--			penalty-->
-<!--		FROM studygroup-->
-<!--		WHERE 1=1-->
-<!--		ORDER BY group_id desc-->
-<!--	</select>-->
-
+	
+	<!-- 그룹 리스트 전체 조회 -->
+	<select id="selectListStudyGroup" resultType="List">
+		SELECT
+			group_id,
+			leader_id,
+			title,
+			name,
+			desc,
+			kind,
+			status,
+			mem_cnt,
+			startdate,
+			enddate,
+			chk_m,
+			chk_min_cnt,
+			chk_total_cnt,
+			penalty
+		FROM studygroup
+		WHERE 1=1
+		ORDER BY group_id desc;
+	</select>
 
 	<update id="changeStatus">
 		UPDATE studygroup
