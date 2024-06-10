@@ -8,6 +8,8 @@ import Login from "./pages/member/Login";
 import AddPost from "./pages/mystudy/CreatePost"
 import MyStudy from "./pages/mystudy/MyStudy";
 import MyPage from "./pages/member/MyPage";
+import FindId from "./pages/member/FindId";
+import FindPwd from "./pages/member/FindPwd";
 
 import './App.css';
 
@@ -28,7 +30,8 @@ function App() {
         <Route path="/join" element={<Join/>}></Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/mypage" element={<MyPage/>}></Route>
-
+        <Route path="/findId" element={<FindId/>}></Route>
+        <Route path="/findPwd" element={<FindPwd/>}></Route>
       </Routes>
     </BrowserRouter>
   );
