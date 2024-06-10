@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @ 2024.05.13     김혜원        최초 생성
  * @ 2024.05.14     김혜원        그룹 가입 신청하기
  * @ 2024.05.19     김혜원        그룹 상태 변경
- *
+ * @ 2024.05.27     김혜원        get 메서드 추가
  */
 
 @RestController
@@ -64,10 +64,15 @@ public class JoinedgroupController {
 
     @DeleteMapping("/user/{user_id}/group/{group_id}")
     public void deleteJoinedgroup(@PathVariable("user_id") String user_id, @PathVariable("group_id") String group_id){
+        Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(user_id, group_id);
 
-        // joinedgroup getbyid~ 만들기
+        int success = 0;
 
-        int success = joinedgroupService.deleteJoinedgroup(user_id, group_id);
+        LOGGER.info("================ vo : "+joinedgroupVo);
+
+        if(joinedgroupVo != null){
+            success = joinedgroupService.deleteJoinedgroup(user_id, group_id);
+        }
 
         if(success>0){
             LOGGER.info("================ joingroup delete success");
@@ -85,13 +90,16 @@ public class JoinedgroupController {
     @PutMapping("/updateStatus/{status}")
     public void updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") String status){
         LOGGER.info("================ joinedgroup join");
+        Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(vo.getUser_id().getUser_id(), vo.getGroup_id().getGroup_id());
+        // 나중 : status가 code 테이블에 있는지 검사
 
-        // get 메소드 만들어서 vo 유효한지 검사
-        // status가 code 테이블에 있는지 검사
+        boolean success = false;
 
+        // 값이 있을 때에만 수정 가능
+        if(joinedgroupVo != null){
+            success = joinedgroupService.updateJoinedStatus(vo, status);
+        }
 
-
-        boolean success = joinedgroupService.updateJoinedStatus(vo, status);
 
         if(success){
             LOGGER.info("================ join update success");

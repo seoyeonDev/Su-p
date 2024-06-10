@@ -24,7 +24,7 @@
      );
     </insert>
 
-
+    <!-- 가입 거절, 가입 취소 (delete) -->
     <delete id="deleteJoinedgroup">
         DELETE FROM joinedgroup
         WHERE 1=1
@@ -41,5 +41,18 @@
             AND group_id = #{group_id.group_id}
     </update>
 
+    <!-- groulId, userId로 joinedgroup 찾기 -->
+    <select id="getByUserIdAndGroupId" resultType="com.example.studyproject.joinedgroup.Joinedgroup">
+        SELECT
+            group_id,
+            user_id,
+            role,
+            joinstatus,
+            submission_cnt
+        FROM joinedgroup
+        WHERE 1=1
+            AND user_id = #{user_id}
+            AND group_id = #{group_id}
+    </select>
 
 </mapper>

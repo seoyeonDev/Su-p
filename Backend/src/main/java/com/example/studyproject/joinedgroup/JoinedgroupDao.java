@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @ -----------    --------    ---------------------------
  * @ 2024.05.13     김혜원        최초 생성
  * @ 2024.05.14     김혜원        그룹 가입 신청하기
- *
+ * @ 2024.05.27     김혜원        get 메서드 추가
  */
 @Mapper
 public interface JoinedgroupDao {
@@ -26,4 +26,6 @@ public interface JoinedgroupDao {
     // 그룹 참여 상태 수정
     boolean updateJoinedStatus(Joinedgroup vo);
 
+    // groupId & userId 로 불러오기
+    Joinedgroup getByUserIdAndGroupId(String user_id, String group_id);
 }
