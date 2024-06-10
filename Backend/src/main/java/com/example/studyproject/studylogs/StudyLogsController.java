@@ -5,10 +5,10 @@ import com.example.studyproject.studygroup.StudyGroupController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/studylogs")
@@ -26,7 +26,10 @@ public class StudyLogsController {
         studyLogsService.insertLogs(vo);
     }
 
-
+    @GetMapping("/selectList")
+    public ArrayList<StudyLogs> selectList(){
+        return studyLogsService.selectList();
+    }
 
 
 }
