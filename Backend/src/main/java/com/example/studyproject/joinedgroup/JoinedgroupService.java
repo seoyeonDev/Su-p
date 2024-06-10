@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @ -----------    --------    ---------------------------
  * @ 2024.05.13     김혜원        최초 생성
  * @ 2024.05.14     김혜원        그룹 가입 신청하기
- *
+ * @ 2024.05.27     김혜원        get 메서드 추가
  */
 
 @Service
@@ -66,5 +66,14 @@ public class JoinedgroupService {
 
         return joinedgroupDao.updateJoinedStatus(vo);
 
+    }
+
+    /**
+     * userId와 groupId 로 찾기
+     */
+    public Joinedgroup getByUserIdAndGroupId(String user_id, String group_id){
+        LOGGER.info("================ vo : "+user_id + "   "+group_id);
+
+        return joinedgroupDao.getByUserIdAndGroupId(user_id, group_id);
     }
 }
