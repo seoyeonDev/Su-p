@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @ 2024.05.14     김혜원        그룹 가입 신청하기
  * @ 2024.05.19     김혜원        그룹 상태 변경
  * @ 2024.05.27     김혜원        get 메서드 추가
+ * @ 2024.06.10     김혜원        joinedgroup 타입 바꾸기
  */
 
 @RestController
@@ -43,7 +44,7 @@ public class JoinedgroupController {
     public void joinGroup(@RequestBody Joinedgroup vo){
         LOGGER.info("================ joinedgroup join");
 
-        Member memberVo = memberService.getMemberById(vo.getUser_id().getUser_id());
+        Member memberVo = memberService.getMemberById(vo.getUser_id());
         // group getGroupById 도 만들면 검사하는 logic 넣기
 
         boolean success;
@@ -90,7 +91,7 @@ public class JoinedgroupController {
     @PutMapping("/updateStatus/{status}")
     public void updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") String status){
         LOGGER.info("================ joinedgroup join");
-        Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(vo.getUser_id().getUser_id(), vo.getGroup_id().getGroup_id());
+        Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(vo.getUser_id(), vo.getGroup_id());
         // 나중 : status가 code 테이블에 있는지 검사
 
         boolean success = false;

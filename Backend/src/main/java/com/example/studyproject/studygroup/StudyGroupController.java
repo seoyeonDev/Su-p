@@ -109,8 +109,7 @@ public class StudyGroupController {
         }
 
 		groupService.createGroup(vo);
-
-		Joinedgroup joinedgroupVo = new Joinedgroup(vo, vo.getLeader_id(), null,null,0);
+		Joinedgroup joinedgroupVo = new Joinedgroup(vo.getGroup_id(), vo.getLeader_id(), null,null,0);
 		// joinedgroupVo로 joinedgroup 생성, true : 그룹장
 		joinedgroupService.createJoinedGroup(joinedgroupVo,true);
 	}
