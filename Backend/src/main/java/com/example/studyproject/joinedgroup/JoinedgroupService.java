@@ -31,23 +31,23 @@ public class JoinedgroupService {
      * 그룹 가입 신청
      */
     public boolean createJoinedGroup(Joinedgroup vo, boolean role){
-        // 그룹장이라면 true 넣으면 됩니다요
-
+        // 그룹장이라면 true, 참여자라면 false
         String roleStatus;
+        String joinStatus;
 
-        if(role){ // 그룹장 true : 11
+        // 그룹장(true) : ROLE10, 참여자(false) : ROLE20
+        // PERM10 : 가입대기, PERM20 : 가입승인, PERM30 : 가입거절
+        if(role){ // 그룹장 true : ROLE10
             // 코드 테이블로 검사하는 logic 구현해야함
-            roleStatus = "11";
-        } else { // 참여자 false : 12
-            roleStatus = "12";
+            roleStatus = "ROLE10";
+            joinStatus = "PERM20";
+        } else { // 참여자 false : ROLE20
+            roleStatus = "ROLE20";
+            joinStatus = "PERM10";
         }
 
         vo.setSubmission_cnt(0); // 총 제출 횟수
-        /*
-        0 : 가입 대기
-        1 : 가입 승인
-         */
-        vo.setJoinstatus("0"); // 가입 신청 상태
+        vo.setJoinstatus(joinStatus); // 가입 신청 상태
         vo.setRole(roleStatus); // 역할
 
         return joinedgroupDao.createJoinedGroup(vo);

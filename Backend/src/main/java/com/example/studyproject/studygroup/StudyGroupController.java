@@ -10,6 +10,7 @@ package com.example.studyproject.studygroup;
  * @ 2024.05.01     봉선호        최초 생성
  * @ 2024.05.17		봉선호		그룹 추가 메서드 수정
  * @ 2024.06.02     이서연        그룹상태 변경 스케줄러 및 메서드 추가
+ * @ 2024.06.03     김혜원       그룹 추가시 joinedgroup도 생성
  */
 
 import java.security.NoSuchAlgorithmException;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.studyproject.joinedgroup.Joinedgroup;
+import com.example.studyproject.joinedgroup.JoinedgroupService;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,12 +47,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/studygroup")
 public class StudyGroupController {
+	
+	@Autowired
+	private StudyGroupService groupService;
 
-    @Autowired
-    private StudyGroupService groupService;
-
-    // log4j2 로그 찍기
-    private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
+	@Autowired
+	private JoinedgroupService joinedgroupService;
+	
+	// log4j2 로그 찍기
+	private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
+	
 
   /**
    * 시퀀스 생성 및 전체체출횟수 계산해서 그룹 추가 & JoinedGroup에 그룹장 추가
@@ -101,11 +108,13 @@ public class StudyGroupController {
             vo.setChk_total_cnt(totCnt);
         }
 
-        groupService.createGroup(vo);
+		groupService.createGroup(vo);
 
-        // JoinedGroup에 그룹장ID로 동시에 추가
-        // 혜원 pr 후 추가
-    }
+		Joinedgroup joinedgroupVo = new Joinedgroup(vo, vo.getLeader_id(), null,null,0);
+		// joinedgroupVo로 joinedgroup 생성, true : 그룹장
+		joinedgroupService.createJoinedGroup(joinedgroupVo,true);
+	}
+	
 
     //  그룹 수정
     @PutMapping("(/updateGroup")
