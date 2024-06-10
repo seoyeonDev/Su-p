@@ -16,4 +16,9 @@ public class StudyLogsService {
     }
 
 
+    // 결과물 추가
+    public void insertLogs(StudyLogs vo) {
+        studyLogsDao.insertLogs(vo);
+    }
+
 }

@@ -6,6 +6,29 @@
 <!-- namespace에 mapper가 생성되어 있는 패키지 경로를 적어준다. -->
 <mapper namespace="com.example.studyproject.studylogs.StudyLogsDao">
 
+    <!-- 결과물 신규추가 -->
+    <insert id ="insertLogs">
+        INSERT INTO studylogs
+        (
+            post_id
+            , user_id
+            , group_id
+            , title
+            , content
+            , create_date
+
+        )
+        VALUES (
+            ( SELECT COALESCE(CAST(max(post_id) AS INTEGER) + 1 , 1)
+                       FROM studylogs WHERE group_id = #{group_id}
+                       )
+            , #{user_id}
+            , #{group_id}
+            , #{title}
+            , #{content}
+            , now()
+        )
+    </insert>
 
 
 </mapper>
