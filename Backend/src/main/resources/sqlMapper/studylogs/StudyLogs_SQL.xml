@@ -30,5 +30,15 @@
         )
     </insert>
 
+    <!-- 결과물 업데이트 -->
+    <update id="updateStudyLogs" >
+        UPDATE studylogs
+        SET
+        title = #{title},
+        content = #{content},
+        update_date = now()
+        WHERE
+        post_id = #{post_id}
+    </update>
 
 </mapper>

@@ -21,4 +21,10 @@ public class StudyLogsService {
         studyLogsDao.insertLogs(vo);
     }
 
+
+
+    // 스터디로그 업데이트
+    public void updateStudyLogs(StudyLogs vo){
+        studyLogsDao.updateStudyLogs(vo);
+    }
 }
