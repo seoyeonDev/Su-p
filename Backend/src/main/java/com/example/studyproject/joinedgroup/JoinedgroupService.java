@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 /**
  * @Class Name : JoinedgroupService.java
  * @Description : 그룹 가입 상태 Service
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @ 2024.05.13     김혜원        최초 생성
  * @ 2024.05.14     김혜원        그룹 가입 신청하기
  * @ 2024.05.27     김혜원        get 메서드 추가
+ * @ 2024.06.10     이서연        사용자별 가입한 그룹 목록 메서드 추가
  */
 
 @Service
@@ -25,6 +28,11 @@ public class JoinedgroupService {
 
     public JoinedgroupService(JoinedgroupDao joinedgroupDao){
         this.joinedgroupDao = joinedgroupDao;
+    }
+
+    // 사용자별 가입한 그룹 목록
+    ArrayList<Joinedgroup> selectJoinedList(String user_id){
+        return joinedgroupDao.selectJoinedList(user_id);
     }
 
     /**

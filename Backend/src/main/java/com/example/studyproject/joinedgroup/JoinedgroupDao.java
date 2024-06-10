@@ -2,6 +2,8 @@ package com.example.studyproject.joinedgroup;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
+
 /**
  * @Class Name : JoinedgroupDao.java
  * @Description : 그룹 가입 상태 정보 Dao
@@ -12,9 +14,13 @@ import org.apache.ibatis.annotations.Mapper;
  * @ 2024.05.13     김혜원        최초 생성
  * @ 2024.05.14     김혜원        그룹 가입 신청하기
  * @ 2024.05.27     김혜원        get 메서드 추가
+ * @ 2024.06.10     이서연        사용자별 가입한 그룹 목록 메서드 추가
  */
 @Mapper
 public interface JoinedgroupDao {
+
+    // 사용자별 가입한 그룹 목록
+    ArrayList<Joinedgroup> selectJoinedList(String user_id);
 
     // 그룹 참여 신청 (참여자)
     boolean createJoinedGroup(Joinedgroup vo);
