@@ -30,5 +30,12 @@
         )
     </insert>
 
+    <select id = "selectList" resultType="com.example.studyproject.studylogs.StudyLogs">
+        SELECT post_id
+            , title
+            , create_date
+        FROM studylogs
+    </select>
+
 
 </mapper>
