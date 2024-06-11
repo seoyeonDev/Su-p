@@ -53,10 +53,13 @@ public class StudyLogsController {
     @GetMapping("/getImage/{img_id}")
     public ResponseEntity<byte[]> getImage(@PathVariable String img_id) {
         // 실제 이미지 파일이 저장된 경로
-        String imagePath = path + "/" +img_id; // 스터디로그 등록하는 메서드가 아직 없어서 어떤 식으로 저장되는지 모르므로 임시로 경로 지정
-
+    	LOGGER.info("이미지파일명: " + img_id);
+        String imagePath = path + "sp-studylogs_img/" +img_id; // 스터디로그 등록하는 메서드가 아직 없어서 어떤 식으로 저장되는지 모르므로 임시로 경로 지정
+        LOGGER.info("이미지파일 경로: " + imagePath);
+        
         // 파일이 존재하는지 확인
         Path imageFilePath = Paths.get(imagePath);
+        LOGGER.info("이미지파일 경로: " + imagePath);
         if (!Files.exists(imageFilePath)) {
             // 파일이 존재하지 않을 경우 404 에러를 반환
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -70,13 +73,17 @@ public class StudyLogsController {
             // 이미지 파일을 읽어오는 중에 에러가 발생한 경우 500 에러를 반환
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
+        LOGGER.info("이미지파일 바이트배열: " + imageBytes);
+        
         // 응답에 이미지 데이터와 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         
         String[] parts = img_id.split("\\.");
         String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
-
+        LOGGER.info("이미지파일 확장자: " + parts);
+        LOGGER.info("이미지파일 확장자 소문자: " + fileExtension);
+        
+        
         MediaType mediaType;
         if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension)) {
             mediaType = MediaType.IMAGE_JPEG;
@@ -86,10 +93,14 @@ public class StudyLogsController {
             // 기본적으로 JPEG로 설정
             mediaType = MediaType.IMAGE_JPEG;
         }
-
+        LOGGER.info("이미지파일 미디어타입: " + mediaType);
+        
+        
         headers.setContentType(mediaType);
         headers.setContentLength(imageBytes.length);
-
+        LOGGER.info("이미지파일 헤더: " + headers);
+        LOGGER.info("이미지 리턴: " + new ResponseEntity<>(imageBytes, headers, HttpStatus.OK));
+        
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
     
@@ -97,10 +108,14 @@ public class StudyLogsController {
     @GetMapping("/downloadFile/{file_id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String file_id) {
         // 파일의 절대 경로 생성.. 이미지와 마찬가지로 스터디로그 생성 메서드가 없어서 이미지, 파일 어떤 식으로 저장하는지 모르므로 임의로 설정
-        String realFilePath = path + "/" + file_id;
+    	LOGGER.info("파일명: " + file_id);
+        String realFilePath = path + "sp-studylogs_file/" + file_id;
+    	LOGGER.info("파일경로: " + realFilePath);
 
         // 파일의 경로를 이용하여 FileSystemResource 객체 생성
         Path filePath = Paths.get(realFilePath);
+    	LOGGER.info("파일경로 객체: " + filePath);
+    	
         FileSystemResource fileResource = new FileSystemResource(filePath);
 
         // 파일이 존재하지 않는 경우 404 에러 반환
@@ -112,7 +127,9 @@ public class StudyLogsController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", fileResource.getFilename());
-
+    	LOGGER.info("헤더: " + headers);
+    	LOGGER.info("헤더 리턴: " + ResponseEntity.ok().headers(headers).body(fileResource));
+        
         // 파일을 응답 본문에 담아서 클라이언트에게 반환
         return ResponseEntity.ok()
                 .headers(headers)
