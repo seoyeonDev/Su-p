@@ -8,7 +8,7 @@ const StudyList = () => {
       // 서버단에서 데이터 가져오기
       axios.post('http://localhost:8080/studygroup/studyGroupList')
         .then(response => {
-          setStudyItems(response.data.studylist); // studylist 키에 해당하는 데이터를 상태에 저장
+          setStudyItems(response.data); // studylist 키에 해당하는 데이터를 상태에 저장
         })
         .catch(error => console.error('Error fetching data:', error));
     }, []);
