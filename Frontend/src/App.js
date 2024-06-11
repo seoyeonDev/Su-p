@@ -8,6 +8,7 @@ import Login from "./pages/member/Login";
 import AddPost from "./pages/mystudy/CreatePost"
 import MyStudy from "./pages/mystudy/MyStudy";
 import MyPage from "./pages/member/MyPage";
+import StudyList from "./pages/studygroup/StudyList";
 
 import './App.css';
 
@@ -28,6 +29,9 @@ function App() {
         <Route path="/join" element={<Join/>}></Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/mypage" element={<MyPage/>}></Route>
+
+        {/* 스터디그룹 */}
+        <Route path="/studylist" element={<StudyList/>}></Route>
 
       </Routes>
     </BrowserRouter>
