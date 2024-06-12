@@ -36,7 +36,9 @@ function Login () {
                 </div>
                 <div>
                     <button type="button" onClick={loginTest}>로그인</button>
-                    <Link to={"/join"} className={"button-style"}>회원가입</Link>
+                    <Link to={"/join"} className={"button-style"}>회원가입</Link><br/>
+                    <Link to={"/findId"}>아이디 찾기</Link><br/>
+                    <Link to={"/findPwd"}>비밀번호 찾기</Link><br/>
                 </div>
                 <div> testMsg : {test}</div>
 
