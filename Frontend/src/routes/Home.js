@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import StudyList from '../pages/studygroup/StudyList';
 
 function Home() {
     const [message, setMessage] = useState([]);
@@ -64,6 +65,9 @@ function Home() {
                     <button type="submit">제출</button>
                 </form>
             </div>
+            <main>
+                <StudyList/>
+            </main>
         </div>
 
 
