@@ -7,6 +7,17 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @Class Name : PenaltylogController.java
+ * @Description : PenaltylogController CONTROLLER
+ * @Modification Information
+ * @
+ * @ 수정일           수정자        수정내용
+ * @ -----------    --------    ---------------------------
+ * @ 2024.06.12     김혜원        주석 수정
+ *
+ */
+
 @RestController
 @RequestMapping("/studylogs")
 public class StudyLogsController {
@@ -23,6 +34,11 @@ public class StudyLogsController {
         studyLogsService.insertLogs(vo);
     }
 
+    /**
+     * 결과물 업데이트
+     * @param post_id - 결과물 id
+     * @param vo - 결과물 vo
+     */
     @PutMapping("/update/{post_id}")
     public void updateLogs(@PathVariable String post_id, @RequestBody StudyLogs vo) {
 

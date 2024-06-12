@@ -23,7 +23,7 @@ public class StudyLogsService {
 
 
 
-    // 스터디로그 업데이트
+    // 결과물 업데이트
     public void updateStudyLogs(StudyLogs vo){
         studyLogsDao.updateStudyLogs(vo);
     }
