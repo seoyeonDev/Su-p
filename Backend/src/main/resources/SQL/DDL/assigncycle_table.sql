@@ -1,14 +1,13 @@
--- Table: public.sg_assgincycle
+-- Table: public.sg_assigncycle
 
 -- DROP TABLE IF EXISTS public.sg_assigncycle;
 
 CREATE TABLE IF NOT EXISTS public.sg_assigncycle
 (
-    startdate timestamp without time zone NOT NULL,
-    enddate timestamp without time zone NOT NULL,
     group_id character(255) COLLATE pg_catalog."default" NOT NULL,
-    assgincycle integer NOT NULL,
-    CONSTRAINT sg_assigncycle_pkey PRIMARY KEY (startdate, enddate)
+    startdate character(255) NOT NULL,
+    enddate character(255) NOT NULL,
+    assigncycle character(255) NOT NULL
 )
 
 TABLESPACE pg_default;

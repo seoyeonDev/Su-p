@@ -5,20 +5,22 @@
 <mapper namespace="com.example.studyproject.assigncycle.AssignCycleDao">
 	
 	<!-- 회차 정보 추가 -->
-	<insert id="insertAssignCycle">
+	<insert id="insertAssignCycle" parameterType="list">
 		INSERT INTO sg_assigncycle
 		(
+			group_id,
 			startdate,
 			enddate,
-			group_id,
-			assgincycle
+			assigncycle
 		)
 		VALUES
+		<foreach collection="list" item="item" separator=",">
 		(
-			#{startdate},
-			#{enddate},
-			#{group_id},
-			#{assgincycle}
-		);
+			#{item.group_id},
+			#{item.startdate},
+			#{item.enddate},
+			#{item.assigncycle}
+		)
+		</foreach>
 	</insert>
 </mapper>

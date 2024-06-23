@@ -11,7 +11,6 @@ package com.example.studyproject.assigncycle;
  *
  */
 
-import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,37 +26,21 @@ import lombok.*;
 @AllArgsConstructor
 public class AssignCycle {
 
-	private LocalDateTime startdate;
-	private LocalDateTime enddate;
 	private String group_id;
-	private int assigncycle;
+	private String startdate;
+	private String enddate;
+	private String assigncycle;
 	
 	public AssignCycle() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AssignCycle(LocalDateTime startdate, LocalDateTime enddate, String group_id, int assigncycle) {
+	public AssignCycle(String group_id, String startdate, String enddate, String assigncycle) {
 		super();
-		this.startdate = startdate;
-		this.enddate = enddate;
 		this.group_id = group_id;
-		this.assigncycle = assigncycle;
-	}
-
-	public LocalDateTime getStartdate() {
-		return startdate;
-	}
-
-	public void setStartdate(LocalDateTime startdate) {
 		this.startdate = startdate;
-	}
-
-	public LocalDateTime getEnddate() {
-		return enddate;
-	}
-
-	public void setEnddate(LocalDateTime enddate) {
 		this.enddate = enddate;
+		this.assigncycle = assigncycle;
 	}
 
 	public String getGroup_id() {
@@ -68,17 +51,33 @@ public class AssignCycle {
 		this.group_id = group_id;
 	}
 
-	public int getAssigncycle() {
+	public String getStartdate() {
+		return startdate;
+	}
+
+	public void setStartdate(String startdate) {
+		this.startdate = startdate;
+	}
+
+	public String getEnddate() {
+		return enddate;
+	}
+
+	public void setEnddate(String enddate) {
+		this.enddate = enddate;
+	}
+
+	public String getAssigncycle() {
 		return assigncycle;
 	}
 
-	public void setAssigncycle(int assigncycle) {
+	public void setAssigncycle(String assigncycle) {
 		this.assigncycle = assigncycle;
 	}
 
 	@Override
 	public String toString() {
-		return "AssginCycle [startdate=" + startdate + ", enddate=" + enddate + ", group_id=" + group_id
+		return "AssignCycle [group_id=" + group_id + ", startdate=" + startdate + ", enddate=" + enddate
 				+ ", assigncycle=" + assigncycle + "]";
 	}
 	

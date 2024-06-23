@@ -1,5 +1,10 @@
 package com.example.studyproject.assigncycle;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Class Name : AssginCycleService.java
  * @Description : AssginCycleService SERVICE
@@ -26,9 +31,44 @@ public class AssignCycleService {
 	public AssignCycleService(AssignCycleDao assignCycleDao) {
 		this.assignCycleDao = assignCycleDao;
 	}
+	// 회차 계산
+	public List<AssignCycle> createCycle(String group_id, LocalDateTime startdate, LocalDateTime lastdate, String chkM) {
+		List<AssignCycle> list = new ArrayList<>();
+		
+		// 주 또는 월단위일 경우,
+		if(chkM.equals("SUBM10")) {
+			int assigncycle = 1;
+			// 시작날짜가 종료날짜 이전일 동안
+			while(!startdate.isAfter(lastdate)) {
+				// n회차의 종료날짜를 계산하고
+				LocalDateTime enddate = startdate.plusDays(6);
+				if(enddate.isAfter(lastdate)) {
+					enddate = lastdate;
+				}
+				// 리스트에 넣는다.
+				list.add(new AssignCycle(group_id, startdate.toString(), enddate.toString(), String.valueOf(assigncycle)));
+				startdate = enddate.plusDays(1);
+				assigncycle++;
+			}
+		} else if(chkM.equals("SUBM20")) {
+			int assigncycle = 1;
+			while(!startdate.isAfter(lastdate)) {
+				LocalDateTime enddate = startdate.plusDays(29);
+				if(enddate.isAfter(lastdate)) {
+					enddate = lastdate;
+				}
+				list.add(new AssignCycle(group_id, startdate.toString(), enddate.toString(), String.valueOf(assigncycle)));
+				startdate = enddate.plusDays(1);
+				assigncycle++;
+			}
+		}
+		
+		return list;
+	}
+	
 	
 	// 그룹의 회차 정보 생성
-	public void insertAssignCycle(AssignCycle vo) {
-		assignCycleDao.insertAssignCycle(vo);
+	public void insertAssignCycle(List<AssignCycle> list) {
+		assignCycleDao.insertAssignCycle(list);
 	}
 }
