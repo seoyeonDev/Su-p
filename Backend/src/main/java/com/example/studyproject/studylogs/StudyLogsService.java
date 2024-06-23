@@ -18,12 +18,17 @@ public class StudyLogsService {
         this.studyLogsDao = studyLogsDao;
     }
 
+    // 스터디로그 상세 조회
+    public StudyLogs selectStudyLogs(String post_id) {
+    	return studyLogsDao.selectStudyLogs(post_id);
+    }
 
     // 결과물 추가
     public void insertLogs(StudyLogs vo) {
         studyLogsDao.insertLogs(vo);
     }
 
+    // 스터디로그 
     public ArrayList<StudyLogs> selectList(){
         return studyLogsDao.selectList();
 
