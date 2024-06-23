@@ -10,22 +10,32 @@ package com.example.studyproject.studygroup;
  * @ 2024.05.01     봉선호        최초 생성
  * @ 2024.05.17		봉선호		그룹 추가 메서드 수정
  * @ 2024.06.02     이서연        그룹상태 변경 스케줄러 및 메서드 추가
+ * @ 2024.06.03     김혜원       그룹 추가시 joinedgroup도 생성
  */
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.example.studyproject.joinedgroup.Joinedgroup;
+import com.example.studyproject.joinedgroup.JoinedgroupService;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,12 +47,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/studygroup")
 public class StudyGroupController {
+	
+	@Autowired
+	private StudyGroupService groupService;
 
-    @Autowired
-    private StudyGroupService groupService;
-
-    // log4j2 로그 찍기
-    private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
+	@Autowired
+	private JoinedgroupService joinedgroupService;
+	
+	// log4j2 로그 찍기
+	private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
+	
 
   /**
    * 시퀀스 생성 및 전체체출횟수 계산해서 그룹 추가 & JoinedGroup에 그룹장 추가
@@ -94,11 +108,12 @@ public class StudyGroupController {
             vo.setChk_total_cnt(totCnt);
         }
 
-        groupService.createGroup(vo);
-
-        // JoinedGroup에 그룹장ID로 동시에 추가
-        // 혜원 pr 후 추가
-    }
+		groupService.createGroup(vo);
+		Joinedgroup joinedgroupVo = new Joinedgroup(vo.getGroup_id(), vo.getLeader_id(), null,null,0);
+		// joinedgroupVo로 joinedgroup 생성, true : 그룹장
+		joinedgroupService.createJoinedGroup(joinedgroupVo,true);
+	}
+	
 
     //  그룹 수정
     @PutMapping("(/updateGroup")
@@ -132,21 +147,44 @@ public class StudyGroupController {
     @PostMapping("/studyGroupList")
     public void studyGroupList() {
 
-        LOGGER.info("======================= 리스트 포스트 호출");
+		List<?> studyGroupList = groupService.selectListStudyGroup();
+		LOGGER.info("studyGroup 리스트: " + studyGroupList);
+		
+		// 리턴 변수 클라이언트단 작업하면서 수정
+    }  
+  
+	// 그룹 제목으로 검색 
+	@GetMapping("/listByTitle/{title}")
+	public Map<String, Object> listByTitle(@PathVariable String title) {
+		List<?> listByTitle = groupService.selectListByTitle(title);
+		LOGGER.info("studyGroup 리스트: " + listByTitle);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("listByTitle", listByTitle);
+		
+		// 리턴 변수 map으로 지정
+		return map;
+	}  
+  
+	// 그룹 상세 조회 + 조회수 증가
+	@GetMapping("/studyDetail/{group_id}")
+	public void studyDetail(@PathVariable String group_id) {
 
-        List<?> studyGroupList = groupService.selectListStudyGroup();
-        LOGGER.info("studyGroup 리스트: " + studyGroupList);
+		// 조회수 +1 카운트
+		groupService.updateViewCnt(group_id);
+		
+		StudyGroup vo = groupService.selectStudyGroup(group_id);
+		LOGGER.info("sg vo: " + vo);
+		
+		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
+	}
+	
+	// 그룹 삭제
+	@Delete("/deleteGroup")
+	public void deleteGroup(@RequestBody StudyGroup vo) {
 
-        // 리턴 변수 클라이언트단 작업하면서 수정
-    }
-
-    // 그룹 삭제
-    @Delete("/deleteGroup")
-    public void deleteGroup(@RequestBody StudyGroup vo) {
-
-        groupService.deleteGroup(vo);
-    }
-
+		groupService.deleteGroup(vo);
+	}
 
     // 그룹 상태 변경
     @Scheduled(cron = "0 0 0 * * *")
