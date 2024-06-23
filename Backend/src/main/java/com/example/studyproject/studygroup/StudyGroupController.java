@@ -145,12 +145,13 @@ public class StudyGroupController {
 
     // 그룹 목록 호출
     @PostMapping("/studyGroupList")
-    public void studyGroupList() {
+    public List<?> studyGroupList() {
 
 		List<?> studyGroupList = groupService.selectListStudyGroup();
 		LOGGER.info("studyGroup 리스트: " + studyGroupList);
 		
-		// 리턴 변수 클라이언트단 작업하면서 수정
+		// 리턴 변수 클라이언트단 작업하면서 수정 완료
+		return studyGroupList;
     }  
   
 	// 그룹 제목으로 검색 
