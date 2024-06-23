@@ -2,9 +2,14 @@ package com.example.studyproject.studylogs;
 
 
 import com.example.studyproject.studygroup.StudyGroupController;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -12,10 +17,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,20 +45,32 @@ public class StudyLogsController {
     private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
 
 
+    // 스터디 로그 상세 조회
+    @GetMapping("/studylogsdetail/{post_id}")
+    public Map<String, Object> getMethodName(@PathVariable String post_id) {
+    	
+    	Map<String, Object> map = new HashMap<>();
+    	
+    	StudyLogs vo = studyLogsService.selectStudyLogs(post_id);
+    	map.put("vo", vo);
+    	
+        return map;
+    }
+    
 
 
+    // 결과물 신규추가
+    @PostMapping("/insert")
+    public void insertLogs(@RequestBody StudyLogs vo){
+        studyLogsService.insertLogs(vo);
+    }
+    
+    // 스터디로그 
+    @GetMapping("/selectList")
+    public ArrayList<StudyLogs> selectList(){
+        return studyLogsService.selectList();
+    }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // 스터디로그 상세보기 - 이미지
     @GetMapping("/getImage/{img_id}")
     public ResponseEntity<byte[]> getImage(@PathVariable String img_id) {

@@ -4,7 +4,7 @@ class MyPage extends Component {
     render() {
         return (
             <div>
-                마이페이지
+                <h1>마이페이지</h1>
             </div>
         );
     }
