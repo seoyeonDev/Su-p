@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import StudyList from '../pages/studygroup/StudyList';
 
 import JoinedList from '../pages/joinedgroup/JoinedList';
 
@@ -66,10 +67,16 @@ function Home() {
                     <button type="submit">제출</button>
                 </form>
             </div>
+
             <div>
                 서연
                 <JoinedList/>
             </div>
+
+
+            <main>
+                <StudyList/>
+            </main>
 
         </div>
 
