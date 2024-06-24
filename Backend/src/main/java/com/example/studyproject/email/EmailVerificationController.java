@@ -11,22 +11,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/mail")
 public class EmailVerificationController {
 
     @Autowired
     private EmailService emailService;
     private int number;
-//
-//    @PostMapping("/{email}")
-//    public String verifyEmail(@PathVariable String email){
-//        // 인증 코드 생성 로직 (예시로 간단히 UUID를 사용함)
-//        String verificationCode = UUID.randomUUID().toString();
-//        // 인증 코드를 이메일로 전송
-//        emailService.sendSimpleMessage(email, "이메일 인증", "인증 코드: " + verificationCode);
-//        return "인증 코드가 이메일로 전송되었습니다.";
-//    }
 
+    RedisConfig rc = new RedisConfig();
+
+
+    /**
+     * 인증번호 이메일 전송
+     * @param mail
+     * @param request
+     * @return
+     */
     @PostMapping("/mailSend")
     public HashMap<String, Object> mailSend(String mail, HttpServletRequest request){
         HashMap<String, Object> map = new HashMap<>();
@@ -34,9 +34,11 @@ public class EmailVerificationController {
             number = emailService.sendMail(mail);
             String num = String.valueOf(number);
 
-            HttpSession session = null;
-            session = request.getSession();
-            session.setAttribute("emailNum", num);
+            // redis 저장
+            rc.redisTemplate(rc.redisConnectionFactory()).opsForValue().set("emailNumChk",num);
+//            HttpSession session = null;
+//            session = request.getSession();
+//            session.setAttribute("emailNum", num);
 
             map.put("success", Boolean.TRUE);
             map.put("number", num);
@@ -47,11 +49,19 @@ public class EmailVerificationController {
         return map;
     }
 
+    /**
+     * 인증번호 검사
+     * @param userNumber
+     * @return
+     */
     @GetMapping("/mailCheck")
-    public ResponseEntity<?> mailCheck(@RequestParam String userNumber, HttpServletRequest request){
-        HttpSession session = request.getSession();
-        boolean isMatch = userNumber.equals(session.getAttribute("emailNum"));
-        //        boolean isMatch = userNumber.equals(String.valueOf(number));
+    public ResponseEntity<?> mailCheck(@RequestParam String userNumber){
+
+
+        String value = (String) rc.redisTemplate(rc.redisConnectionFactory()).opsForValue().get("emailNumChk");
+        boolean isMatch = userNumber.equals(value);
+//        boolean isMatch = userNumber.equals(session.getAttribute("emailNum"));
+
         return ResponseEntity.ok(isMatch);
     }
 }
