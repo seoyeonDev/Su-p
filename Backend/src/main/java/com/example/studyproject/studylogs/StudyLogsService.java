@@ -28,10 +28,14 @@ public class StudyLogsService {
         studyLogsDao.insertLogs(vo);
     }
 
+    // 결과물 업데이트
+    public void updateStudyLogs(StudyLogs vo){
+        studyLogsDao.updateStudyLogs(vo);
+    }
+  
     // 스터디로그 
     public ArrayList<StudyLogs> selectList(){
         return studyLogsDao.selectList();
 
     }
-
 }

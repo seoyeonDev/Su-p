@@ -47,6 +47,17 @@
         )
     </insert>
 
+    <!-- 결과물 업데이트 -->
+    <update id="updateStudyLogs" >
+        UPDATE studylogs
+        SET
+        title = #{title},
+        content = #{content},
+        update_date = now()
+        WHERE
+        post_id = #{post_id}
+    </update>
+
     <!-- 스터디로그 리스트 -->
     <select id = "selectList" resultType="com.example.studyproject.studylogs.StudyLogs">
         SELECT post_id
@@ -54,6 +65,5 @@
             , create_date
         FROM studylogs
     </select>
-
 
 </mapper>
