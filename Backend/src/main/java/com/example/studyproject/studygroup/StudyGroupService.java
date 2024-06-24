@@ -86,7 +86,8 @@ public class StudyGroupService {
 	// 조회수 업데이트
 	public void updateViewCnt(String group_id) {
 		groupDao.updateViewCnt(group_id);
-
+	}
+	
 	// 그룹 상태 변경
 	public void changeStatus(){
 		groupDao.changeStatus();

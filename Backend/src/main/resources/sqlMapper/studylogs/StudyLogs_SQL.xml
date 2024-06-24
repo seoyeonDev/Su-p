@@ -4,7 +4,24 @@
 
 
 <!-- namespace에 mapper가 생성되어 있는 패키지 경로를 적어준다. -->
-<mapper namespace="com.example.studyproject.studylogs.StudyLogsDao">
+
+	
+	<!-- 스터디로그 상세 조회 -->
+	<select id="selectStudyLogs" resultType="com.example.studyproject.studylogs.StudyLogs">
+		SELECT
+			post_id,
+			user_id,
+			group_id,
+			title,
+			content,
+			create_date,
+			update_date,
+			file_id,
+			img_id
+		FROM studylogs
+		WHERE 1=1
+		AND post_id = #{post_id}
+	</select>
 
     <!-- 결과물 신규추가 -->
     <insert id ="insertLogs">
@@ -40,5 +57,13 @@
         WHERE
         post_id = #{post_id}
     </update>
+
+    <!-- 스터디로그 리스트 -->
+    <select id = "selectList" resultType="com.example.studyproject.studylogs.StudyLogs">
+        SELECT post_id
+            , title
+            , create_date
+        FROM studylogs
+    </select>
 
 </mapper>

@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.UUID;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/member")
 public class EmailVerificationController {
@@ -25,11 +28,15 @@ public class EmailVerificationController {
 //    }
 
     @PostMapping("/mailSend")
-    public HashMap<String, Object> mailSend(String mail){
+    public HashMap<String, Object> mailSend(String mail, HttpServletRequest request){
         HashMap<String, Object> map = new HashMap<>();
         try {
             number = emailService.sendMail(mail);
             String num = String.valueOf(number);
+
+            HttpSession session = null;
+            session = request.getSession();
+            session.setAttribute("emailNum", num);
 
             map.put("success", Boolean.TRUE);
             map.put("number", num);
@@ -41,8 +48,10 @@ public class EmailVerificationController {
     }
 
     @GetMapping("/mailCheck")
-    public ResponseEntity<?> mailCheck(@RequestParam String userNumber){
-        boolean isMatch = userNumber.equals(String.valueOf(number));
+    public ResponseEntity<?> mailCheck(@RequestParam String userNumber, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        boolean isMatch = userNumber.equals(session.getAttribute("emailNum"));
+        //        boolean isMatch = userNumber.equals(String.valueOf(number));
         return ResponseEntity.ok(isMatch);
     }
 }

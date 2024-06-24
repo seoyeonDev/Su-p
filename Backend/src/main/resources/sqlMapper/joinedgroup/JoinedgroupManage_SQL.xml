@@ -16,8 +16,8 @@
         )
         VALUES
         (
-            #{group_id.group_id},
-            #{user_id.user_id},
+            #{group_id},
+            #{user_id},
             #{role},
             #{joinstatus},
             #{submission_cnt}
@@ -37,8 +37,8 @@
         UPDATE joinedgroup
         SET joinstatus = #{joinstatus}
         WHERE 1=1
-            AND user_id = #{user_id.user_id}
-            AND group_id = #{group_id.group_id}
+            AND user_id = #{user_id}
+            AND group_id = #{group_id}
     </update>
 
     <!-- groulId, userId로 joinedgroup 찾기 -->
@@ -53,6 +53,19 @@
         WHERE 1=1
             AND user_id = #{user_id}
             AND group_id = #{group_id}
+    </select>
+
+    <!-- 사용자별 가입한 그룹 목록 -->
+    <select id="selectJoinedList" resultType="com.example.studyproject.joinedgroup.Joinedgroup">
+        SELECT
+            group_id
+            , user_id
+            , role
+            , joinstatus
+            , submission_cnt
+        FROM joinedgroup
+        WHERE 1=1
+            AND user_id = #{user_id}
     </select>
 
 </mapper>
