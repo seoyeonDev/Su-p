@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.studyproject.assigncycle.AssignCycle;
+import com.example.studyproject.assigncycle.AssignCycleService;
 import com.example.studyproject.joinedgroup.Joinedgroup;
 import com.example.studyproject.joinedgroup.JoinedgroupService;
 import org.apache.ibatis.annotations.Delete;
@@ -54,6 +56,8 @@ public class StudyGroupController {
 	@Autowired
 	private JoinedgroupService joinedgroupService;
 	
+	@Autowired AssignCycleService assignCycleService;
+	
 	// log4j2 로그 찍기
 	private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
 	
@@ -78,7 +82,7 @@ public class StudyGroupController {
 		LOGGER.info("yrmd: " + yrmd);
 		
 		String maxGroupId = groupService.getMaxGroupId(yrmd);
-		if(!maxGroupId.equals("") && maxGroupId != null) {
+		if(maxGroupId != null && !maxGroupId.equals("")) {
 			long nextValue = Long.valueOf(maxGroupId) + 1;
 			maxGroupId = String.valueOf(nextValue);
 			vo.setGroup_id(maxGroupId);
@@ -91,23 +95,15 @@ public class StudyGroupController {
 		// 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
 		// 주단위: (종료일-시작일)/7 * 최소제출횟수
 		// 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
-        LocalDateTime startDateTime = vo.getStartdate();
-        LocalDateTime endDateTime = vo.getEnddate();
-
-        LocalDate startDate = startDateTime.toLocalDate();
-        LocalDate endDate = endDateTime.toLocalDate();
-
-        int totCnt = 0;
-        if ((vo.getChk_m()).equals("SUBM10")) {
-            long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-            totCnt = (int) ((daysBetween / 7) * vo.getChk_min_cnt());
-            vo.setChk_total_cnt(totCnt);
-        } else if ((vo.getChk_m()).equals("SUBM20")) {
-            long monthsBetween = ChronoUnit.MONTHS.between(startDate, endDate);
-            totCnt = (int) (monthsBetween * vo.getChk_min_cnt());
-            vo.setChk_total_cnt(totCnt);
-        }
-
+		int totCnt = groupService.getTotCnt(vo.getChk_m(), vo.getChk_min_cnt(), vo.getStartdate(), vo.getEnddate());
+		LOGGER.info("과제 총 제출 횟수: " + totCnt);
+		vo.setChk_total_cnt(totCnt);
+		
+		// 시작일, 종료일, 제출기준(주, 월)으로 회차 생성
+		List<AssignCycle> list = assignCycleService.createCycle(maxGroupId, vo.getStartdate(), vo.getEnddate(), vo.getChk_m());
+		LOGGER.info("사이클 리스트: " + list);
+		assignCycleService.insertAssignCycle(list);
+		
 		groupService.createGroup(vo);
 		Joinedgroup joinedgroupVo = new Joinedgroup(vo.getGroup_id(), vo.getLeader_id(), null,null,0);
 		// joinedgroupVo로 joinedgroup 생성, true : 그룹장
@@ -123,22 +119,9 @@ public class StudyGroupController {
         // 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
         // 주단위: (종료일-시작일)/7 * 최소제출횟수
         // 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
-        LocalDateTime startDateTime = vo.getStartdate();
-        LocalDateTime endDateTime = vo.getEnddate();
-
-        LocalDate startDate = startDateTime.toLocalDate();
-        LocalDate endDate = endDateTime.toLocalDate();
-
-        int totCnt = 0;
-        if ((vo.getChk_m()).equals("SUBM10")) {
-            long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-            totCnt = (int) ((daysBetween / 7) * vo.getChk_min_cnt());
-            vo.setChk_total_cnt(totCnt);
-        } else if ((vo.getChk_m()).equals("SUBM20")) {
-            long monthsBetween = ChronoUnit.MONTHS.between(startDate, endDate);
-            totCnt = (int) (monthsBetween * vo.getChk_min_cnt());
-            vo.setChk_total_cnt(totCnt);
-        }
+		int totCnt = groupService.getTotCnt(vo.getChk_m(), vo.getChk_min_cnt(), vo.getStartdate(), vo.getEnddate());
+		LOGGER.info("과제 총 제출 횟수: " + totCnt);
+		vo.setChk_total_cnt(totCnt);
 
         groupService.updateGroup(vo);
     }
