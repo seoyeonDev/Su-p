@@ -8,5 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface AssignCycleDao {
 
 	// 그룹의 화차 정보 생성
-	void insertAssignCycle(List<AssignCycle> lsit);
+	void insertAssignCycle(List<AssignCycle> list);
 }
