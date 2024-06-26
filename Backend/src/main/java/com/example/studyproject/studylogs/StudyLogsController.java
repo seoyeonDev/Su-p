@@ -32,12 +32,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * @Class Name : PenaltylogController.java
+ * @Description : PenaltylogController CONTROLLER
+ * @Modification Information
+ * @
+ * @ 수정일           수정자        수정내용
+ * @ -----------    --------    ---------------------------
+ * @ 2024.06.12     김혜원        주석 수정
+ *
+ */
+
 @RestController
 @RequestMapping("/studylogs")
 public class StudyLogsController {
 
-    @Autowired
-    private StudyLogsService studyLogsService;
+  @Autowired
+  private StudyLogsService studyLogsService;
+  
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
 
@@ -71,6 +83,33 @@ public class StudyLogsController {
         return studyLogsService.selectList();
     }
 
+
+    /**
+     * 결과물 업데이트
+     * @param post_id - 결과물 id
+     * @param vo - 결과물 vo
+     */
+    @PutMapping("/update/{post_id}")
+    public void updateLogs(@PathVariable String post_id, @RequestBody StudyLogs vo) {
+
+        StudyLogs studyLogs = studyLogsService.selectStudyLogs(post_id);
+        LOGGER.info("StudyLogs updated: " + studyLogs);
+
+        if (studyLogs == null) {
+            LOGGER.error("StudyLogs not found with post_id: " + post_id);
+            throw new RuntimeException("StudyLogs not found with post_id: " + post_id);
+        }
+
+        // 기존의 게시물을 업데이트
+        // 제목, 내용, 수정일은 db에서 now로 처리
+        studyLogs.setTitle(vo.getTitle());
+        studyLogs.setContent(vo.getContent());
+
+        studyLogsService.updateStudyLogs(vo);
+        LOGGER.info("StudyLogs updated: " + studyLogs);
+
+    }
+
     // 스터디로그 상세보기 - 이미지
     @GetMapping("/getImage/{img_id}")
     public ResponseEntity<byte[]> getImage(@PathVariable String img_id) {
@@ -86,6 +125,7 @@ public class StudyLogsController {
             // 파일이 존재하지 않을 경우 404 에러를 반환
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
 
         // 이미지 파일을 읽어와 byte 배열로 변환
         byte[] imageBytes;

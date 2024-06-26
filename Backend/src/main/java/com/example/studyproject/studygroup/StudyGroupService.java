@@ -12,6 +12,9 @@ package com.example.studyproject.studygroup;
  */
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -48,6 +51,25 @@ public class StudyGroupService {
 		}
 		
 		return returnValue;
+	}
+	
+	// 과제 총 제출 횟수 구하기
+	public int getTotCnt(String chkM, int chkMinCnt, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        LocalDate startDate = startDateTime.toLocalDate();
+        LocalDate endDate = endDateTime.toLocalDate();
+
+        int totCnt = 0;
+        if (chkM.equals("SUBM10")) {
+            long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+            LOGGER.info("주단위 날짜차이: " + daysBetween);
+            totCnt = (int) (((daysBetween + 1) / 7) * chkMinCnt);
+        } else if (chkM.equals("SUBM20")) {
+            long monthsBetween = ChronoUnit.DAYS.between(startDate, endDate);
+            LOGGER.info("월단위 날짜차이: " + monthsBetween);
+            totCnt = (int) (((monthsBetween + 1) / 30) * chkMinCnt);
+        }
+        
+        return totCnt;
 	}
 	
 	// 그룹 추가
