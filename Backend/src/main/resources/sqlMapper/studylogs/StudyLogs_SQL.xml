@@ -4,7 +4,7 @@
 
 
 <!-- namespace에 mapper가 생성되어 있는 패키지 경로를 적어준다. -->
-
+<mapper namespace="com.example.studyproject.studylogs.StudyLogsDao">
 	
 	<!-- 스터디로그 상세 조회 -->
 	<select id="selectStudyLogs" resultType="com.example.studyproject.studylogs.StudyLogs">
