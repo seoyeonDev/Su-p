@@ -23,3 +23,37 @@
     height: 200px;
     width: 800px;
 }
+
+/* 마이페이지 - 내 정보 */
+.info-area {
+    display:flex;
+}
+
+.info-area-image {
+    flex: 2;
+}
+
+.info-area-type {
+    flex: 1;
+}
+
+.info-area-myinfo {
+    flex: 2;
+}
+
+.info-area-button {
+    flex: 1;
+}
+
+/* 마이페이지 - 비밀번호 변경 */
+.changePwd-area {
+    display:flex;
+}
+
+.changePwd-type {
+    flex: 1;
+}
+
+.changePwd-input {
+    flex: 2;
+}
