@@ -10,9 +10,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * @Class Name : JoinedgroupController.java
@@ -41,6 +43,20 @@ public class JoinedgroupController {
     // log4j2 로그 찍기
     private static final Logger LOGGER = LogManager.getLogger(JoinedgroupController.class);
 
+
+    @GetMapping("/joinedList")
+    public Map selectJoinedList(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Map map = new HashMap();
+        if (session == null){
+            return null;
+        } else {
+            String loginId = (String) session.getAttribute("loginId");
+            ArrayList<Joinedgroup> list = joinedgroupService.selectJoinedList(loginId);
+            map.put("joinedlist", list);
+        }
+        return map;
+    }
 
     /**
      * 그룹 가입 신청자
