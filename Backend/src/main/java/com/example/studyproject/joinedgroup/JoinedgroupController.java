@@ -10,9 +10,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
+
 
 /**
  * @Class Name : JoinedgroupController.java
@@ -128,6 +130,23 @@ public class JoinedgroupController {
             LOGGER.info("================ join update failed");
         }
 
+    }
+
+    // 조건에 따른 목록보기
+    @GetMapping("/selectList")
+    public Map selectList(String joinstatus, String role, String status, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Map map = new HashMap();
+        if (session == null){
+            return null;
+        } else {
+            String loginId = (String) session.getAttribute("loginId");
+//            loginId = "sooyeon275";
+            ArrayList<Joinedgroup> list = joinedgroupService.selectList(joinstatus, role, status, loginId);
+            map.put("list",list);
+        }
+
+        return map;
     }
 
 

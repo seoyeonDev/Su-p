@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * @ 2024.05.14     김혜원        그룹 가입 신청하기
  * @ 2024.05.27     김혜원        get 메서드 추가
  * @ 2024.06.10     이서연        사용자별 가입한 그룹 목록 메서드 추가
+ * @ 2024.06.24     이서연        조건에 따른 목록보기
  */
 @Mapper
 public interface JoinedgroupDao {
@@ -34,4 +35,7 @@ public interface JoinedgroupDao {
 
     // groupId & userId 로 불러오기
     Joinedgroup getByUserIdAndGroupId(String user_id, String group_id);
+
+    // 조건에 따른 목록보기
+    ArrayList<Joinedgroup> selectList(String joinstatus, String role, String status, String user_id);
 }
