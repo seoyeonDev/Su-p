@@ -2,7 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
-<mapper namespace="com.example.studyproject.pelantylog.PenaltylogDao">
-	
+<mapper namespace="com.example.studyproject.penaltylog.PenaltylogDao">
+
+    <!-- 유저 아이디로 penaltylog 불러오기 -->
+    <select id="getByUserId" resultType="com.example.studyproject.penaltylog.Penaltylog">
+        SELECT
+            user_id,
+            group_id,
+            title,
+            logcontent,
+            penalty_round
+        FROM penaltylog
+        WHERE 1=1
+            AND user_id = #{user_id}
+    </select>
+
+    <!-- 그룹 아이디로 penaltylog 불러오기 -->
+    <select id="getByGroupId" resultType="com.example.studyproject.penaltylog.Penaltylog">
+        SELECT
+            user_id,
+            group_id,
+            title,
+            logcontent,
+            penalty_round
+        FROM penaltylog
+            WHERE 1=1
+        AND group_id = #{group_id}
+    </select>
 
 </mapper>

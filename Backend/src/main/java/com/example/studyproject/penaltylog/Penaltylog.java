@@ -19,7 +19,7 @@ public class Penaltylog {
 	private String group_id;
 	private String title;
 	private String logcontent;
-	private LocalDateTime penaltydate;
+	private int penalty_round;
 	
 //	public Penaltylog() {
 //		// TODO Auto-generated constructor stub
