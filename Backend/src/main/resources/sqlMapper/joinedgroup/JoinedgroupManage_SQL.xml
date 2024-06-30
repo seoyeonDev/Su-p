@@ -73,6 +73,7 @@
             AND COALESCE(#{role},'')='' OR a.role = #{role}                     <!-- 그룹장/참여자 -->
             AND COALESCE(#{status},'')='' OR b.status = #{status}               <!-- 그룹상태 -->
 
+    </select>
 
     <!-- 사용자별 가입한 그룹 목록 -->
     <select id="selectJoinedList" resultType="com.example.studyproject.joinedgroup.Joinedgroup">
