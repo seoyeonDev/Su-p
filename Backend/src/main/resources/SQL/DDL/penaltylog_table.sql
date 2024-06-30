@@ -33,3 +33,10 @@ COMMENT ON COLUMN public.penaltylog.logcontent
 
 COMMENT ON COLUMN public.penaltylog.penaltydate
     IS '패널티 날짜';
+
+-- 회차로 변경
+ALTER TABLE public.penaltylog
+DROP COLUMN penaltydate;
+
+ALTER TABLE public.penaltylog
+ADD COLUMN penalty_round int NOT NULL;
