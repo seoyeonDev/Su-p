@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +34,7 @@ public class PenaltylogService {
 		this.penaltyLogDao = penaltyLogDao;
 	}
 
-	// assigncycle 기준 조회
-	// 기준비교
+	// assigncycle 기준 조회 기준비교
 	// penalty insert
 	public String chkPenalty(String group_id){
 		String msg = "";
@@ -42,15 +42,15 @@ public class PenaltylogService {
 		System.out.println(group_id);
 		List<Map<String,Object>> penalty_chk = penaltyLogDao.selectPenalty(group_id);
 		for (Map<String, Object> penaltyMap : penalty_chk) {
-			int userId = (int) penaltyMap.get("user_id");
+			String userId = (String) penaltyMap.get("user_id");
 			int penalty = (int) penaltyMap.get("penalty");
-			int logCount = (int) penaltyMap.get("log_count");
+			Long logCount = (Long) penaltyMap.get("log_count");
 			boolean penaltyChk = (boolean) penaltyMap.get("penalty_chk");
 
-			if(!penaltyChk){
+			if(!penaltyChk){	// penalty 기준 미만
 				System.out.println(userId + "   user_id");
 				msg += " " + userId;
-				// user_id 이용해서 PENALTY table 에 인서트하기
+				// TODO user_id 이용해서 PENALTY table 에 인서트하기
 			}else {
 				System.out.println(userId + "   XXX");
 			}

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
-<mapper namespace="com.example.studyproject.pelantylog.PenaltylogDao">
+<mapper namespace="com.example.studyproject.penaltylog.PenaltylogDao">
 
     <select id="selectPenalty" resultType="map">
         with temp_date AS (
@@ -10,10 +10,10 @@
             where group_id = #{ group_id }
             and now() between date(startdate) and date(enddate)
         )
-        select A.user_id,B.penalty
+        select A.user_id
+            , B.penalty
             , count(*) AS log_count
             , B.penalty &lt;= count(*) AS penalty_chk
-            -- ,C.assigncycle
         from studylogs  A
             left join studygroup B
             on A.group_id = B.group_id
