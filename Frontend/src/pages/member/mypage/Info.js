@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Info = () => {
-    const imageUrl = 'http://localhost:8080/studylogs/getImage/IMG_20180815_144343631.jpg';
+    const [imageUrl, setImgUrl] = useState('');
     const [userInfo, setUserInfo] = useState(null);
     const [editNickNm, setEditNickNm] = useState('');
     const [editEmail, setEditEmail] = useState('');
@@ -20,7 +20,7 @@ const Info = () => {
                 setEditNickNm(1);
                 setEditEmail(1);
                 setUserInfo(response.data);
-                console.log(response.data);
+                setImgUrl('http://localhost:8080/studylogs/getImage/' + response.data.member.profile_img);
             } catch(error) {
                 console.log("error: " + error);
             }
