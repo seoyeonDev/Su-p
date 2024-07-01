@@ -2,21 +2,7 @@ package com.example.studyproject.penaltylog;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-/**
- * @Class Name : PenaltylogService.java
- * @Description : PenaltylogService SERVICE
- * @Modification Information
- * @
- * @ 수정일           수정자        수정내용
- * @ -----------    --------    ---------------------------
- * @ 2024.06.03     봉선호        최초 생성
- *
- */
-
 import org.springframework.stereotype.Service;
-
-
 @Service
 public class PenaltylogService {
 	
@@ -25,8 +11,18 @@ public class PenaltylogService {
 	
 	private final PenaltylogDao penaltyLogDao;
 
-	public PenaltylogService(PenaltylogDao penaltyLogDao) {
-		this.penaltyLogDao = penaltyLogDao;
+	public PenaltylogService(PenaltylogDao penaltyLogDao) {this.penaltyLogDao = penaltyLogDao;}
+
+	// penaltylog 삭제
+	public int deletePenaltyLog(String user_id, String group_id, int penalty_round){
+		int deleteSuccess = 0;
+		try{
+			deleteSuccess= penaltyLogDao.deletePenaltyLog(user_id, group_id, penalty_round);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return deleteSuccess;
 	}
     
 }

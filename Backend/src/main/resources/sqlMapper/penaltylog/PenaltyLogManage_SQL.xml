@@ -2,7 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
-<mapper namespace="com.example.studyproject.pelantylog.PenaltylogDao">
-	
+<mapper namespace="com.example.studyproject.penaltylog.PenaltylogDao">
+
+
+    <!-- penaltylog 삭제  -->
+    <delete id="deletePenaltyLog">
+        DELETE FROM penaltylog
+        WHERE user_id = #{user_id}
+        AND group_id = #{group_id}
+        AND penalty_round = #{penalty_round}
+    </delete>
 
 </mapper>
