@@ -12,16 +12,18 @@ function Login () {
     const [userPwd,setUserPwd] = useState('');
     const [msg, setMsg] = useState('');
 
-    const memberVo = {
+    const vo = {
         user_id : userId,
-        pwd : userPwd
+        password : userPwd
     }
 
     const postLogin = () => {
-        axios.post('http://localhost:8080/member/login', memberVo)
+        axios.post('http://localhost:8080/member/login', vo)
             .then(response => {
-                setMsg(response.data);
-                console.log('로그인 완료 , ', msg);
+                setMsg(response.data.msg);
+                localStorage.setItem('loginId', response.data.loginId);
+                console.log(localStorage.getItem('loginId'));
+                console.log('로그인 완료 , ', response.data.loginId);
             })
             .catch((err) => {
                 console.log('에러 , ', err);
@@ -50,8 +52,8 @@ function Login () {
                 {/*<h1>로그인</h1>*/}
                 <div className = "menuTitle">로그인</div>
                 <div className = "member-input">
-                    <input type="text" id={userId} placeholder={"아이디를 입력하세요."}/><br/>
-                    <input type="password" id={userPwd} placeholder={"비밀번호를 입력하세요."}/>
+                    <input type="text" id={userId}  onChange={(e) => setUserId(e.target.value)} placeholder={"아이디를 입력하세요."}/><br/>
+                    <input type="password" id={userPwd} onChange={(e) => setUserPwd(e.target.value)} placeholder={"비밀번호를 입력하세요."}/>
                 </div>
                 <div>
                     <button type="button" onClick={postLogin}>로그인</button>
