@@ -2,7 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
-<mapper namespace="com.example.studyproject.pelantylog.PenaltylogDao">
-	
+<mapper namespace="com.example.studyproject.penaltylog.PenaltylogDao">
+
+    <select id="selectPenalty" resultType="map">
+        with temp_date AS (
+            select * from sg_assigncycle
+            where group_id = #{ group_id }
+            and now() between date(startdate) and date(enddate)
+        )
+        select A.user_id
+            , B.penalty
+            , count(*) AS log_count
+            , B.penalty &lt;= count(*) AS penalty_chk
+        from studylogs  A
+            left join studygroup B
+            on A.group_id = B.group_id
+            left join temp_date C
+            on C.group_id = A.group_id
+        where A.create_date between date(C.startdate) AND date(C.enddate)
+        group by user_id, B.penalty, C.assigncycle
+    </select>
 
 </mapper>

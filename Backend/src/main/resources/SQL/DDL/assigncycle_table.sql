@@ -17,3 +17,8 @@ ALTER TABLE IF EXISTS public.sg_assigncycle
 
 COMMENT ON TABLE public.sg_assigncycle
     IS '스터디그룹 회차';
+
+-- pk 추가
+alter table public.sg_assigncycle
+    add constraint sg_assigncycle_pk
+        primary key (group_id, assigncycle);
