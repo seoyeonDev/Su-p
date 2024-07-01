@@ -47,7 +47,6 @@ public class MemberService {
 		// 입력받은 비밀번호 암호화
 		String encPwd = Sha256.encrypt(vo.getPassword());
 		vo.setPassword(encPwd);
-
 		Member idVo = getMemberById(vo.getUser_id());
 		Member loginVo = memberDao.loginMember(vo);
 
@@ -92,6 +91,12 @@ public class MemberService {
 		vo.setPassword(encPwd);
 		
 		memberDao.updateMember(vo);
+	}
+	
+	// 아이디로 유저정보 불러오기 
+	public Member getUserInfoById(String user_id) {
+		
+		return memberDao.getUserInfoById(user_id);
 	}
 	
 	// 아이디 중복검사
