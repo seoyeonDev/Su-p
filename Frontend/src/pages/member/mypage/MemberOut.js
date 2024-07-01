@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const MemberOut = () => {
     const [terms, setTerms] = useState('');
     const [agreed, setAgreed] = useState(false);
+    const loginId = localStorage.getItem('loginId');
 
     useEffect(() => {
       // withdrawalTerms.txt 파일을 불러와서 내용을 상태에 저장
@@ -17,8 +19,16 @@ const MemberOut = () => {
     };
 
     const withdrawal = () => {
+        var checkPwd = prompt('비밀번호를 입력해주세요.');
         if (agreed) {
-            alert('탈퇴 완료.');
+            axios.delete('http://localhost:8080/member/delete/' + 'test2', {
+                params: {
+                    password: checkPwd
+                }
+            })
+            .then(response => {
+                alert(response.data);
+            });
         } else {
             alert('탈퇴 약관에 동의해주세요.');
         }
