@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Class Name : PenaltylogController.java
@@ -36,6 +39,7 @@ public class PenaltylogController {
 
     // log4j2 로그 찍기
     private static final Logger LOGGER = LogManager.getLogger(PenaltylogController.class);
+
 
     /**
      * 유저 아이디로 penaltylog 불러오기
@@ -80,5 +84,10 @@ public class PenaltylogController {
         }
 
         return map;
+
+    @GetMapping("/chkPenalty")
+    public String chkPenalty (String group_id){
+        return penaltyLogService.chkPenalty(group_id);
+
     }
 }

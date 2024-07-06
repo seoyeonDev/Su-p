@@ -4,6 +4,7 @@
         
 <mapper namespace="com.example.studyproject.penaltylog.PenaltylogDao">
 
+
     <!-- 유저 아이디로 penaltylog 불러오기 -->
     <select id="getByUserId" resultType="com.example.studyproject.penaltylog.Penaltylog">
         SELECT
@@ -28,6 +29,25 @@
         FROM penaltylog
             WHERE 1=1
         AND group_id = #{group_id}
+
+    <select id="selectPenalty" resultType="map">
+        with temp_date AS (
+            select * from sg_assigncycle
+            where group_id = #{ group_id }
+            and now() between date(startdate) and date(enddate)
+        )
+        select A.user_id
+            , B.penalty
+            , count(*) AS log_count
+            , B.penalty &lt;= count(*) AS penalty_chk
+        from studylogs  A
+            left join studygroup B
+            on A.group_id = B.group_id
+            left join temp_date C
+            on C.group_id = A.group_id
+        where A.create_date between date(C.startdate) AND date(C.enddate)
+        group by user_id, B.penalty, C.assigncycle
+
     </select>
 
 </mapper>
