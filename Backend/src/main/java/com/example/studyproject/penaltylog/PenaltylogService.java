@@ -10,6 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @Class Name : PenaltylogService.java
+ * @Description : PenaltylogService SERVICE
+ * @Modification Information
+ * @
+ * @ 수정일           수정자        수정내용
+ * @ -----------    --------    ---------------------------
+ * @ 2024.06.03     봉선호        최초 생성
+ * @ 2024.07.01 	김혜원        조회 및 초기화
+ * @ 2024.07.01		이서연 		 데이터 조회 및 비교
+ */
 
 @Service
 public class PenaltylogService {
