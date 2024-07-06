@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,36 @@ public class PenaltylogService {
 	public PenaltylogService(PenaltylogDao penaltyLogDao) {
 		this.penaltyLogDao = penaltyLogDao;
 	}
+
+
+	// 유저 아이디로 penaltylog 불러오기
+	public ArrayList<Penaltylog> getByUserId(String user_id){
+		ArrayList<Penaltylog> penaltylogList = new ArrayList<>();
+
+		try{
+			penaltylogList = penaltyLogDao.getByUserId(user_id);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return penaltylogList;
+	}
+
+	// 그룹 아이디로 penaltylog 불러오기
+	public ArrayList<Penaltylog> getByGroupId(String group_id){
+
+		ArrayList<Penaltylog> penaltylogList = new ArrayList<>();
+
+		try{
+			penaltylogList = penaltyLogDao.getByGroupId(group_id);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return penaltylogList;
+	}
+
+
 
 	// assigncycle 기준 조회 기준비교
 	// penalty insert
@@ -59,4 +90,5 @@ public class PenaltylogService {
 		return msg;
 	}
     
+
 }
