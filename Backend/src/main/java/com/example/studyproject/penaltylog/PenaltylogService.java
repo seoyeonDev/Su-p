@@ -2,6 +2,13 @@ package com.example.studyproject.penaltylog;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : PenaltylogService.java
@@ -11,17 +18,9 @@ import org.apache.logging.log4j.Logger;
  * @ 수정일           수정자        수정내용
  * @ -----------    --------    ---------------------------
  * @ 2024.06.03     봉선호        최초 생성
- *
+ * @ 2024.07.01 	김혜원        조회 및 초기화
+ * @ 2024.07.01		이서연 		 데이터 조회 및 비교
  */
-
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 
 @Service
 public class PenaltylogService {
@@ -31,8 +30,18 @@ public class PenaltylogService {
 	
 	private final PenaltylogDao penaltyLogDao;
 
-	public PenaltylogService(PenaltylogDao penaltyLogDao) {
-		this.penaltyLogDao = penaltyLogDao;
+	public PenaltylogService(PenaltylogDao penaltyLogDao) {this.penaltyLogDao = penaltyLogDao;}
+
+	// penaltylog 삭제
+	public int deletePenaltyLog(String user_id, String group_id, int penalty_round){
+		int deleteSuccess = 0;
+		try{
+			deleteSuccess= penaltyLogDao.deletePenaltyLog(user_id, group_id, penalty_round);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return deleteSuccess;
 	}
 
 

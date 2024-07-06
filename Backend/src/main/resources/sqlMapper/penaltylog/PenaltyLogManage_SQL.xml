@@ -5,6 +5,15 @@
 <mapper namespace="com.example.studyproject.penaltylog.PenaltylogDao">
 
 
+
+    <!-- penaltylog 삭제  -->
+    <delete id="deletePenaltyLog">
+        DELETE FROM penaltylog
+        WHERE user_id = #{user_id}
+        AND group_id = #{group_id}
+        AND penalty_round = #{penalty_round}
+    </delete>
+
     <!-- 유저 아이디로 penaltylog 불러오기 -->
     <select id="getByUserId" resultType="com.example.studyproject.penaltylog.Penaltylog">
         SELECT
@@ -49,5 +58,6 @@
         group by user_id, B.penalty, C.assigncycle
 
     </select>
+
 
 </mapper>

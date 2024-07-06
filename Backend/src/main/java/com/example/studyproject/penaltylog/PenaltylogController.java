@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 /**
  * @Class Name : PenaltylogController.java
@@ -40,6 +43,31 @@ public class PenaltylogController {
     // log4j2 로그 찍기
     private static final Logger LOGGER = LogManager.getLogger(PenaltylogController.class);
 
+
+
+    /**
+     * penaltylog 삭제
+     *
+     * @param user_id
+     * @param group_id
+     * @param penalty_round
+     * @return
+     */
+    @DeleteMapping("/{user_id}/{group_id}/{penalty_round}")
+    public Map deletePenaltyLog(@PathVariable String user_id, @PathVariable String group_id, @PathVariable int penalty_round){
+        Map map = new HashMap();
+
+        try{
+            int deleteSuccess = penaltyLogService.deletePenaltyLog(user_id, group_id, penalty_round);
+            map.put("success",deleteSuccess);
+            // 1이면 성공, 0이면 실패
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        return map;
+    }
 
     /**
      * 유저 아이디로 penaltylog 불러오기
@@ -84,6 +112,7 @@ public class PenaltylogController {
         }
 
         return map;
+    }
 
     @GetMapping("/chkPenalty")
     public String chkPenalty (String group_id){
