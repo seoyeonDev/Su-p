@@ -1,36 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Info = () => {
-    const imageUrl = 'http://localhost:8080/studylogs/getImage/IMG_20180815_144343631.jpg';
+    const [imageUrl, setImgUrl] = useState('');
+    const [userInfo, setUserInfo] = useState(null);
+    const [editNickNm, setEditNickNm] = useState('');
+    const [editEmail, setEditEmail] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const user_id = localStorage.getItem('loginId');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/member/mypage', {
+                    params: {
+                        user_id: user_id
+                    }
+                });
+                setEditNickNm(1);
+                setEditEmail(1);
+                setUserInfo(response.data);
+                setImgUrl('http://localhost:8080/studylogs/getImage/' + response.data.member.profile_img);
+            } catch(error) {
+                console.log("error: " + error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const checkNickNm = () => {
         axios.get('http://localhost:8080/member/checkNickNm')
-            .then(() => {
+            .then(response => {
+                if(response.data.msg === 0) {
+                    setEditNickNm(1);
+                } else {
+                    setEditNickNm(0);
+                }
                 alert('닉네임 중복체크');
             });
     };
 
     const changeEmail = () => {
-        axios.get('')
-            .then(() => {
-                alert('이메일 인증번호 발송');
-            });
+        setIsEditing(true);
+        setEditEmail(0);
+        // axios.post('http://localhost:8080/mail/mailSend')
+        // .then(response => {
+        //     alert('이메일 인증번호 확인');
+        // });
     };
 
     const checkCode = () => {
-        axios.get('')
-            .then(() => {
-                alert('이메일 인증번호 확인');
+        axios.post('http://localhost:8080/mail/mailCheck')
+            .then(response => {
+                if(response.data) {
+                    setEditEmail(1);
+                    alert('이메일 인증번호 확인');
+                } else {
+                    setEditEmail(0);
+                }
             });
     };
 
     const changeInfo = () => {
-        axios.get('')
-            .then(() => {
-                alert('수정');
-            });
+        console.log("editEmail: " + editEmail);
+        if(editNickNm === 1 && editEmail === 1) {
+            // axios.get('')
+            //     .then(() => {
+            //         alert('수정');
+            //     });
+            alert('수정')
+        } else {
+            alert('수정실패');
+        }
     };
+
+    if (!userInfo || !userInfo.member) {
+        return <div>No user info available</div>;
+    }
+
+    // userInfo가 null이 아니고, userInfo.member도 존재할 때 구조 분해 할당
+    const { member } = userInfo;
 
   return (
     <div>
@@ -54,13 +104,13 @@ const Info = () => {
 
         <div className='info-area-myinfo'>
             <div className='info-area-myinfo-visible'>
-                <input type='text' id='userId' name='userId' value='sp123' readOnly /> <br/>
-                <input type='text' id='userName' name='userName' value='김스프' readOnly /> <br/>
-                <input type='text' id='userNickNm' name='userNickNm' placeholder='스프스프' /> <br/>
-                <input type='text' id='userEmail' name='userEmail' placeholder='sp123@sp.com' /> <br/>
+                <input type='text' id='userId' name='userId' value={member.user_id} readOnly /> <br/>
+                <input type='text' id='userName' name='userName' value={member.name} readOnly /> <br/>
+                <input type='text' id='userNickNm' name='userNickNm' defaultValue={member.nickname} /> <br/>
+                <input type='text' id='userEmail' name='userEmail' defaultValue={member.email} /> <br/>
             </div>
             <div className='info-area-myinfo-invisible'>
-                <input type='text' id='verificationCode' name='verificationCode' placeholder='123456' />
+                <input type='text' id='verificationCode' name='verificationCode' disabled={!isEditing} />
             </div>
         </div>
 
