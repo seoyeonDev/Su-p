@@ -42,15 +42,14 @@ public interface MemberDao {
 	// 아이디찾기
 	String findId(String name, String email);
 
-	// 비밀번호찾기
+	// 비밀번호 찾기 - 계정찾기
 	public int chkPwd(String user_id, String name, String email);
+
+	// 비밀전호 찾기 - 비밀번호 변경
 	public void changePwd(Member vo);
-	
-	String resetPwd();
 
 	// 회원 탈퇴
 	int deleteMember(String user_id);
-
 
 	// 비밀번호 일치 여부
 	int isPasswordCorrect(String user_id, String password);
