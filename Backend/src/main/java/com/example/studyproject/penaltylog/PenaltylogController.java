@@ -123,7 +123,9 @@ public class PenaltylogController {
     @PostMapping("/create")
     public void createPenalty(@RequestBody Penaltylog vo){
         try{
+            penaltyLogService.chkPenalty(vo.getGroup_id());
             penaltyLogService.insertPenaltylog(vo);
+
         } catch(Exception e){
             e.printStackTrace();
         }
