@@ -65,6 +65,17 @@
 		WHERE user_id = #{user_id}
 	</update>
 	
+	<!-- 아이디로 마이페이지 유저 정보 불러오기 --> 
+	<select id="getUserInfoById" resultType="com.example.studyproject.member.Member">
+		SELECT 
+			user_id,
+			name,
+			nickname,
+			email,
+			profile_img
+		FROM member WHERE user_id = #{user_id}
+	</select>
+
 	<!-- 아이디 중복검사 -->
 	<select id="getMemberById" resultType="com.example.studyproject.member.Member">
 		SELECT * FROM member WHERE user_id = #{user_id}

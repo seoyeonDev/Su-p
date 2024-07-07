@@ -33,7 +33,10 @@ public interface MemberDao {
 	// 잠금여부 업데이트
 	void updateLockYn(Member vo);
 	
-	// 아이디 중복검사
+	// 아이디로 유저 정보 불러오기 
+	Member getUserInfoById(String user_id);
+	
+	// 아이디 중복검사 
 	Member getMemberById(String user_id);
 
 	// 닉네임 중복검사
