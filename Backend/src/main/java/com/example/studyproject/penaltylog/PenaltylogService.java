@@ -98,6 +98,18 @@ public class PenaltylogService {
 		
 		return msg;
 	}
-    
+
+	// penaltylog 추가
+	public int insertPenaltylog(Penaltylog penaltylog){
+		int success=0;
+
+		try{
+			success = penaltyLogDao.insertPenaltylog(penaltylog);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		return success;
+	}
 
 }

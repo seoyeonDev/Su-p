@@ -17,7 +17,6 @@ public class Penaltylog {
 
 	private String user_id;
 	private String group_id;
-	private String title;
 	private String logcontent;
 	private int penalty_round;
 	
