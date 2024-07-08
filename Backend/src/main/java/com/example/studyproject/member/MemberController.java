@@ -136,6 +136,7 @@ public class MemberController {
 	}
 	
 	// 수정
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/update")
 	public void update(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
@@ -196,7 +197,7 @@ public class MemberController {
 		LOGGER.info("================ nickname: " + nickname);
 		
 		int chkImpl;
-		if(member == null) {
+		if(member == null || nickname.equals(member.getNickname())) {
 			return chkImpl = 0;
 		} else {
 			LOGGER.info("================ nickname: " + member.getNickname());
@@ -222,17 +223,16 @@ public class MemberController {
 		return chk;
 	}
   
-  
-  @PostMapping("/changePwd")
-	public int changePwd(Member vo, String newPassword) throws NoSuchAlgorithmException {
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/changePwd")
+	public int changePwd(@RequestBody Member vo, String currentPassword, String newPassword) throws NoSuchAlgorithmException {
 		String id = vo.getUser_id();
 		String name = vo.getName();
 		String email = vo.getEmail();
 		int chk = memberService.chkPwd(id, name, email);
-
 		vo.setPassword(newPassword);
-		if (chk == 1) {
-			// 결과가 한개일 때
+		// 입력한 현재 비밀번호와 db가 일치할 때 & 멤버 결과가 한개일 때
+		if (memberService.isPasswordCorrect(id, currentPassword) && chk == 1) {
 			memberService.changePwd(vo);
 			return 1;
 		}
