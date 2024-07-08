@@ -16,7 +16,7 @@ const Info = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/member/mypage', {
+                const response = await axios.get('http://localhost:3000/member/mypage', {
                     params: {
                         user_id: user_id
                     }
@@ -28,7 +28,7 @@ const Info = () => {
                 setEmail(response.data.member.email);
                 localStorage.setItem('userName', response.data.member.name);
                 localStorage.setItem('userEmail', response.data.member.email);
-                setImgUrl('http://localhost:8080/studylogs/getImage/' + response.data.member.profile_img);
+                setImgUrl('http://localhost:3000/studylogs/getImage/' + response.data.member.profile_img);
             } catch(error) {
                 console.log("error: " + error);
             }
@@ -43,7 +43,7 @@ const Info = () => {
     }
 
     const checkNickNm = () => {
-        axios.get('http://localhost:8080/member/checkNickNm/' + inputNickNm)
+        axios.get('http://localhost:3000/member/checkNickNm/' + inputNickNm)
             .then(response => {
                 if(response.data === 0) {
                     alert('사용 가능한 닉네임입니다.');
@@ -66,7 +66,7 @@ const Info = () => {
             alert('유효한 이메일을 입력해주세요.');
         } else {
             setIsEditing(true);
-            axios.post(`http://localhost:8080/mail/mailSend?mail=${email}`)
+            axios.post(`http://localhost:3000/mail/mailSend?mail=${email}`)
             .then(response => {
                 console.log(response.data);
                 if(response.data.success){
@@ -103,7 +103,7 @@ const Info = () => {
         } else if(editNickNm === 1 && editEmail === 0){
             alert('이메일 인증을 진행해주세요.');
         } else if(editNickNm === 1 && editEmail === 1) {
-            axios.post('http://localhost:8080/member/update', vo)
+            axios.post('http://localhost:3000/member/update', vo)
                 .then(response => {
                     alert('회원 정보가 수정되었습니다.');
                 });

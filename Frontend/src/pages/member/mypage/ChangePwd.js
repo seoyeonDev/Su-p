@@ -31,7 +31,7 @@ const ChangePwd = () => {
   const changePassword = () => {
     console.log(vo);
     if(currentPwd !== '' && newPwd !== '' && chkPwd !== '' && (newPwd === chkPwd)) {
-      axios.post(`http://localhost:8080/member/changePwd?currentPassword=${currentPwd}&newPassword=${chkPwd}`, vo)
+      axios.post(`http://localhost:3000/member/changePwd?currentPassword=${currentPwd}&newPassword=${chkPwd}`, vo)
           .then(response => {
               console.log(response.data);
               if(response.data === 1) {

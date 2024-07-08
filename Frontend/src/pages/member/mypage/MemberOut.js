@@ -21,7 +21,7 @@ const MemberOut = () => {
     const withdrawal = () => {
         if (agreed) {
             var checkPwd = prompt('비밀번호를 입력해주세요.');
-            axios.delete('http://localhost:8080/member/delete/' + 'loginId', {
+            axios.delete('http://localhost:3000/member/delete/' + 'loginId', {
                 params: {
                     password: checkPwd
                 }
