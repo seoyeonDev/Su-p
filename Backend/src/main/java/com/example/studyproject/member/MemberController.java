@@ -249,25 +249,16 @@ public class MemberController {
 	 */
   	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/delete/{user_id}")
-	public String deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
+	public boolean deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
 
 		boolean success;
-
 		if(memberService.isPasswordCorrect(user_id, password)){	// 비밀번호 일치
 			success = memberService.deleteMember(user_id);
 		} else{
 			success = false;
-			LOGGER.info("================ Member deleted: 비밀번호 일치하지 않음");
 		}
-
-		if (success) {
-			LOGGER.info("================ Member delete success : " + user_id);
-			return "회원 탈퇴 완료";
-		} else {
-			LOGGER.info("================ Member deletion failed: " + user_id);
-			return "회원 탈퇴 실패";
-		}
-
+		
+		return success;
 	}
 
 }
