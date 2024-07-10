@@ -82,14 +82,25 @@ public class PenaltylogService {
 		System.out.println(group_id);
 		List<Map<String,Object>> penalty_chk = penaltyLogDao.selectPenalty(group_id);
 		for (Map<String, Object> penaltyMap : penalty_chk) {
+
+
 			String userId = (String) penaltyMap.get("user_id");
 			int penalty = (int) penaltyMap.get("penalty");
 			Long logCount = (Long) penaltyMap.get("log_count");
 			boolean penaltyChk = (boolean) penaltyMap.get("penalty_chk");
 
+			Penaltylog penaltylogVo = new Penaltylog(userId, group_id, (logCount + "패널티"), logCount);
+
 			if(!penaltyChk){	// penalty 기준 미만
 				System.out.println(userId + "   user_id");
 				msg += " " + userId;
+				int success = penaltyLogDao.insertPenaltylog(penaltylogVo);
+
+				if(success>=1){
+					LOGGER.info("================ penalty insert success" );
+				} else{
+					LOGGER.info("================ penalty insert fail" );
+				}
 				// TODO user_id 이용해서 PENALTY table 에 인서트하기
 			}else {
 				System.out.println(userId + "   XXX");
@@ -98,6 +109,18 @@ public class PenaltylogService {
 		
 		return msg;
 	}
-    
+
+	// penaltylog 추가
+	public int insertPenaltylog(Penaltylog penaltylog){
+		int success=0;
+
+		try{
+			success = penaltyLogDao.insertPenaltylog(penaltylog);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		return success;
+	}
 
 }

@@ -2,6 +2,8 @@ package com.example.studyproject.member;
 
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +57,7 @@ public class MemberController {
 	public void join(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
 		if(member == null) {
-			path = path + "/" + vo.getUser_id();
+			path = path + "user_img/" + vo.getUser_id();
 			LOGGER.info("File path: " + path);
 			File dir = new File(path);
 			dir.mkdir();
@@ -89,9 +91,10 @@ public class MemberController {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PostMapping("/login")
-	public String login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
+	public Map<String, Object> login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
         Member member = memberService.loginMember(vo);
-
+        Map<String, Object> map = new HashMap<>();
+        
         String msg = "";
         HttpSession session = null;
         if (member != null && member.getLock_yn().equals("N")) {
@@ -103,7 +106,7 @@ public class MemberController {
 			session.setAttribute("loginSession", member);
           
 			session.setAttribute("loginId", member.getUser_id());
-      session.setAttribute("authorization", auth);		// 사용자 계정권한 세션에 추가
+			session.setAttribute("authorization", auth);	// 사용자 계정권한 세션에 추가
   
 			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
 			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
@@ -116,20 +119,34 @@ public class MemberController {
 			}
 
 			LOGGER.info("================ " + msg);
-			return msg;
+			map.put("msg", msg);
+			map.put("loginId", member.getUser_id());
 		} else if(member != null && member.getLock_yn().equals("Y")){
 			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
 			msg = "unlocked";
 			LOGGER.info("================ " + msg);
-			return msg;
+			map.put("msg", msg);
+			return map;
 		} else {
 			msg = "존재하지 않는 계정입니다. 회원가입을 진행해주세요.";
 		}
 		LOGGER.info("================ " + msg);
-		return msg;
+		return map;
 	}
 
 
+	// 마이페이지 정보 호출
+	@GetMapping("/mypage")
+	public Map<String, Object> getMemberInfo(@RequestParam String user_id) {
+		Map<String, Object> map = new HashMap<>();
+		Member member = memberService.getUserInfoById(user_id);
+		LOGGER.info("member: " + member);
+		map.put("member", member);
+		
+		return map;
+	}
+  
+	
 	/**
 	 * 수정
 	 * @param vo
@@ -266,25 +283,16 @@ public class MemberController {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@DeleteMapping("/delete/{user_id}")
-	public String deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
+	public boolean deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
 
 		boolean success;
-
 		if(memberService.isPasswordCorrect(user_id, password)){	// 비밀번호 일치
 			success = memberService.deleteMember(user_id);
 		} else{
 			success = false;
-			LOGGER.info("================ Member deleted: 비밀번호 일치하지 않음");
 		}
-
-		if (success) {
-			LOGGER.info("================ Member delete success : " + user_id);
-			return "회원 탈퇴 완료";
-		} else {
-			LOGGER.info("================ Member deletion failed: " + user_id);
-			return "회원 탈퇴 실패";
-		}
-
+		
+		return success;
 	}
 
 }
