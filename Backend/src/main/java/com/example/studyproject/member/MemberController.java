@@ -54,7 +54,7 @@ public class MemberController {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PostMapping("/join")
-	public void join(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
+	public void join(@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
 		if(member == null) {
 			path = path + "user_img/" + vo.getUser_id();
