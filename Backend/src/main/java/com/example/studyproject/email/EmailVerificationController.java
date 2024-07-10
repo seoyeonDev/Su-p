@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -35,10 +36,7 @@ public class EmailVerificationController {
             String num = String.valueOf(number);
 
             // redis 저장
-            rc.redisTemplate(rc.redisConnectionFactory()).opsForValue().set("emailNumChk",num);
-//            HttpSession session = null;
-//            session = request.getSession();
-//            session.setAttribute("emailNum", num);
+            rc.redisTemplate(rc.redisConnectionFactory()).opsForValue().set("emailNumChk",num, 10, TimeUnit.MINUTES);   // 10분 시간제한
 
             map.put("success", Boolean.TRUE);
             map.put("number", num);
