@@ -46,10 +46,15 @@ public class MemberController {
 	}
 
 	// 20240406 커밋 테스트
-	
-	// 회원가입
+
+	/**
+	 * 회원가입
+	 * @param vo
+	 * @param f
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PostMapping("/join")
-	public void join(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
+	public void join(@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
 		if(member == null) {
 			path = path + "user_img/" + vo.getUser_id();
@@ -77,8 +82,14 @@ public class MemberController {
 			LOGGER.info("================ " + "Join failed");
 		}
 	}
-	
-	// 로그인
+
+	/**
+	 * 로그인
+	 * @param vo
+	 * @param request
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PostMapping("/login")
 	public Map<String, Object> login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
         Member member = memberService.loginMember(vo);
@@ -133,9 +144,13 @@ public class MemberController {
 		
 		return map;
 	}
-	
-	// 수정
-	@CrossOrigin(origins = "http://localhost:3000")
+
+	/**
+	 * 수정
+	 * @param vo
+	 * @param f
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PostMapping("/update")
 	public void update(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
@@ -162,7 +177,7 @@ public class MemberController {
 		memberService.updateMember(vo);
 	}
 	
-    /**
+  /**
 	 * 유저 검색_회원가입 시 아이디 중복 검사
 	 * @param user_id - 유저 아이디
 	 * @return chkImpl - 아이디 존재 유무에 따라 0 또는 1 리턴(임시)
@@ -184,7 +199,7 @@ public class MemberController {
 		}
 	}
 
-    /**
+  /**
 	 * 유저 검색_회원가입 및 정보 수정 시 닉네임 중복 검사
 	 * @param nickname - 유저 닉네임
 	 * @return chkImpl - 닉네임 존재 유무에 따라 0 또는 1 리턴(임시)
@@ -203,7 +218,13 @@ public class MemberController {
 			return chkImpl = 1;
 		}
 	}
-	
+
+	/**
+	 * 아이디 찾기
+	 * @param name
+	 * @param email
+	 * @return
+	 */
 	@GetMapping("/findId")
 	public String findId(String name, String email){
 		String user_id = memberService.findId(name, email);
@@ -215,14 +236,26 @@ public class MemberController {
 		return user_id;
 	}
 
-
+	/**
+	 * 비밀번호 찾기 - 계정찾기
+	 * @param id
+	 * @param name
+	 * @param email
+	 * @return
+	 */
 	@GetMapping("/chkPwd")
 	public int chkPwd(String id, String name, String email){
 		int chk = memberService.chkPwd(id, name, email);
 		return chk;
 	}
-  
-	@CrossOrigin(origins = "http://localhost:3000")
+
+	/**
+	 * 비밀번호 찾기 - 비밀번호 변경
+	 * @param vo
+	 * @param newPassword
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PostMapping("/changePwd")
 	public int changePwd(@RequestBody Member vo, String currentPassword, String newPassword) throws NoSuchAlgorithmException {
 		String id = vo.getUser_id();
@@ -239,7 +272,7 @@ public class MemberController {
 		return 0;
 	}
   
-  	/**
+  /**
 	 * 멤버 탈퇴
 	 * @param user_id - 사용자의 id
 	 * @param password - input 창에서 입력받은 password

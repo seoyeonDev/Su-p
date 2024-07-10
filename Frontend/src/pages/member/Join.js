@@ -18,7 +18,7 @@ function Join() {
     // 유효한지 체크 
     const [joinCheck, setJoinCheck] = useState({
         checkId: false,
-        checkInvalidPwd : false,
+        checkInvalidPwd: false,
         checkpwd: false,
         checkNickname: false,
         checkEmail: false
@@ -43,10 +43,10 @@ function Join() {
 
     const setMessage = (key, value) => {
         setMessages((prevMessages) => ({
-          ...prevMessages,
-          [key]: value,
+            ...prevMessages,
+            [key]: value,
         }));
-      };
+    };
 
     // id 체크 
     const idChk = async () => {
@@ -79,17 +79,17 @@ function Join() {
 
         const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         setPassword(e.target.value);
-        if(whitespaceCheck(password)){
-            setMessage('passwordCheckMsg','공백을 입력할 수 없습니다.');
+        if (whitespaceCheck(password)) {
+            setMessage('passwordCheckMsg', '공백을 입력할 수 없습니다.');
             joinCheckAll("checkInvalidPwd", false);
-        } else if(password.length < 8){
-            setMessage('passwordCheckMsg','8자 이상 입력해주세요.');
+        } else if (password.length < 8) {
+            setMessage('passwordCheckMsg', '8자 이상 입력해주세요.');
             joinCheckAll("checkInvalidPwd", false);
-        } else if(!regex.test(password)){
-            setMessage('passwordCheckMsg','영문, 숫자, 특수문자 3가지 이상을 조합하여 비밀번호를 생성해주세요.');
+        } else if (!regex.test(password)) {
+            setMessage('passwordCheckMsg', '영문, 숫자, 특수문자 3가지 이상을 조합하여 비밀번호를 생성해주세요.');
             joinCheckAll("checkInvalidPwd", false);
         } else {
-            setMessage('passwordCheckMsg','');
+            setMessage('passwordCheckMsg', '');
             joinCheckAll("checkInvalidPwd", true);
         }
     };
@@ -98,10 +98,10 @@ function Join() {
     const handleCheckPasswordChange = (e) => {
         setCheckPassword(e.target.value);
         if (e.target.value !== password) {
-            setMessage('passwordCheckMsg','비밀번호가 일치하지 않습니다.');
+            setMessage('passwordCheckMsg', '비밀번호가 일치하지 않습니다.');
             joinCheckAll("checkpwd", false);
         } else {
-            setMessage('passwordCheckMsg','비밀번호가 일치합니다.');
+            setMessage('passwordCheckMsg', '비밀번호가 일치합니다.');
             joinCheckAll("checkpwd", true);
         }
     };
@@ -109,16 +109,16 @@ function Join() {
     // 닉네임 중복 검사 
     const nicknameChk = async () => {
         if (whitespaceCheck(nickname)) {
-            setMessage('nicknameMsg','공백을 입력할 수 없습니다.');
+            setMessage('nicknameMsg', '공백을 입력할 수 없습니다.');
             joinCheckAll("nickname", false);
         } else {
             axios.get(`http://localhost:3000/member/checkNickNm/${nickname}`)
                 .then(response => {
-                    if(response.data===0){
-                        setMessage('nicknameMsg','사용 가능한 닉네임입니다.');
+                    if (response.data === 0) {
+                        setMessage('nicknameMsg', '사용 가능한 닉네임입니다.');
                         joinCheckAll("checkNickname", true);
-                    } else if(response.data===1){
-                        setMessage('nicknameMsg','사용 불가능한 닉네임입니다.');
+                    } else if (response.data === 1) {
+                        setMessage('nicknameMsg', '사용 불가능한 닉네임입니다.');
                         joinCheckAll("checkNickname", false);
                     }
                 }).catch(error => {
@@ -131,14 +131,14 @@ function Join() {
         if (!email.includes("@")) {
             joinCheckAll("email", false);
             setMessage('emailSendMsg', '유효한 이메일을 입력해주세요');
-        } else if(whitespaceCheck(email)) {
+        } else if (whitespaceCheck(email)) {
             joinCheckAll("email", false);
             setMessage('emailSendMsg', '이메일에 공백이 들어갈 수 없습니다.');
-        }else {
+        } else {
             axios.post(`http://localhost:3000/mail/mailSend?mail=${email}`)
                 .then(response => {
                     console.log(response);
-                    if(response.data.success){
+                    if (response.data.success) {
                         setEmailChkNumber(response.data.number);
                         joinCheckAll("email", true);
                         setMessage('emailSendMsg', '이메일로 인증번호를 발송하였습니다.');
@@ -152,20 +152,20 @@ function Join() {
         }
     }
     // 이메일 인증 번호 확인
-    const emailNumChk = async() => {
-        if(inputEmailNumber===emailChkNumber){
+    const emailNumChk = async () => {
+        if (inputEmailNumber === emailChkNumber) {
             joinCheckAll('checkEmail', true);
             setMessage('emailMsg', '이메일 인증에 성공하였습니다.');
-        } else{
+        } else {
             joinCheckAll('checkEmail', false);
             setMessage('emailMsg', '이메일 인증에 실패하였습니다.');
         }
     }
 
     // 가입하기
-    const join = async() => {
+    const join = async () => {
         const checkbox = document.getElementById('joinChkbox').checked;
-        const name = document.getElementById('name').value ;
+        const name = document.getElementById('name').value;
 
         const data = {
             "user_id": userId,
@@ -173,55 +173,58 @@ function Join() {
             "name": name,
             "nickname": nickname,
             "email": email,
-            "join_date": null, 
+            "join_date": null,
             "profile_img": "프로필 이미지 경로",
-            "fail_num": 0, 
+            "fail_num": 0,
             "lock_yn": null,
             "authorization": null
         };
 
+
         const formData = new FormData();
-        formData.append("file", file);
-        formData.append(
-            "vo",
-            new Blob([JSON.stringify(data)], {type:"appilication/json"})
-        );
+        formData.append("file", file); // 파일 추가
+        formData.append("vo", new Blob([JSON.stringify(data)], { type: "application/json" })); // JSON 데이터 추가
+
 
         // 값 유효한지 체크 
-        if(!joinCheck.checkId){
+        if (!joinCheck.checkId) {
             setMessage('joinMsg', '아이디를 확인해주세요.');
-        } else if(!joinCheck.checkpwd || !joinCheck.checkInvalidPwd){
-            setMessage('joinMsg','비밀번호를 확인해주세요');
-        } else if(!joinCheck.checkNickname){
-            setMessage('joinMsg','닉네임을 확인해주세요');
-        } else if(!joinCheck.checkEmail){
-            setMessage('joinMsg','이메일을 확인해주세요');
-        } else if(!checkbox){
-            setMessage('joinMsg','회원가입 약관에 동의를 확인해주세요');
-        } else{
+        } else if (!joinCheck.checkpwd || !joinCheck.checkInvalidPwd) {
+            setMessage('joinMsg', '비밀번호를 확인해주세요');
+        } else if (!joinCheck.checkNickname) {
+            setMessage('joinMsg', '닉네임을 확인해주세요');
+        } else if (!joinCheck.checkEmail) {
+            setMessage('joinMsg', '이메일을 확인해주세요');
+        } else if (!checkbox) {
+            setMessage('joinMsg', '회원가입 약관에 동의를 확인해주세요');
+        } else {
             // 회원가입
-            axios.post(`http://localhost:3000/member/join`, data)
-            .then(response => {
-                console.log(response);
-                if(response.status===200){ // 가입 성공
-                    navigate('/login');
+            axios.post(`http://localhost:3000/member/join`, formData, {
+                headers: {
+                    'Content-Type' : 'multipart/form-data'
                 }
-            }).catch(error => {
-                console.log(error);
-            });
+            })
+                .then(response => {
+                    console.log(response);
+                    if (response.status === 200) { // 가입 성공
+                        navigate('/login');
+                    }
+                }).catch(error => {
+                    console.log(error);
+                });
         }
     }
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
         console.log(event.target.files[0]);
-    } 
+    }
 
     const whitespaceCheck = (value) => {
         console.log(value.includes(" "));
-        if(value.includes(" ")){
+        if (value.includes(" ")) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -234,7 +237,7 @@ function Join() {
 
                 <div>
                     {/* 이미지 */}
-                    <div className={"img"} id={"img"}><input type="file" onChange={handleFileChange}/></div>
+                    <div className={"img"} id={"img"}><input type="file" onChange={handleFileChange} /></div>
 
                     {/* 가입란 */}
                     <div>
