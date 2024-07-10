@@ -40,3 +40,7 @@ DROP COLUMN penaltydate;
 
 ALTER TABLE public.penaltylog
 ADD COLUMN penalty_round int NOT NULL;
+
+-- title 삭제
+alter table penaltylog
+drop column title;

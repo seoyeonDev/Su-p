@@ -25,5 +25,7 @@ public interface PenaltylogDao {
     // 기준비교
     List<Map<String,Object>> selectPenalty(String group_id);
 
+    // penaltylog 추가
+    int insertPenaltylog(Penaltylog vo);
 }
 
