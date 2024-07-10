@@ -46,7 +46,7 @@ public class AssignCycleService {
 					enddate = lastdate;
 				}
 				// 리스트에 넣는다.
-				list.add(new AssignCycle(group_id, startdate.toString(), enddate.toString(), String.valueOf(assigncycle)));
+				list.add(new AssignCycle(group_id, startdate.toString(), enddate.withHour(11).withMinute(59).toString(), String.valueOf(assigncycle)));
 				startdate = enddate.plusDays(1);
 				assigncycle++;
 			}
@@ -57,7 +57,7 @@ public class AssignCycleService {
 				if(enddate.isAfter(lastdate)) {
 					enddate = lastdate;
 				}
-				list.add(new AssignCycle(group_id, startdate.toString(), enddate.toString(), String.valueOf(assigncycle)));
+				list.add(new AssignCycle(group_id, startdate.toString(), enddate.withHour(11).withMinute(59).toString(), String.valueOf(assigncycle)));
 				startdate = enddate.plusDays(1);
 				assigncycle++;
 			}

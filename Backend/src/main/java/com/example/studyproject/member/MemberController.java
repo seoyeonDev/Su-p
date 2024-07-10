@@ -79,7 +79,6 @@ public class MemberController {
 	}
 	
 	// 로그인
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/login")
 	public Map<String, Object> login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
         Member member = memberService.loginMember(vo);
@@ -247,27 +246,17 @@ public class MemberController {
 	 * @return - 회원 탈퇴 성공 여부에 대한 결과값 (String)
 	 * @throws NoSuchAlgorithmException
 	 */
-  	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/delete/{user_id}")
-	public String deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
+	public boolean deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
 
 		boolean success;
-
 		if(memberService.isPasswordCorrect(user_id, password)){	// 비밀번호 일치
 			success = memberService.deleteMember(user_id);
 		} else{
 			success = false;
-			LOGGER.info("================ Member deleted: 비밀번호 일치하지 않음");
 		}
-
-		if (success) {
-			LOGGER.info("================ Member delete success : " + user_id);
-			return "회원 탈퇴 완료";
-		} else {
-			LOGGER.info("================ Member deletion failed: " + user_id);
-			return "회원 탈퇴 실패";
-		}
-
+		
+		return success;
 	}
 
 }
