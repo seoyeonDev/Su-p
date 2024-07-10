@@ -38,6 +38,7 @@
         FROM penaltylog
             WHERE 1=1
         AND group_id = #{group_id}
+    </select>
 
     <select id="selectPenalty" resultType="map">
         with temp_date AS (
