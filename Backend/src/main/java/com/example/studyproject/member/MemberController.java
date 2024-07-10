@@ -134,7 +134,6 @@ public class MemberController {
 		return map;
 	}
 
-
 	// 마이페이지 정보 호출
 	@GetMapping("/mypage")
 	public Map<String, Object> getMemberInfo(@RequestParam String user_id) {
@@ -145,8 +144,7 @@ public class MemberController {
 		
 		return map;
 	}
-  
-	
+
 	/**
 	 * 수정
 	 * @param vo
@@ -179,7 +177,7 @@ public class MemberController {
 		memberService.updateMember(vo);
 	}
 	
-    /**
+  /**
 	 * 유저 검색_회원가입 시 아이디 중복 검사
 	 * @param user_id - 유저 아이디
 	 * @return chkImpl - 아이디 존재 유무에 따라 0 또는 1 리턴(임시)
@@ -201,7 +199,7 @@ public class MemberController {
 		}
 	}
 
-    /**
+  /**
 	 * 유저 검색_회원가입 및 정보 수정 시 닉네임 중복 검사
 	 * @param nickname - 유저 닉네임
 	 * @return chkImpl - 닉네임 존재 유무에 따라 0 또는 1 리턴(임시)
@@ -213,7 +211,7 @@ public class MemberController {
 		LOGGER.info("================ nickname: " + nickname);
 		
 		int chkImpl;
-		if(member == null) {
+		if(member == null || nickname.equals(member.getNickname())) {
 			return chkImpl = 0;
 		} else {
 			LOGGER.info("================ nickname: " + member.getNickname());
@@ -258,16 +256,15 @@ public class MemberController {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
-  @PostMapping("/changePwd")
-	public int changePwd(Member vo, String newPassword) throws NoSuchAlgorithmException {
+	@PostMapping("/changePwd")
+	public int changePwd(@RequestBody Member vo, String currentPassword, String newPassword) throws NoSuchAlgorithmException {
 		String id = vo.getUser_id();
 		String name = vo.getName();
 		String email = vo.getEmail();
 		int chk = memberService.chkPwd(id, name, email);
-
 		vo.setPassword(newPassword);
-		if (chk == 1) {
-			// 결과가 한개일 때
+		// 입력한 현재 비밀번호와 db가 일치할 때 & 멤버 결과가 한개일 때
+		if (memberService.isPasswordCorrect(id, currentPassword) && chk == 1) {
 			memberService.changePwd(vo);
 			return 1;
 		}
@@ -275,7 +272,7 @@ public class MemberController {
 		return 0;
 	}
   
-  	/**
+  /**
 	 * 멤버 탈퇴
 	 * @param user_id - 사용자의 id
 	 * @param password - input 창에서 입력받은 password

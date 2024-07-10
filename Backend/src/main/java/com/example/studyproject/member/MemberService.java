@@ -86,10 +86,6 @@ public class MemberService {
 	// 수정
 	public void updateMember(Member vo) throws NoSuchAlgorithmException {
 		
-		// 입력받은 비밀번호 암호화
-		String encPwd = Sha256.encrypt(vo.getPassword());
-		vo.setPassword(encPwd);
-		
 		memberDao.updateMember(vo);
 	}
 	

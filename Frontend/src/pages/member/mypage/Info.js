@@ -6,13 +6,17 @@ const Info = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [editNickNm, setEditNickNm] = useState('');
     const [editEmail, setEditEmail] = useState('');
+    const [inputNickNm, setInputNickNm] = useState('');
+    const [email, setEmail] = useState('');
+    const [emailNum, setEmailNum] = useState('');
+    const [inputEmailNum, setInputEmailNum] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const user_id = localStorage.getItem('loginId');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/member/mypage', {
+                const response = await axios.get('http://localhost:3000/member/mypage', {
                     params: {
                         user_id: user_id
                     }
@@ -20,7 +24,11 @@ const Info = () => {
                 setEditNickNm(1);
                 setEditEmail(1);
                 setUserInfo(response.data);
-                setImgUrl('http://localhost:8080/studylogs/getImage/' + response.data.member.profile_img);
+                setInputNickNm(response.data.member.nickname);
+                setEmail(response.data.member.email);
+                localStorage.setItem('userName', response.data.member.name);
+                localStorage.setItem('userEmail', response.data.member.email);
+                setImgUrl('http://localhost:3000/studylogs/getImage/' + response.data.member.profile_img);
             } catch(error) {
                 console.log("error: " + error);
             }
@@ -29,49 +37,76 @@ const Info = () => {
         fetchData();
     }, []);
 
+    const handleInputNickName = (event) => {
+        setInputNickNm(event.target.value);
+        setEditNickNm(0);
+    }
+
     const checkNickNm = () => {
-        axios.get('http://localhost:8080/member/checkNickNm')
+        axios.get('http://localhost:3000/member/checkNickNm/' + inputNickNm)
             .then(response => {
-                if(response.data.msg === 0) {
+                if(response.data === 0) {
+                    alert('사용 가능한 닉네임입니다.');
                     setEditNickNm(1);
                 } else {
+                    alert('이미 사용 중인 닉네임입니다.');
                     setEditNickNm(0);
                 }
-                alert('닉네임 중복체크');
             });
     };
 
-    const changeEmail = () => {
-        setIsEditing(true);
+    const handleInputEmail = (event) => {
+        setEmail(event.target.value);
         setEditEmail(0);
-        // axios.post('http://localhost:8080/mail/mailSend')
-        // .then(response => {
-        //     alert('이메일 인증번호 확인');
-        // });
+    }
+
+    const changeEmail = () => {
+        setEditEmail(0);
+        if(!email.includes("@") || email.includes(" ")) {
+            alert('유효한 이메일을 입력해주세요.');
+        } else {
+            setIsEditing(true);
+            axios.post(`http://localhost:3000/mail/mailSend?mail=${email}`)
+            .then(response => {
+                console.log(response.data);
+                if(response.data.success){
+                    setEmailNum(response.data.number);
+                    alert('입력하신 이메일로 인증번호를 발송하였습니다.');
+                } else {
+                    alert('인증번호 발송에 실패하였습니다.');
+                }
+            }).catch(error => {
+                console.log(error);
+            });
+        }
     };
 
     const checkCode = () => {
-        axios.post('http://localhost:8080/mail/mailCheck')
-            .then(response => {
-                if(response.data) {
-                    setEditEmail(1);
-                    alert('이메일 인증번호 확인');
-                } else {
-                    setEditEmail(0);
-                }
-            });
+        if((inputEmailNum === emailNum) && inputEmailNum !== '') {
+            setEditEmail(1);
+            alert('이메일 인증에 성공하였습니다.');
+        } else {
+            alert('이메일 인증에 실패하였습니다.');
+        }
     };
+
+    const vo = {
+        user_id : user_id,
+        nickname : inputNickNm,
+        email : email
+    }
 
     const changeInfo = () => {
         console.log("editEmail: " + editEmail);
-        if(editNickNm === 1 && editEmail === 1) {
-            // axios.get('')
-            //     .then(() => {
-            //         alert('수정');
-            //     });
-            alert('수정')
-        } else {
-            alert('수정실패');
+        if(editNickNm === 0 && editEmail === 1) {
+            alert('닉네임 중복 확인을 진행해주세요.');
+        } else if(editNickNm === 1 && editEmail === 0){
+            alert('이메일 인증을 진행해주세요.');
+        } else if(editNickNm === 1 && editEmail === 1) {
+            axios.post('http://localhost:3000/member/update', vo)
+                .then(response => {
+                    alert('회원 정보가 수정되었습니다.');
+                });
         }
     };
 
@@ -106,11 +141,11 @@ const Info = () => {
             <div className='info-area-myinfo-visible'>
                 <input type='text' id='userId' name='userId' value={member.user_id} readOnly /> <br/>
                 <input type='text' id='userName' name='userName' value={member.name} readOnly /> <br/>
-                <input type='text' id='userNickNm' name='userNickNm' defaultValue={member.nickname} /> <br/>
-                <input type='text' id='userEmail' name='userEmail' defaultValue={member.email} /> <br/>
+                <input type='text' id='userNickNm' name='userNickNm' onChange={handleInputNickName} defaultValue={member.nickname} /> <br/>
+                <input type='text' id='userEmail' name='userEmail' onChange={handleInputEmail} defaultValue={member.email} /> <br/>
             </div>
             <div className='info-area-myinfo-invisible'>
-                <input type='text' id='verificationCode' name='verificationCode' disabled={!isEditing} />
+                <input type='text' id='verificationCode' name='verificationCode' onChange={(e) => setInputEmailNum(e.target.value)} disabled={!isEditing} />
             </div>
         </div>
 
