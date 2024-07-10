@@ -79,7 +79,6 @@ public class MemberController {
 	}
 	
 	// 로그인
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/login")
 	public Map<String, Object> login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
         Member member = memberService.loginMember(vo);
@@ -247,7 +246,6 @@ public class MemberController {
 	 * @return - 회원 탈퇴 성공 여부에 대한 결과값 (String)
 	 * @throws NoSuchAlgorithmException
 	 */
-  	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/delete/{user_id}")
 	public boolean deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
 
