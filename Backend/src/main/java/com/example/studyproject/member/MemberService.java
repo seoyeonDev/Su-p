@@ -83,7 +83,7 @@ public class MemberService {
 		return loginVo;
 	}
 
-	// 멤버수정
+	// 수정
 	public void updateMember(Member vo) throws NoSuchAlgorithmException {
 		
 		// 입력받은 비밀번호 암호화
@@ -105,7 +105,7 @@ public class MemberService {
 		return memberDao.getMemberById(user_id);
 	}
 
-	// 유저 검색용
+	// 닉네임 중복 검사 - 유저 검색용
 	public Member getMemberByNickNm(String nickname) {
 		
 		return memberDao.getMemberByNickNm(nickname);
@@ -117,10 +117,12 @@ public class MemberService {
         return memberDao.findId(name, email);
 	}
 
+	// 비밀번호 찾기 - 계정찾기
 	public int chkPwd (String id, String name, String email){
 		return memberDao.chkPwd(id, name, email);
 	}
 
+	// 비밀번호 찾기 - 비밀번호 변경
 	public void changePwd(Member vo) throws NoSuchAlgorithmException {
 
 		// 비밀번호 단방향 암호화(SHA-256 알고리즘)
@@ -131,7 +133,7 @@ public class MemberService {
 		memberDao.changePwd(vo);
 	}
     
-	// 회원 삭제
+	// 회원 탈퇴
 	public boolean deleteMember(String user_id) {
 		int rowsAffected = memberDao.deleteMember(user_id);
 		return rowsAffected > 0;

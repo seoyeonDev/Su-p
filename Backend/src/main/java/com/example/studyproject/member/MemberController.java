@@ -46,8 +46,13 @@ public class MemberController {
 	}
 
 	// 20240406 커밋 테스트
-	
-	// 회원가입
+
+	/**
+	 * 회원가입
+	 * @param vo
+	 * @param f
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PostMapping("/join")
 	public void join(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
@@ -77,8 +82,14 @@ public class MemberController {
 			LOGGER.info("================ " + "Join failed");
 		}
 	}
-	
-	// 로그인
+
+	/**
+	 * 로그인
+	 * @param vo
+	 * @param request
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PostMapping("/login")
 	public Map<String, Object> login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
         Member member = memberService.loginMember(vo);
@@ -123,6 +134,7 @@ public class MemberController {
 		return map;
 	}
 
+
 	// 마이페이지 정보 호출
 	@GetMapping("/mypage")
 	public Map<String, Object> getMemberInfo(@RequestParam String user_id) {
@@ -133,8 +145,14 @@ public class MemberController {
 		
 		return map;
 	}
+  
 	
-	// 수정
+	/**
+	 * 수정
+	 * @param vo
+	 * @param f
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PostMapping("/update")
 	public void update(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
@@ -202,7 +220,13 @@ public class MemberController {
 			return chkImpl = 1;
 		}
 	}
-	
+
+	/**
+	 * 아이디 찾기
+	 * @param name
+	 * @param email
+	 * @return
+	 */
 	@GetMapping("/findId")
 	public String findId(String name, String email){
 		String user_id = memberService.findId(name, email);
@@ -214,14 +238,26 @@ public class MemberController {
 		return user_id;
 	}
 
-
+	/**
+	 * 비밀번호 찾기 - 계정찾기
+	 * @param id
+	 * @param name
+	 * @param email
+	 * @return
+	 */
 	@GetMapping("/chkPwd")
 	public int chkPwd(String id, String name, String email){
 		int chk = memberService.chkPwd(id, name, email);
 		return chk;
 	}
-  
-  
+
+	/**
+	 * 비밀번호 찾기 - 비밀번호 변경
+	 * @param vo
+	 * @param newPassword
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 */
   @PostMapping("/changePwd")
 	public int changePwd(Member vo, String newPassword) throws NoSuchAlgorithmException {
 		String id = vo.getUser_id();
