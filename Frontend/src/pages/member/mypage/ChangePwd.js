@@ -30,7 +30,18 @@ const ChangePwd = () => {
 
   const changePassword = () => {
     console.log(vo);
-    if(currentPwd !== '' && newPwd !== '' && chkPwd !== '' && (newPwd === chkPwd)) {
+    const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if(currentPwd === '' && (newPwd === chkPwd)) {
+      alert('현재 비밀번호를 입력해주세요.');
+    } else if(currentPwd !== '' && (newPwd === '' || chkPwd === '')) {
+      alert('변경할 비밀번호를 입력해주세요.');
+    } else if(newPwd.includes(" ") || chkPwd.includes(" ")) {
+      alert("비밀번호에 공백을 입력할 수 없습니다.");
+    } else if(!regex.test(newPwd) || !regex.test(chkPwd)) {
+      alert("영문, 숫자, 특수문자 3가지 이상을 조합하여 8자리 이상의 비밀번호를 생성해주세요.");
+    } else if(currentPwd !== '' && (newPwd !== chkPwd)) {
+      alert('입력한 비밀번호가 일치하지 않습니다. 다시 시도해주세요.');
+    } else if(currentPwd !== '' && newPwd !== '' && chkPwd !== '' && (newPwd === chkPwd)) {
       axios.post(`http://localhost:3000/member/changePwd?currentPassword=${currentPwd}&newPassword=${chkPwd}`, vo)
           .then(response => {
               console.log(response.data);
@@ -40,12 +51,6 @@ const ChangePwd = () => {
                 alert('현재 비밀번호가 일치하지 않습니다.');
               }
           });
-    } else if(currentPwd === '' && (newPwd === chkPwd)) {
-      alert('현재 비밀번호를 입력해주세요.');
-    } else if(currentPwd !== '' && (newPwd === '' || chkPwd === '')) {
-      alert('변경할 비밀번호를 입력해주세요.');
-    } else if(currentPwd !== '' && (newPwd !== chkPwd)) {
-      alert('입력한 비밀번호가 일치하지 않습니다. 다시 시도해주세요.');
     }
   };
   
