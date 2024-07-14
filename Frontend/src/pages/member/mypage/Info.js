@@ -10,6 +10,7 @@ const Info = () => {
     const [email, setEmail] = useState('');
     const [emailNum, setEmailNum] = useState('');
     const [inputEmailNum, setInputEmailNum] = useState('');
+    const [file, setFile] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const user_id = localStorage.getItem('loginId');
 
@@ -28,7 +29,8 @@ const Info = () => {
                 setEmail(response.data.member.email);
                 localStorage.setItem('userName', response.data.member.name);
                 localStorage.setItem('userEmail', response.data.member.email);
-                setImgUrl('http://localhost:3000/studylogs/getImage/' + response.data.member.profile_img);
+                
+                setImgUrl('http://localhost:3000/member/getImage/' + user_id + "/" + (response.data.member.profile_img).split('/').pop());
             } catch(error) {
                 console.log("error: " + error);
             }
@@ -93,8 +95,13 @@ const Info = () => {
     const vo = {
         user_id : user_id,
         nickname : inputNickNm,
-        email : email
+        email : email,
+        profile_img: ""
     }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("vo", new Blob([JSON.stringify(vo)], { type: "application/json" })); 
 
     const changeInfo = () => {
         console.log("editEmail: " + editEmail);
@@ -103,12 +110,31 @@ const Info = () => {
         } else if(editNickNm === 1 && editEmail === 0){
             alert('이메일 인증을 진행해주세요.');
         } else if(editNickNm === 1 && editEmail === 1) {
-            axios.post('http://localhost:3000/member/update', vo)
+            axios.post('http://localhost:3000/member/update', formData, {
+                headers: {
+                    'Content-Type' : 'multipart/form-data'
+                }
+            })
                 .then(response => {
                     alert('회원 정보가 수정되었습니다.');
                 });
         }
     };
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+          // 미리보기 이미지 업데이트
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setImgUrl(reader.result);
+          };
+          reader.readAsDataURL(selectedFile);
+    
+          // 파일 상태 업데이트
+          setFile(selectedFile);
+        }
+    }
 
     if (!userInfo || !userInfo.member) {
         return <div>No user info available</div>;
@@ -123,6 +149,7 @@ const Info = () => {
       <div className='info-area'>
         <div className='info-area-image'>
             <img src={imageUrl} style={{ width: '80%', height: 'auto' }}/>
+            <input type="file" onChange={handleFileChange} />
         </div>
 
         <div className='info-area-type'>
