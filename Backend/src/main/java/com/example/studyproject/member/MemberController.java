@@ -1,6 +1,10 @@
 package com.example.studyproject.member;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +13,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +64,7 @@ public class MemberController {
 	@PostMapping("/join")
 	public void join(@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
+		String realPath = path;
 		if(member == null) {
 			path = path + "user_img/" + vo.getUser_id();
 			LOGGER.info("File path: " + path);
@@ -76,6 +85,9 @@ public class MemberController {
 			}
 			vo.setProfile_img(imgPath);
 			memberService.insertMember(vo);
+			path = realPath;
+			
+			LOGGER.info("================path: " + path);
 			LOGGER.info("================ " + "Join");
 			LOGGER.info("================ " + vo);
 		} else {	
@@ -145,6 +157,60 @@ public class MemberController {
 		return map;
 	}
 
+    // 멤버 - 이미지
+    @GetMapping("/getImage/{user_id}/{img_name}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String user_id, @PathVariable String img_name) {
+        // 실제 이미지 파일이 저장된 경로
+        String imagePath = path + "user_img/" + user_id + "/" + img_name;
+        
+        // 파일이 존재하는지 확인
+        Path imageFilePath = Paths.get(imagePath);
+        LOGGER.info("이미지파일 경로: " + imagePath);
+        if (!Files.exists(imageFilePath)) {
+            // 파일이 존재하지 않을 경우 404 에러를 반환
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+
+        // 이미지 파일을 읽어와 byte 배열로 변환
+        byte[] imageBytes;
+        try {
+            imageBytes = Files.readAllBytes(imageFilePath);
+        } catch (IOException e) {
+            // 이미지 파일을 읽어오는 중에 에러가 발생한 경우 500 에러를 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        LOGGER.info("이미지파일 바이트배열: " + imageBytes);
+        
+        // 응답에 이미지 데이터와 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        
+        String[] parts = img_name.split("\\.");
+        String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
+        LOGGER.info("이미지파일 확장자: " + parts);
+        LOGGER.info("이미지파일 확장자 소문자: " + fileExtension);
+        
+        
+        MediaType mediaType;
+        if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension)) {
+            mediaType = MediaType.IMAGE_JPEG;
+        } else if ("png".equalsIgnoreCase(fileExtension)) {
+            mediaType = MediaType.IMAGE_PNG;
+        } else {
+            // 기본적으로 JPEG로 설정
+            mediaType = MediaType.IMAGE_JPEG;
+        }
+        LOGGER.info("이미지파일 미디어타입: " + mediaType);
+        
+        
+        headers.setContentType(mediaType);
+        headers.setContentLength(imageBytes.length);
+        LOGGER.info("이미지파일 헤더: " + headers);
+        LOGGER.info("이미지 리턴: " + new ResponseEntity<>(imageBytes, headers, HttpStatus.OK));
+        
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+    }
+	
 	/**
 	 * 수정
 	 * @param vo
@@ -152,15 +218,17 @@ public class MemberController {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PostMapping("/update")
-	public void update(@RequestBody Member vo, MultipartFile f) throws NoSuchAlgorithmException {
+	public void update(@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
 		
+		String realPath = path;
 		String oldImg = member.getProfile_img();
 		String fname = f.getOriginalFilename();
 		
 		String imgPath = "";
 		if(fname != null && !fname.equals("")) {
-			imgPath = path + "/" + vo.getUser_id();
+			path = path + "user_img/" + vo.getUser_id();
+			imgPath = path + "/" + fname;
 			File imgSave = new File(imgPath);
 			File imgDel = new File(oldImg);
 			imgDel.delete();
@@ -175,6 +243,7 @@ public class MemberController {
 			vo.setProfile_img(oldImg);
 		}
 		memberService.updateMember(vo);
+		path = realPath;
 	}
 	
   /**
