@@ -97,7 +97,7 @@ public class MemberController {
         
         String msg = "";
         HttpSession session = null;
-        if (member != null && member.getLock_yn().equals("N")) {
+        if (member != null && member.getLock_yn().equals("N")) { // login 성공 시
 
 			String auth = memberService.chkAUTH(vo.getUser_id());
 			msg = "login success " + auth;

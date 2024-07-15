@@ -76,7 +76,7 @@ public class MemberService {
 			
 			memberDao.updateFailNum(vo);
 			memberDao.updateLockYn(vo);
-			loginVo = idVo;
+			loginVo = getMemberById(vo.getUser_id());
 			LOGGER.info("================ LoginVo: " + loginVo);
 		}
 
