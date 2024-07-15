@@ -14,5 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface FilesDao {
-
+	
+	// 파일 테이블 추가
+	void insertFiles(Files vo);
 }

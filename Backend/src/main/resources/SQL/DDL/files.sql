@@ -35,3 +35,22 @@ COMMENT ON COLUMN public.files.file_ext
 
 COMMENT ON COLUMN public.files.ins_date
     IS '입력일시';
+
+
+-- SEQUENCE: public.seq_files
+
+-- DROP SEQUENCE IF EXISTS public.seq_files;
+
+CREATE SEQUENCE IF NOT EXISTS public.seq_files
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1
+    OWNED BY files.file_seq;
+
+ALTER SEQUENCE public.seq_files
+    OWNER TO studyproject;
+
+COMMENT ON SEQUENCE public.seq_files
+    IS '파일 시퀀스';

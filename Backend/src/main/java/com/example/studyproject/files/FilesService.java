@@ -25,4 +25,10 @@ public class FilesService {
     public FilesService(FilesDao filesDao){
         this.filesDao = filesDao;
     }
+    
+    // 파일 테이블 추가
+    public void insertFiles(Files vo) {
+    	
+    	filesDao.insertFiles(vo);
+    }
 }

@@ -4,5 +4,24 @@
         
 <mapper namespace="com.example.studyproject.files.FilesDao">
 	
+	<!-- 파일 테이블 추가 -->
+	<select id="insertFiles">
+		INSERT INTO files(
+			file_seq,
+			file_id,
+			file_name, 
+			file_ext, 
+			ins_id, 
+			ins_date
+			)
+		VALUES (
+			nextval('seq_files'),
+			#{file_id},
+			#{file_name},
+			#{file_ext},
+			#{ins_id},
+			#{ins_date}
+		);
+	</select>
 
 </mapper>
