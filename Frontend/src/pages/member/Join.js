@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/components/Member.css';
@@ -14,8 +14,20 @@ function Join() {
     const [emailChkNumber, setEmailChkNumber] = useState('');
     const [inputEmailNumber, setInputEmailNumber] = useState('');
     const [file, setFile] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);       // 이미지 미리보기 
+    const fileInputRef = useRef();
+    const [emailTime, setEmailTime] = useState(10 * 60);            // 이메일 10분
+    const [emailSent, setEmailSent] = useState(false);              // 이메일 발송됐을 때 타이머 보이게 만들기
 
-    // 유효한지 체크 
+    useEffect(() => {
+        if (emailTime > 0) {
+            const timer = setTimeout(() => setEmailTime(emailTime - 1), 1000); // 1초 후 실행 
+            return () => clearTimeout(timer);
+        }
+    }, [emailTime])
+
+
+    // 입력창이 유효한지 체크 
     const [joinCheck, setJoinCheck] = useState({
         checkId: false,
         checkInvalidPwd: false,
@@ -141,6 +153,8 @@ function Join() {
                     if (response.data.success) {
                         setEmailChkNumber(response.data.number);
                         joinCheckAll("email", true);
+                        setEmailTime(10 * 60);
+                        setEmailSent(true);
                         setMessage('emailSendMsg', '이메일로 인증번호를 발송하였습니다.');
                     } else {
                         joinCheckAll("email", false);
@@ -153,9 +167,13 @@ function Join() {
     }
     // 이메일 인증 번호 확인
     const emailNumChk = async () => {
-        if (inputEmailNumber === emailChkNumber) {
+        if (inputEmailNumber === emailChkNumber && (minutes > 0 || seconds > 0)) {
             joinCheckAll('checkEmail', true);
             setMessage('emailMsg', '이메일 인증에 성공하였습니다.');
+            setEmailSent(false);
+        } else if(minutes === 0 && seconds === 0) {
+            joinCheckAll('checkEmail', false);
+            setMessage('emailMsg', '이메일 유효 시간을 확인해주세요.');
         } else {
             joinCheckAll('checkEmail', false);
             setMessage('emailMsg', '이메일 인증에 실패하였습니다.');
@@ -201,7 +219,7 @@ function Join() {
             // 회원가입
             axios.post(`http://localhost:3000/member/join`, formData, {
                 headers: {
-                    'Content-Type' : 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data'
                 }
             })
                 .then(response => {
@@ -215,19 +233,38 @@ function Join() {
         }
     }
 
+    // 파일 
     const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-        console.log(event.target.files[0]);
+        const file = event.target.files[0];
+        setFile(file);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
+    // 파일 삭제 
+    const handleFileRemove = () => {
+        setFile(null);
+        setSelectedImage(null);
+        fileInputRef.current.value = "";
+    }
+
+    // 공백 검사
     const whitespaceCheck = (value) => {
-        console.log(value.includes(" "));
         if (value.includes(" ")) {
             return true;
         } else {
             return false;
         }
     }
+
+    const minutes = Math.floor((emailTime || 0) / 60);
+    const seconds = (emailTime || 0) % 60;
 
     return (
         <div className="content-container">
@@ -237,7 +274,15 @@ function Join() {
 
                 <div>
                     {/* 이미지 */}
-                    <div className={"img"} id={"img"}><input type="file" onChange={handleFileChange} /></div>
+                    <div className={"img"} id={"img"}>
+                        <input type="file" ref={fileInputRef} onChange={handleFileChange} />
+                        {selectedImage && (
+                            <div>
+                                <img src={selectedImage} alt="Selected" />
+                                <button onClick={handleFileRemove}>파일 삭제</button>
+                            </div>
+                        )}
+                    </div>
 
                     {/* 가입란 */}
                     <div>
@@ -272,6 +317,10 @@ function Join() {
                             <label>이메일</label>
                             <input name={"email"} type="text" placeholder={"이메일을 입력하세요."} value={email} onChange={(e) => setEmail(e.target.value)} />
                             <button type="button" onClick={emailChk}>인증번호 발송</button>
+                            <div id="emailTimeChk" style={{display: emailSent ? 'block' : 'none'}}>
+                                {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
+                                {/* 이메일 인증 관련 컴포넌트 */}
+                            </div>
                             <div>{messages.emailSendMsg}</div>
                         </div>
                         <div>
