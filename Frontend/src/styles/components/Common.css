@@ -1,0 +1,69 @@
+*{
+    box-sizing: border-box;
+    margin:0px;
+}
+
+/* button css */
+.common-btn{
+    display: inline-block;
+    height:34px;
+    padding: 5px 20px;
+    font-size: 16px;
+    border:none;
+    color: #333333; 
+    background-color: #DAD4D4;
+    border-radius: 8px;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* 호버 효과 */
+}
+
+.common-btn:hover {
+    background-color: #c4bebe;
+    border-color: #c4bebe;
+}
+
+.common-btn:active {
+    background-color: #c4bebe;
+    border-color: #c4bebe; 
+}
+
+/* input css */
+.common-input[type="text"], .common-input[type="password"] {
+    height : 34px;
+    padding: 5px;
+    vertical-align: middle;
+    border-radius: 8px;
+    border : 1px solid #DAD4D4;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.common-input[type="text"]:focus, .common-input[type="password"]:focus{
+    border-color: #8C8484; 
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); 
+}
+
+
+/*
+.common-link{
+
+}
+*/
+
+/*
+.common-textarea{
+
+}
+*/
+
+/*
+.common-title{
+
+}
+*/
+
+/*
+.common-select{
+
+} */
