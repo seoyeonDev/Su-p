@@ -31,7 +31,8 @@ public class Member {
 //	}
 //
 //	public Member(String user_id, String password, String name, String nickname, String email, LocalDateTime join_date,
-//			String profile_img, int fail_num, String lock_yn) {
+//			String profile_img, int fail_num, String lock_yn, String authorization) {
+//		super();
 //		this.user_id = user_id;
 //		this.password = password;
 //		this.name = name;
@@ -41,6 +42,7 @@ public class Member {
 //		this.profile_img = profile_img;
 //		this.fail_num = fail_num;
 //		this.lock_yn = lock_yn;
+//		this.authorization = authorization;
 //	}
 //
 //	public String getUser_id() {
@@ -115,11 +117,19 @@ public class Member {
 //		this.lock_yn = lock_yn;
 //	}
 //
+//	public String getAuthorization() {
+//		return authorization;
+//	}
+//
+//	public void setAuthorization(String authorization) {
+//		this.authorization = authorization;
+//	}
+//
 //	@Override
 //	public String toString() {
 //		return "Member [user_id=" + user_id + ", password=" + password + ", name=" + name + ", nickname=" + nickname
 //				+ ", email=" + email + ", join_date=" + join_date + ", profile_img=" + profile_img + ", fail_num="
-//				+ fail_num + ", lock_yn=" + lock_yn + "]";
+//				+ fail_num + ", lock_yn=" + lock_yn + ", authorization=" + authorization + "]";
 //	}
-//
+
 }
