@@ -31,14 +31,17 @@ function Login () {
         console.log('login button')
         axios.post('http://localhost:3000/member/login', memberVo)
             .then(response => {
-                if (response.status === 200 && response.data === 'unlocked') {
-                    setMsg(response.data);
+                if (response.status === 200 && response.data.msg === 'unlocked') {
+                    setMsg(response.data.msg);
+                    // setUserId(response.data);
                     // console.log('로그인 완료 , ', msg);
                     alert('로그인 성공 ! ' + userId + ' 님');
+                    localStorage.setItem("user_id", userId);
+                    // alert(localStorage.getItem("user_id"));
                     navigate('/')
                 } else {
-                    setMsg(response.data);
-                    alert(response.data);
+                    setMsg(response.data.msg);
+                    alert(response.data.msg);
                 }
             })
             .catch((err) => {
@@ -82,7 +85,7 @@ function Login () {
 
 
             <div >
-                { msg }
+                {msg && <div>{msg.toString()}</div>}
             </div>
         </div>
     );
