@@ -2,7 +2,7 @@
 
 -- DROP TABLE IF EXISTS public.files;
 
-CREATE TABLE IF NOT EXISTS public.files
+CREATE TABLE IF NOT EXISTS public.supfiles
 (
     file_seq character varying(100) COLLATE pg_catalog."default" NOT NULL,
     file_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
@@ -15,25 +15,25 @@ CREATE TABLE IF NOT EXISTS public.files
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.files
+ALTER TABLE IF EXISTS public.supfiles
     OWNER to studyproject;
 
-COMMENT ON TABLE public.files
+COMMENT ON TABLE public.supfiles
     IS '파일';
 
-COMMENT ON COLUMN public.files.file_seq
+COMMENT ON COLUMN public.supfiles.file_seq
     IS '파일번호';
 
-COMMENT ON COLUMN public.files.file_id
+COMMENT ON COLUMN public.supfiles.file_id
     IS '파일ID';
 
-COMMENT ON COLUMN public.files.file_name
+COMMENT ON COLUMN public.supfiles.file_name
     IS '원본파일명';
 
-COMMENT ON COLUMN public.files.file_ext
+COMMENT ON COLUMN public.supfiles.file_ext
     IS '입력작업자';
 
-COMMENT ON COLUMN public.files.ins_date
+COMMENT ON COLUMN public.supfiles.ins_date
     IS '입력일시';
 
 
@@ -47,7 +47,7 @@ CREATE SEQUENCE IF NOT EXISTS public.seq_files
     MINVALUE 1
     MAXVALUE 999999999
     CACHE 1
-    OWNED BY files.file_seq;
+    OWNED BY supfiles.file_seq;
 
 ALTER SEQUENCE public.seq_files
     OWNER TO studyproject;
