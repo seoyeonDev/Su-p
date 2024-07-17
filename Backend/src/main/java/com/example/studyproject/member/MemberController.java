@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.studyproject.files.Files;
-import com.example.studyproject.files.FilesService;
+import com.example.studyproject.files.SupFiles;
+import com.example.studyproject.files.SupFilesService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -37,7 +37,7 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	@Autowired
-	private FilesService filesSerivce;
+	private SupFilesService filesSerivce;
 	
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
@@ -86,7 +86,7 @@ public class MemberController {
 			memberService.insertMember(vo);
 			
 			// 파일 테이블에 이미지 정보 추가
-			Files files = new Files();
+			SupFiles files = new SupFiles();
 			String[] parts = fname.split("\\.");
 			String fileName = parts[0]; // 원본파일명
 	        String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환

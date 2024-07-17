@@ -16,18 +16,18 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class FilesService {
+public class SupFilesService {
 
-    public static final Logger LOGGER = LogManager.getLogger(FilesService.class);
+    public static final Logger LOGGER = LogManager.getLogger(SupFilesService.class);
 
-    private final FilesDao filesDao;
+    private final SupFilesDao filesDao;
 
-    public FilesService(FilesDao filesDao){
+    public SupFilesService(SupFilesDao filesDao){
         this.filesDao = filesDao;
     }
     
     // 파일 테이블 추가
-    public void insertFiles(Files vo) {
+    public void insertFiles(SupFiles vo) {
     	
     	filesDao.insertFiles(vo);
     }

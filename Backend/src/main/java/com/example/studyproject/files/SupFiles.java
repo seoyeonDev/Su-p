@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Files {
+public class SupFiles {
 	private String file_seq;
 	private String file_id;
 	private String file_name;
@@ -21,11 +21,11 @@ public class Files {
 	private String ins_id;
 	private LocalDateTime ins_date;
 	
-//	public Files() {
+//	public SupFiles() {
 //		// TODO Auto-generated constructor stub
 //	}
 //
-//	public Files(String file_seq, String file_id, String file_name, String file_ext, String ins_id,
+//	public SupFiles(String file_seq, String file_id, String file_name, String file_ext, String ins_id,
 //			LocalDateTime ins_date) {
 //		super();
 //		this.file_seq = file_seq;
@@ -86,7 +86,7 @@ public class Files {
 //
 //	@Override
 //	public String toString() {
-//		return "Files [file_seq=" + file_seq + ", file_id=" + file_id + ", file_name=" + file_name + ", file_ext="
+//		return "SupFiles [file_seq=" + file_seq + ", file_id=" + file_id + ", file_name=" + file_name + ", file_ext="
 //				+ file_ext + ", ins_id=" + ins_id + ", ins_date=" + ins_date + "]";
 //	}
 	
