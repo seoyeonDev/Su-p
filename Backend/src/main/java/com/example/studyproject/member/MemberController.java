@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.studyproject.files.Files;
+import com.example.studyproject.files.FilesService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -40,6 +44,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private FilesService filesSerivce;
+	
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
 	
@@ -85,9 +92,24 @@ public class MemberController {
 			}
 			vo.setProfile_img(imgPath);
 			memberService.insertMember(vo);
-			path = realPath;
 			
-			LOGGER.info("================path: " + path);
+			// 파일 테이블에 이미지 정보 추가
+			Files files = new Files();
+			String[] parts = fname.split("\\.");
+			String fileName = parts[0]; // 원본파일명
+	        String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
+	        LocalDateTime now = LocalDateTime.now();
+			
+			files.setFile_id(vo.getUser_id());
+			files.setFile_name(fileName);
+			files.setFile_ext(fileExtension);
+			files.setIns_id(vo.getUser_id());
+			files.setIns_date(now);
+			
+			filesSerivce.insertFiles(files);
+			
+      path = realPath;
+      LOGGER.info("================path: " + path);
 			LOGGER.info("================ " + "Join");
 			LOGGER.info("================ " + vo);
 		} else {	
