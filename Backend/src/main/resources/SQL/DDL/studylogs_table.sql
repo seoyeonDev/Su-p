@@ -1,8 +1,6 @@
 create table studylogs
 (
-    post_id     varchar(100)  not null
-        constraint studylogs_pk
-            primary key,
+    post_id     varchar(100)  not null,
     user_id     varchar(255)  not null,
     group_id    varchar(255)  not null,
     title       varchar(100)  not null,
@@ -10,7 +8,8 @@ create table studylogs
     create_date timestamp     not null,
     update_date timestamp,
     file_id     varchar(255),
-    img_id      varchar(255)
+    img_id      varchar(255),
+    CONSTRAINT files_pkey PRIMARY KEY (post_id, group_id)
 );
 
 comment on table studylogs is '스터디 결과물';
@@ -35,7 +34,3 @@ comment on column studylogs.img_id is '이미지';
 
 -- create unique index studylogs_pk
 --     on public.studylogs (post_id);
-
-alter table public.studylogs
-    add constraint studylogs_pk
-        primary key (post_id, group_id);
