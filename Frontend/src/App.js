@@ -12,6 +12,7 @@ import MyPage from "./pages/member/mypage/MyPage";
 import Info from "./pages/member/mypage/Info";
 import ChangePwd from "./pages/member/mypage/ChangePwd";
 import MemberOut from "./pages/member/mypage/MemberOut";
+import InputPassword from "./pages/member/mypage/InputPassword";
 
 import JoinedList from "./pages/joinedgroup/JoinedList";
 
@@ -41,6 +42,7 @@ function App() {
         <Route path="/mypage/*" element={<MyPage/>}></Route>
         <Route path="/findId" element={<FindId/>}></Route>
         <Route path="/findPwd" element={<FindPwd/>}></Route>
+        <Route path="/inputPassword" element={<InputPassword/>}></Route>
 
         {/* 스터디그룹 */}
         <Route path="/studylist" element={<StudyList/>}></Route>
