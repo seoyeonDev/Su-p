@@ -157,7 +157,7 @@ public class MemberController {
 			map.put("loginId", member.getUser_id());
 		} else if(member != null && member.getLock_yn().equals("Y")){
 			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
-			msg = "unlocked";
+//			msg = "unlocked";
 			LOGGER.info("================ " + msg);
 			map.put("msg", msg);
 			return map;
