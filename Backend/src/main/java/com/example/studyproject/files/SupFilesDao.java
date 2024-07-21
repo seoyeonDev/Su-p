@@ -1,5 +1,8 @@
 package com.example.studyproject.files;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -17,4 +20,8 @@ public interface SupFilesDao {
 	
 	// 파일 테이블 추가
 	void insertFiles(SupFiles vo);
+	
+	List<HashMap<String, Object>> getFile(HashMap<String, Object> map);
+	
+	void delFile(HashMap<String, Object> map);
 }
