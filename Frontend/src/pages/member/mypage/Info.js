@@ -12,7 +12,7 @@ const Info = () => {
     const [inputEmailNum, setInputEmailNum] = useState('');
     const [file, setFile] = useState('');
     const [isEditing, setIsEditing] = useState(false);
-    const user_id = localStorage.getItem('loginId');
+    const user_id = localStorage.getItem('user_id');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,7 +30,7 @@ const Info = () => {
                 localStorage.setItem('userName', response.data.member.name);
                 localStorage.setItem('userEmail', response.data.member.email);
                 
-                setImgUrl('http://localhost:3000/member/getImage/' + user_id + "/" + (response.data.member.profile_img).split('/').pop());
+                setImgUrl('http://localhost:3000/member/getImage/' + user_id);
             } catch(error) {
                 console.log("error: " + error);
             }
