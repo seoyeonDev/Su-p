@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -180,9 +181,12 @@ public class MemberController {
 	}
 
     // 멤버 - 이미지
-    @GetMapping("/getImage/{user_id}/{img_name}")
-    public ResponseEntity<byte[]> getImage(@PathVariable String user_id, @PathVariable String img_name) {
-        // 실제 이미지 파일이 저장된 경로
+    @GetMapping("/getImage/{user_id}")
+    public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
+    	
+    	map.put("fileId", user_id);
+    	List<HashMap<String, Object>> list = filesSerivce.getFile(map);
+    	String img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
         String imagePath = path + "user_img/" + user_id + "/" + img_name;
         
         // 파일이 존재하는지 확인
@@ -193,7 +197,6 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-
         // 이미지 파일을 읽어와 byte 배열로 변환
         byte[] imageBytes;
         try {
@@ -202,16 +205,11 @@ public class MemberController {
             // 이미지 파일을 읽어오는 중에 에러가 발생한 경우 500 에러를 반환
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        LOGGER.info("이미지파일 바이트배열: " + imageBytes);
         
         // 응답에 이미지 데이터와 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         
-        String[] parts = img_name.split("\\.");
-        String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
-        LOGGER.info("이미지파일 확장자: " + parts);
-        LOGGER.info("이미지파일 확장자 소문자: " + fileExtension);
-        
+        String fileExtension = (String) list.get(0).get("fileExt"); // 이미지 확장자
         
         MediaType mediaType;
         if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension)) {
@@ -222,13 +220,9 @@ public class MemberController {
             // 기본적으로 JPEG로 설정
             mediaType = MediaType.IMAGE_JPEG;
         }
-        LOGGER.info("이미지파일 미디어타입: " + mediaType);
-        
         
         headers.setContentType(mediaType);
         headers.setContentLength(imageBytes.length);
-        LOGGER.info("이미지파일 헤더: " + headers);
-        LOGGER.info("이미지 리턴: " + new ResponseEntity<>(imageBytes, headers, HttpStatus.OK));
         
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
@@ -240,11 +234,15 @@ public class MemberController {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PostMapping("/update")
-	public void update(@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
-		Member member = memberService.getMemberById(vo.getUser_id());
+	public void update(@RequestParam HashMap<String, Object> map,
+			@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
+		
+		map.put("fileId", vo.getUser_id());
+		List<HashMap<String, Object>> list = filesSerivce.getFile(map);
+		String img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
 		
 		String realPath = path;
-		String oldImg = member.getProfile_img();
+		String oldImg = path + "user_img/" + vo.getUser_id() + "/" + img_name;
 		String fname = f.getOriginalFilename();
 		
 		String imgPath = "";
@@ -254,6 +252,7 @@ public class MemberController {
 			File imgSave = new File(imgPath);
 			File imgDel = new File(oldImg);
 			imgDel.delete();
+			filesSerivce.delFile(map);
 			try {
 				f.transferTo(imgSave);
 				vo.setProfile_img(imgPath);
@@ -265,6 +264,21 @@ public class MemberController {
 			vo.setProfile_img(oldImg);
 		}
 		memberService.updateMember(vo);
+		
+		// 파일 테이블에 이미지 정보 추가
+		SupFiles files = new SupFiles();
+		String[] parts = fname.split("\\.");
+		String fileName = parts[0]; // 원본파일명
+        String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
+        LocalDateTime now = LocalDateTime.now();
+		
+		files.setFile_id(vo.getUser_id());
+		files.setFile_name(fileName);
+		files.setFile_ext(fileExtension);
+		files.setIns_id(vo.getUser_id());
+		files.setIns_date(now);
+		
+		filesSerivce.insertFiles(files);
 		path = realPath;
 	}
 	
