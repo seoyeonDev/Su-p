@@ -316,12 +316,11 @@ public class MemberController {
 	 * @param password
 	 * @return boolean
 	 */
-	@GetMapping("/inputPassword")
-	public boolean inputPassword(@RequestParam String user_id, @RequestParam String password) {
-		LOGGER.info("아이디, 비밀번호: " + user_id + " / " + password);
+	@PostMapping("/inputPassword")
+	public boolean inputPassword(@RequestBody Member vo) {
 		boolean pwdChk = false;
 		try {
-			pwdChk = memberService.isPasswordCorrect(user_id, password);
+			pwdChk = memberService.isPasswordCorrect(vo.getUser_id(), vo.getPassword());
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
