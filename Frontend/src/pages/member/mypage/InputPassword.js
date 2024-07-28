@@ -11,14 +11,14 @@ const InputPassword = () => {
         setPassword(e.target.value);
     };
 
+    const memberVo = {
+      user_id : user_id,
+      password : password
+  }
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.get('http://localhost:3000/member/inputPassword', {
-           params: {
-            user_id: user_id,
-            password: password
-            }
-        })
+        axios.post('http://localhost:3000/member/inputPassword', memberVo)
             .then(response => {
                 if(response.data) {
                     navigate('/mypage');
