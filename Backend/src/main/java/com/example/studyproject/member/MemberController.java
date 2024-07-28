@@ -323,6 +323,25 @@ public class MemberController {
 			return chkImpl = 1;
 		}
 	}
+	
+	/**
+	 * 마이페이지 접속 - 비밀번호 검증
+	 * @param user_id
+	 * @param password
+	 * @return boolean
+	 */
+	@PostMapping("/inputPassword")
+	public boolean inputPassword(@RequestBody Member vo) {
+		boolean pwdChk = false;
+		try {
+			pwdChk = memberService.isPasswordCorrect(vo.getUser_id(), vo.getPassword());
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return pwdChk;
+	}
 
 	/**
 	 * 아이디 찾기
