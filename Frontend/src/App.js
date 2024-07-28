@@ -18,6 +18,8 @@ import JoinedList from "./pages/joinedgroup/JoinedList";
 import FindId from "./pages/member/FindId";
 import FindPwd from "./pages/member/FindPwd";
 import StudyList from "./pages/studygroup/StudyList";
+import CreateStudygroup from "./pages/studygroup/CreateStudygroup";
+import StudyLogs from "./pages/studylogs/StudyLogs"
 
 
 import './App.css';
@@ -44,9 +46,13 @@ function App() {
 
         {/* 스터디그룹 */}
         <Route path="/studylist" element={<StudyList/>}></Route>
+        <Route path="/createStudygroup" element={<CreateStudygroup/>}></Route>
 
         {/* 가입한 그룹 */}
         <Route path="/joinedlist" element={<JoinedList/>}></Route>
+
+          {/*스터디 로그*/}
+          <Route path={"/studylogs"} element={<StudyLogs/>}></Route>
 
       </Routes>
     </BrowserRouter>

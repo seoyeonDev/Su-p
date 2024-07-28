@@ -39,7 +39,7 @@ public class EmailVerificationController {
             rc.redisTemplate(rc.redisConnectionFactory()).opsForValue().set("emailNumChk",num, 10, TimeUnit.MINUTES);   // 10분 시간제한
 
             map.put("success", Boolean.TRUE);
-            map.put("number", num);
+//            map.put("number", num);
         } catch (Exception e){
             map.put("success", Boolean.FALSE);
             map.put("error", e.getMessage());

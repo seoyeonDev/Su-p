@@ -1,7 +1,12 @@
 package com.example.studyproject.studylogs;
 
+import com.example.studyproject.joinedgroup.Joinedgroup;
+import com.example.studyproject.joinedgroup.JoinedgroupService;
+import com.example.studyproject.member.Member;
+import com.example.studyproject.member.MemberService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,6 +17,12 @@ public class StudyLogsService {
     // log4j2 로그 찍기
     public static final Logger LOGGER = LogManager.getLogger(StudyLogsService.class);
 
+    @Autowired
+    private MemberService memberService;
+    
+    @Autowired
+    private JoinedgroupService joinedgroupService;
+    
     private final StudyLogsDao studyLogsDao;
 
     public StudyLogsService(StudyLogsDao studyLogsDao) {
@@ -25,7 +36,17 @@ public class StudyLogsService {
 
     // 결과물 추가
     public void insertLogs(StudyLogs vo) {
-        studyLogsDao.insertLogs(vo);
+        Member memberVo = memberService.getMemberById(vo.getUser_id());
+        Joinedgroup joinedgroupVo =  joinedgroupService.getByUserIdAndGroupId(vo.getUser_id(), vo.getGroup_id());
+        
+        if(joinedgroupVo != null){
+            studyLogsDao.insertLogs(vo);
+            LOGGER.info("================ " + "StudyLogs insert success");
+        } else{
+            // insert 실패
+            LOGGER.info("================ " + "StudyLogs insert fail");
+        }
+       
     }
 
     // 결과물 업데이트

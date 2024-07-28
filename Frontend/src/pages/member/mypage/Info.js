@@ -12,7 +12,16 @@ const Info = () => {
     const [inputEmailNum, setInputEmailNum] = useState('');
     const [file, setFile] = useState('');
     const [isEditing, setIsEditing] = useState(false);
-    const user_id = localStorage.getItem('user_id');
+    const user_id = localStorage.getItem('loginId');
+    const [emailTime, setEmailTime] = useState(10 * 60);            // 이메일 10분
+    const [emailSent, setEmailSent] = useState(false);              // 이메일 발송됐을 때 타이머 보이게 만들기
+
+    useEffect(() => {
+        if (emailTime > 0) {
+            const timer = setTimeout(() => setEmailTime(emailTime - 1), 1000); // 1초 후 실행 
+            return () => clearTimeout(timer);
+        }
+    }, [emailTime])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -73,6 +82,8 @@ const Info = () => {
                 console.log(response.data);
                 if(response.data.success){
                     setEmailNum(response.data.number);
+                    setEmailTime(10 * 60);
+                    setEmailSent(true);
                     alert('입력하신 이메일로 인증번호를 발송하였습니다.');
                 } else {
                     alert('인증번호 발송에 실패하였습니다.');
@@ -84,9 +95,11 @@ const Info = () => {
     };
 
     const checkCode = () => {
-        if((inputEmailNum === emailNum) && inputEmailNum !== '') {
+        if((inputEmailNum === emailNum) && inputEmailNum !== '' && (minutes > 0 || seconds > 0)) {
             setEditEmail(1);
             alert('이메일 인증에 성공하였습니다.');
+        } else if(minutes === 0 && seconds === 0) {
+            alert('이메일 유효 시간을 확인해주세요.');
         } else {
             alert('이메일 인증에 실패하였습니다.');
         }
@@ -142,6 +155,8 @@ const Info = () => {
 
     // userInfo가 null이 아니고, userInfo.member도 존재할 때 구조 분해 할당
     const { member } = userInfo;
+    const minutes = Math.floor((emailTime || 0) / 60);
+    const seconds = (emailTime || 0) % 60;
 
   return (
     <div>
@@ -173,6 +188,9 @@ const Info = () => {
             </div>
             <div className='info-area-myinfo-invisible'>
                 <input type='text' id='verificationCode' name='verificationCode' onChange={(e) => setInputEmailNum(e.target.value)} disabled={!isEditing} />
+            </div>
+            <div id="emailTimeChk" style={{display: emailSent ? 'block' : 'none'}}>
+                {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
             </div>
         </div>
 
