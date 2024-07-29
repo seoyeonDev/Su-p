@@ -2,7 +2,6 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import StudyList from '../pages/studygroup/StudyList';
-
 import JoinedList from '../pages/joinedgroup/JoinedList';
 
 function Home() {
@@ -70,7 +69,7 @@ function Home() {
 
             <div>
                 서연
-                <JoinedList/>
+                {/* <JoinedList/> */}
             </div>
 
 
