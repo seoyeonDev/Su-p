@@ -18,7 +18,7 @@ public class Joinedgroup {
     private int submission_cnt;
 
 //    public Joinedgroup() {
-//		// TODO Auto-generated constructor stub
+//		// TODO Auto-generated constructor stub 
 //	}
 //
 //	public Joinedgroup(String group_id, String user_id, String role, String joinstatus, int submission_cnt) {

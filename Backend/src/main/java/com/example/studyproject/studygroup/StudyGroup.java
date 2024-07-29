@@ -44,7 +44,7 @@ public class StudyGroup {
     private int penalty;			// 페널티기준
 	
     public StudyGroup() {
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor stub 
 	}
 
 	public StudyGroup(String group_id, String leader_id, String title, String name, String study_desc, String kind,
