@@ -54,3 +54,9 @@ ALTER SEQUENCE public.seq_files
 
 COMMENT ON SEQUENCE public.seq_files
     IS '파일 시퀀스';
+
+
+alter table supfiles add column file_type varchar(20);
+
+COMMENT ON COLUMN public.supfiles.file_type
+    IS '파일종류';

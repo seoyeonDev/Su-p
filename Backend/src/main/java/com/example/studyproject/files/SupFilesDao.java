@@ -2,6 +2,8 @@ package com.example.studyproject.files;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @Class Name : FilesDao.java
  * @Description : 파일 저장 Dao
@@ -17,4 +19,7 @@ public interface SupFilesDao {
 	
 	// 파일 테이블 추가
 	void insertFiles(SupFiles vo);
+
+	// 파일 테이블 리스트 추가
+	int insertFileList(List<SupFiles> supFilesList);
 }

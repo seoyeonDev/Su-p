@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * @Class Name : FilesService.java
@@ -28,7 +30,10 @@ public class SupFilesService {
     
     // 파일 테이블 추가
     public void insertFiles(SupFiles vo) {
-    	
     	filesDao.insertFiles(vo);
+    }
+
+    public int insertFileList(List<SupFiles> supFilesList){
+        return filesDao.insertFileList(supFilesList);
     }
 }

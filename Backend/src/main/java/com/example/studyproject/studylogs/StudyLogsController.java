@@ -77,45 +77,58 @@ public class StudyLogsController {
     }
 
 
-    // 결과물 신규추가
+    /**
+     * 결과물 신규추가
+     *
+     * @param vo     : StudyLogs
+     * @param files  : 파일
+     * @param images : 이미지
+     * @throws NoSuchAlgorithmException
+     */
     @PostMapping("/insert")
-    public void insertLogs(@RequestPart("vo") StudyLogs vo, @RequestParam(value = "files", required = false) List<MultipartFile> files) throws NoSuchAlgorithmException {
-        studyLogsService.insertLogs(vo);
+    public void insertLogs(@RequestPart("vo") StudyLogs vo,
+                           @RequestParam(value = "files", required = false) List<MultipartFile> files,
+                           @RequestParam(value = "images", required = false) List<MultipartFile> images) throws NoSuchAlgorithmException {
 
-        String realPath = path + "study_logs/" + vo.getPost_id();
-        File dir = new File(realPath);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        // StudyLogs 추가하고 post_id 반환
+        String post_id = studyLogsService.insertStudyLogs(vo);
 
-        for (MultipartFile file : files) {
-            if (!file.isEmpty()) {
-                String originalFilename = file.getOriginalFilename();
-                String[] parts = originalFilename.split("\\.");
-                String fileName = parts[0];
-                String fileExtension = parts[parts.length - 1].toLowerCase();
-                LocalDateTime now = LocalDateTime.now();
+        if (post_id != null) {
+            LOGGER.info("================ post_id : " + post_id);
+            List<SupFiles> supImageList = new ArrayList<>();
+            List<SupFiles> supFileList = new ArrayList<>();
 
-                // 파일 저장
-                String filePath = realPath + "/" + originalFilename;
-                File imgSave = new File(filePath);
-                try {
-                    file.transferTo(imgSave);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                SupFiles filesEntity = new SupFiles();
-                filesEntity.setFile_seq(UUID.randomUUID().toString());
-                filesEntity.setFile_id(vo.getPost_id());
-                filesEntity.setFile_name(fileName);
-                filesEntity.setFile_ext(fileExtension);
-                filesEntity.setIns_id(vo.getUser_id());
-                filesEntity.setIns_date(now);
-
-
-                filesSerivce.insertFiles(filesEntity);
+            String realPath = path + "study_logs/" + post_id;
+            File dir = new File(realPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
+
+            supImageList = addSupFiles(images, "KIND10", vo);
+            supFileList = addSupFiles(files, "KIND20", vo);
+
+            // 두 리스트를 합치기
+            List<SupFiles> allFilesList = new ArrayList<>();
+            allFilesList.addAll(supImageList);
+            allFilesList.addAll(supFileList);
+
+            int success = 0;
+
+            try {
+                if (allFilesList.size() > 0) {
+                    success = filesSerivce.insertFileList(allFilesList);
+                    if (success > 0) {
+                        LOGGER.info("================ 파일 저장 성공 success : " + success);
+                    }
+                } else {
+                    LOGGER.info("================ 파일 없음");
+                }
+            } catch (Exception e) {
+                LOGGER.info("================ 파일 저장 실패 : " + e.getMessage());
+            }
+
+        } else {
+            LOGGER.info("================ studyLog 저장시 문제 발생");
         }
     }
 
@@ -239,5 +252,52 @@ public class StudyLogsController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(fileResource);
+    }
+
+    /**
+     * @param files     : 파일 리스트
+     * @param file_type : 파일 유형 (이미지인지, 파일인지)
+     * @param vo        : StudyLogs
+     * @return
+     */
+    public List<SupFiles> addSupFiles(List<MultipartFile> files, String file_type, StudyLogs vo) {
+        List<SupFiles> supFilesList = new ArrayList<>();
+        String realPath = path + "study_logs/" + vo.getPost_id();
+
+        if (files == null) {
+            return supFilesList; // 파일이 비어있다면 : 빈 리스트 반환
+        }
+
+        for (MultipartFile file : files) {
+            if (file != null) {
+                String originalFilename = file.getOriginalFilename();
+                String[] parts = originalFilename.split("\\.");
+                String fileName = parts[0];
+                String fileExtension = parts[parts.length - 1].toLowerCase();
+                LocalDateTime now = LocalDateTime.now();
+
+                // 파일 저장
+                String filePath = realPath + "/" + originalFilename;
+                File imgSave = new File(filePath);
+                try {
+                    file.transferTo(imgSave);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                SupFiles filesEntity = new SupFiles();
+                filesEntity.setFile_seq(UUID.randomUUID().toString());
+                filesEntity.setFile_id(vo.getPost_id());
+                filesEntity.setFile_name(fileName);
+                filesEntity.setFile_ext(fileExtension);
+                filesEntity.setIns_id(vo.getUser_id());
+                filesEntity.setIns_date(now);
+                filesEntity.setFile_type(file_type);
+                // 파일 set해준 후 supFileList에 add 해주기
+                supFilesList.add(filesEntity);
+            }
+        }
+
+        return supFilesList;
     }
 }
