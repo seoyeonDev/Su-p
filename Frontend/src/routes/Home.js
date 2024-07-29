@@ -70,7 +70,7 @@ function Home() {
 
             <div>
                 서연
-                <JoinedList/>
+                {/* <JoinedList/> */}
             </div>
 
 
