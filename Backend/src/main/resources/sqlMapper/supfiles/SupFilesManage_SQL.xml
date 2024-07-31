@@ -4,6 +4,12 @@
         
 <mapper namespace="com.example.studyproject.files.SupFilesDao">
 	
+	<!-- 파일 정보 불러오기 맵 -->
+	<resultMap type="HashMap" id="FileMap">
+		<result property="fileName" column="file_name"/>
+		<result property="fileExt" column="file_ext"/>
+	</resultMap>
+	
 	<!-- 파일 테이블 추가 -->
 	<select id="insertFiles">
 		INSERT INTO supfiles(
@@ -25,6 +31,21 @@
 			#{file_type}
 		);
 	</select>
+	
+	<!-- 파일 테이블 정보 불러오기 -->
+	<select id="getFile" parameterType="HashMap" resultMap="FileMap">
+		SELECT
+			file_name,
+			file_ext
+		FROM supfiles
+		WHERE file_id = #{fileId}
+	</select>
+	
+	<delete id="delFile" parameterType="HashMap">
+		DELETE
+		FROM supfiles
+		WHERE file_id = #{fileId}
+	</delete>
 
 	<!-- 여러 파일 삽입 -->
 	<insert id="insertFileList" parameterType="list">
