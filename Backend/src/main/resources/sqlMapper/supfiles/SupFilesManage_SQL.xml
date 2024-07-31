@@ -18,7 +18,8 @@
 			file_name, 
 			file_ext, 
 			ins_id, 
-			ins_date
+			ins_date,
+			file_type
 			)
 		VALUES (
 			nextval('seq_files'),
@@ -27,6 +28,7 @@
 			#{file_ext},
 			#{ins_id},
 			#{ins_date}
+			#{file_type}
 		);
 	</select>
 	
@@ -45,4 +47,28 @@
 		WHERE file_id = #{fileId}
 	</delete>
 
+	<!-- 여러 파일 삽입 -->
+	<insert id="insertFileList" parameterType="list">
+		INSERT INTO supfiles (
+			file_seq,
+			file_id,
+			file_name,
+			file_ext,
+			ins_id,
+			ins_date,
+			file_type
+		)
+		VALUES
+		<foreach collection="list" item="file" separator=",">
+			(
+			nextval('seq_files'),
+			#{file.file_id},
+			#{file.file_name},
+			#{file.file_ext},
+			#{file.ins_id},
+			#{file.ins_date},
+			#{file.file_type}
+			)
+		</foreach>
+	</insert>
 </mapper>

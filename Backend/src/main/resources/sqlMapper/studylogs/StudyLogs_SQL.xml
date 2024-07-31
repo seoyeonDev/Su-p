@@ -46,6 +46,27 @@
         )
     </insert>
 
+    <insert id="insertStudyLogs" parameterType="com.example.studyproject.studylogs.StudyLogs" useGeneratedKeys="true" keyProperty="post_id">
+        INSERT INTO studylogs (
+            post_id,
+            user_id,
+            group_id,
+            title,
+            content,
+            create_date
+        )
+        VALUES (
+            (SELECT COALESCE(MAX(CAST(post_id AS INTEGER)) + 1, 1)
+                FROM studylogs
+                WHERE group_id = #{group_id}),
+            #{user_id},
+            #{group_id},
+            #{title},
+            #{content},
+            now()
+        )
+    </insert>
+
     <!-- 결과물 업데이트 -->
     <update id="updateStudyLogs" >
         UPDATE studylogs

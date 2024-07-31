@@ -5,7 +5,8 @@ class CreatePost extends Component {
     state = {
         title: '',
         content: '',
-        files: [] // 모든 파일을 담을 상태 배열
+        files: [], // 모든 파일을 담을 상태 배열
+        imgs: []
     };
 
     handleInputChange = (e) => {
@@ -21,10 +22,19 @@ class CreatePost extends Component {
         });
     }
 
+    handleImgChange = (e) => {
+        // 이미지 파일 입력을 처리하고 상태에 업데이트
+        const { imgs } = this.state;
+        const newImgs = Array.from(e.target.files);
+        this.setState({
+            imgs: [...imgs, ...newImgs] // 기존 이미지 파일들과 새로운 파일들을 합침
+        });
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { title, content, files } = this.state;
+        const { title, content, files, imgs } = this.state;
         const data = {
             post_id: '',
             user_id: 'seungmin501', // 테스트를 위한 예시 user_id
@@ -46,6 +56,10 @@ class CreatePost extends Component {
         files.forEach((file) => {
             formData.append('files', file);
         });
+
+        imgs.forEach((img)=>{
+            formData.append('images', img);
+        })
 
         axios.post('http://localhost:3000/studylogs/insert', formData, {
             headers: {
@@ -77,6 +91,12 @@ class CreatePost extends Component {
                     </div>
                     <div>
                         파일2 <input type="file" multiple onChange={this.handleFileChange} />
+                    </div>
+                    <div>
+                        이미지1 <input type="file" onChange={this.handleImgChange}/>
+                    </div>
+                    <div>
+                        이미지2 <input type="file" onChange={this.handleImgChange}/>
                     </div>
                     <div>
                         {files.length > 0 && (
