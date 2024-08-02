@@ -12,7 +12,7 @@ const Info = () => {
     const [inputEmailNum, setInputEmailNum] = useState('');
     const [file, setFile] = useState('');
     const [isEditing, setIsEditing] = useState(false);
-    const user_id = localStorage.getItem('loginId');
+    const user_id = localStorage.getItem('user_id');
     const [emailTime, setEmailTime] = useState(10 * 60);            // 이메일 10분
     const [emailSent, setEmailSent] = useState(false);              // 이메일 발송됐을 때 타이머 보이게 만들기
 
@@ -24,7 +24,7 @@ const Info = () => {
     }, [emailTime])
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async () => { 
             try {
                 const response = await axios.get('http://localhost:3000/member/mypage', {
                     params: {

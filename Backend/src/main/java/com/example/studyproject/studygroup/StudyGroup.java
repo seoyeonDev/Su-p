@@ -13,6 +13,8 @@ package com.example.studyproject.studygroup;
  */
 
 import com.example.studyproject.member.Member;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -31,7 +33,9 @@ public class StudyGroup {
     private String kind;        	// 스터디 종류 => 코드 테이블 참조
     private String status;   	  	// 활성화상태 => 코드 테이블 참조
     private int mem_cnt;        	// 최대멤버수
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startdate;	// 스터디시작일
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime enddate;  	// 스터디종료일
     private int view_cnt;       	// 조회수
     private String chk_m;   	    // 제출기준 => 코드 테이블 참조
@@ -40,7 +44,7 @@ public class StudyGroup {
     private int penalty;			// 페널티기준
 	
 //    public StudyGroup() {
-//		// TODO Auto-generated constructor stub
+//		// TODO Auto-generated constructor stub 
 //	}
 //
 //	public StudyGroup(String group_id, String leader_id, String title, String name, String study_desc, String kind,

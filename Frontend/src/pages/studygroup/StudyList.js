@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {Link} from "react-router-dom";
 import axios from 'axios';
 
 const StudyList = () => {
@@ -18,6 +19,7 @@ const StudyList = () => {
             <br/>
             <div>선호: 스터디 리스트 Home.js에 불러오기 테스트</div>
             <br/>
+            <div><Link to={"/createStudygroup"}>글쓰기</Link><br/></div>
             {studyItems.map(item => (
                 <div key={item.group_id} className='study-card'>
                     <h3>{item.title}</h3>
