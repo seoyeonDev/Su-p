@@ -1,9 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import '../styles/components/Header.css';
 //import { useState, useEffect } from 'react';
 
 function Header() {
+
+    // const [userId, setUserId] = useState('');
+    //
+    // // localStorage Id 가져오기
+    // useEffect(()=>{
+    //     setUserId(localStorage.getItem("user_id"));
+    //
+    // })
+
 
 /*
   const [user, setUser] = useState([]);
@@ -19,14 +28,29 @@ function Header() {
   });
 */
 
-  const handleLogout = () => { // 서버쪽 /logout으로 보내기 
-    axios.post('/logout')
-      .then((response) => {
-        console.log('로그아웃 성공');
-      })
-      .catch((error) => {
-        console.error('로그아웃 오류:', error);
-      });
+  const handleLogout = () => { // 서버쪽 /logout으로 보내기
+
+      alert(localStorage.getItem("user_id") + " 전");
+      if (localStorage.getItem("user_id") != null){
+          alert(localStorage.getItem("user_id"));
+
+          localStorage.removeItem("user_id")
+
+          alert(localStorage.getItem("user_id"));
+
+      } else {
+          alert("로그인 상태가 아닙니다. 재로그인해주세요.")
+
+      }
+
+    // axios.post('/logout')
+      // .then((response) => {
+      //
+      //   console.log('로그아웃 성공');
+      // })
+      // .catch((error) => {
+      //   console.error('로그아웃 오류:', error);
+      // });
   };
 
   return (

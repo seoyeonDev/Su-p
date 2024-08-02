@@ -11,7 +11,6 @@ function Join() {
     const [checkPassword, setCheckPassword] = useState('');
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
-    const [emailChkNumber, setEmailChkNumber] = useState('');
     const [inputEmailNumber, setInputEmailNumber] = useState('');
     const [file, setFile] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);       // 이미지 미리보기 
@@ -151,7 +150,6 @@ function Join() {
                 .then(response => {
                     console.log(response);
                     if (response.data.success) {
-                        setEmailChkNumber(response.data.number);
                         joinCheckAll("email", true);
                         setEmailTime(10 * 60);
                         setEmailSent(true);
@@ -167,17 +165,27 @@ function Join() {
     }
     // 이메일 인증 번호 확인
     const emailNumChk = async () => {
-        if (inputEmailNumber === emailChkNumber && (minutes > 0 || seconds > 0)) {
-            joinCheckAll('checkEmail', true);
-            setMessage('emailMsg', '이메일 인증에 성공하였습니다.');
-            setEmailSent(false);
-        } else if(minutes === 0 && seconds === 0) {
-            joinCheckAll('checkEmail', false);
-            setMessage('emailMsg', '이메일 유효 시간을 확인해주세요.');
-        } else {
-            joinCheckAll('checkEmail', false);
-            setMessage('emailMsg', '이메일 인증에 실패하였습니다.');
-        }
+        axios.get(`http://localhost:3000/mail/mailCheck`,{
+            params: {
+                userNumber : inputEmailNumber
+            }
+        })
+        .then(response => {
+            if(response.data === true && (minutes > 0 || seconds > 0)){
+                joinCheckAll('checkEmail', true);
+                setMessage('emailMsg', '이메일 인증에 성공하였습니다.');
+                setEmailSent(false);
+            }else if(minutes === 0 && seconds === 0) {
+                joinCheckAll('checkEmail', false);
+                setMessage('emailMsg', '이메일 유효 시간을 확인해주세요.');
+            } else {
+                joinCheckAll('checkEmail', false);
+                setMessage('emailMsg', '이메일 인증에 실패하였습니다.');
+            }
+            
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     // 가입하기

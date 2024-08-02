@@ -20,6 +20,7 @@ public class SupFiles {
 	private String file_ext;
 	private String ins_id;
 	private LocalDateTime ins_date;
+	private String file_type;
 	
 //	public SupFiles() {
 //		// TODO Auto-generated constructor stub

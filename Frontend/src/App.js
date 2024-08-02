@@ -8,11 +8,11 @@ import Login from "./pages/member/Login";
 import AddPost from "./pages/mystudy/CreatePost"
 import MyStudy from "./pages/mystudy/MyStudy";
 
-import MyPage from "./pages/member/mypage/MyPage";
-import Info from "./pages/member/mypage/Info";
-import ChangePwd from "./pages/member/mypage/ChangePwd";
-import MemberOut from "./pages/member/mypage/MemberOut";
-import InputPassword from "./pages/member/mypage/InputPassword";
+import MyPage from "./pages/mypage/MyPage";
+import Info from "./pages/mypage/Info";
+import ChangePwd from "./pages/mypage/ChangePwd";
+import MemberOut from "./pages/mypage/MemberOut";
+import InputPassword from "./pages/mypage/InputPassword";
 
 import JoinedList from "./pages/joinedgroup/JoinedList";
 
@@ -20,7 +20,7 @@ import FindId from "./pages/member/FindId";
 import FindPwd from "./pages/member/FindPwd";
 import StudyList from "./pages/studygroup/StudyList";
 import CreateStudygroup from "./pages/studygroup/CreateStudygroup";
-import StudyLogs from "./pages/studylogs/StudyLogs"
+import CreatePost from "./pages/studylogs/CreatePost"
 
 
 import './App.css';
@@ -54,7 +54,7 @@ function App() {
         <Route path="/joinedlist" element={<JoinedList/>}></Route>
 
           {/*스터디 로그*/}
-          <Route path={"/studylogs"} element={<StudyLogs/>}></Route>
+          <Route path={"/createPost"} element={<CreatePost/>}></Route>
 
       </Routes>
     </BrowserRouter>
