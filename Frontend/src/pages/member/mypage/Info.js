@@ -24,7 +24,7 @@ const Info = () => {
     }, [emailTime])
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async () => { 
             try {
                 const response = await axios.get('http://localhost:3000/member/mypage', {
                     params: {
