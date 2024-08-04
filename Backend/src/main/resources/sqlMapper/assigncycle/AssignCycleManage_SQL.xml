@@ -23,4 +23,9 @@
 		)
 		</foreach>
 	</insert>
+	
+	<delete id="deleteAssignCycle" parameterType="String">
+		DELETE FROM sg_assignCycle
+		WHERE group_id = #{group_id}
+	</delete>
 </mapper>
