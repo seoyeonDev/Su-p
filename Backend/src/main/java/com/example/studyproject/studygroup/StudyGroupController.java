@@ -167,7 +167,12 @@ public class StudyGroupController {
 	@Delete("/deleteGroup")
 	public void deleteGroup(@RequestBody StudyGroup vo) {
 
+		// 그룹 삭제
 		groupService.deleteGroup(vo);
+		// joinedgroup 삭제
+		joinedgroupService.deleteEveryJoinedGroup(vo.getGroup_id());
+		// assigncycle 삭제
+		assignCycleService.deleteAssignCycle(vo.getGroup_id());
 	}
 
     // 그룹 상태 변경
