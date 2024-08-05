@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {Link, useNavigate} from "react-router-dom";
+import {Cookies, useCookies} from 'react-cookie';
 
 
 
 function Login () {
+
+
+    axios.defaults.withCredentials = true;
 
     // state 변수 선언
     // const [test , setTest] = useState('');
@@ -12,6 +16,7 @@ function Login () {
     const [userPwd,setUserPwd] = useState('');
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
+    const [cookies, setCookie] = useCookies(['user_id']);
 
     const memberVo = {
         user_id : userId,
@@ -37,6 +42,8 @@ function Login () {
                     // console.log('로그인 완료 , ', msg);
                     alert('로그인 성공 ! ' + userId + ' 님');
                     localStorage.setItem("user_id", userId);
+                    // setCookie("user_id",response.data.user_id);
+                    setCookie("user_id", userId);
                     // alert(localStorage.getItem("user_id"));
                     navigate('/')
                 } else {
