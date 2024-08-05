@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import '../styles/components/Header.css';
+import '../styles/components/Common.css';
 //import { useState, useEffect } from 'react';
 
 function Header() {

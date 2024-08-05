@@ -1,24 +1,9 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import StudyList from '../pages/studygroup/StudyList';
-import JoinedList from '../pages/joinedgroup/JoinedList';
 
 function Home() {
-    const [message, setMessage] = useState([]);
-
-    useEffect(() => {
-        
-        axios.get('/test')
-        .then((response)=>{
-            setMessage(response.data);
-        })
-        .catch(error=>{
-            console.error('Error :',error);
-        })
-
-
-    }, []);
 
     // input 값 이 변수에 넣을거임
     const [inputValue, setInputValue] = useState('');
@@ -49,15 +34,7 @@ function Home() {
     return (
 
         <div>
-            <div> 
-                home화면 <br/>
-            </div>
-            <div>
-                {message}
-            </div>
-            <div>
-                위 인사는 스프링에서 가져온 것. 
-            </div>
+          
             <div>
                 <form onSubmit={handleSubmit}>
                     <label>
@@ -67,10 +44,6 @@ function Home() {
                 </form>
             </div>
 
-            <div>
-                서연
-                {/* <JoinedList/> */}
-            </div>
 
 
             <main>
