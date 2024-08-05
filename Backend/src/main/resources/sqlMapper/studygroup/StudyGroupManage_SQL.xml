@@ -3,7 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
 <mapper namespace="com.example.studyproject.studygroup.StudyGroupDao">
-	
+	<!-- 공통 열 목록 정의 -->
+	<sql id="studyGroupColumns">
+		group_id,
+		leader_id,
+		title,
+		name,
+		study_desc,
+		kind,
+		status,
+		mem_cnt,
+		startdate,
+		enddate,
+		view_cnt,
+		chk_m,
+		chk_min_cnt,
+		chk_total_cnt,
+		penalty
+	</sql>
+
 	<!-- 그룹ID 최대값 찾기 -->
 	<select id="selectMaxGroupId" resultType="String">
 		SELECT
@@ -81,21 +99,7 @@
   <!-- 그룹 리스트 호출 -->
 	<select id="selectListStudyGroup" resultType="hashmap">
 		SELECT
-			group_id,
-			leader_id,
-			title,
-			name,
-			study_desc,
-			kind,
-			status,
-			mem_cnt,
-			startdate,
-			enddate,
-			view_cnt,
-			chk_m,
-			chk_min_cnt,
-			chk_total_cnt,
-			penalty
+			<include refid="studyGroupColumns"/>
 		FROM studygroup
 		WHERE 1=1
 		ORDER BY group_id desc;
@@ -104,21 +108,7 @@
 	<!-- 그룹 제목으로 리스트 호출 --> 
 	<select id="selectListByTitle" resultType="hashmap">
 		SELECT
-			group_id,
-			leader_id,
-			title,
-			name,
-			study_desc,
-			kind,
-			status,
-			mem_cnt,
-			startdate,
-			enddate,
-			view_cnt,
-			chk_m,
-			chk_min_cnt,
-			chk_total_cnt,
-			penalty
+			<include refid="studyGroupColumns"/>
 		FROM studygroup
 		WHERE 1=1
 		AND title like '%'||#{title}||'%'
@@ -128,21 +118,7 @@
 	<!-- 그룹 상세 조회 -->
 	<select id="selectStudyGroup" resultType="com.example.studyproject.studygroup.StudyGroup">
 		SELECT
-			group_id,
-			leader_id,
-			title,
-			name,
-			study_desc,
-			kind,
-			status,
-			mem_cnt,
-			startdate,
-			enddate,
-			view_cnt,
-			chk_m,
-			chk_min_cnt,
-			chk_total_cnt,
-			penalty
+			<include refid="studyGroupColumns"/>
 		FROM studygroup
 		WHERE 1=1
 		AND group_id = #{group_id};
@@ -165,4 +141,24 @@
 		    )
 		WHERE status != 'STAT30'
 	</update>
+
+	<!-- 제목 & (날짜 or 조회수) 조회 -->
+	<select id="getStudyGroups" resultType="hashmap">
+		SELECT
+		<include refid="studyGroupColumns"/>
+		FROM studygroup
+		WHERE 1=1
+		AND title like '%'||#{title}||'%'
+		<choose>
+			<when test="isSortByViews">
+				ORDER BY view_cnt DESC
+			</when>
+			<when test="isSortByLatest">
+				ORDER BY startdate DESC
+			</when>
+			<otherwise>
+				ORDER BY group_id DESC
+			</otherwise>
+		</choose>
+	</select>
 </mapper>

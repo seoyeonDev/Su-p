@@ -114,4 +114,9 @@ public class StudyGroupService {
 	public void changeStatus(){
 		groupDao.changeStatus();
 	}
+
+	// 제목 & (날짜 or 조회수) 조회
+	public List<?> getStudyGroups(String title, Boolean isSortByViews, Boolean isSortByLatest){
+		return groupDao.getStudyGroups(title, isSortByViews, isSortByLatest);
+	}
 }
