@@ -71,7 +71,7 @@
 	</update>
 
 	<!-- 그룹 삭제 -->
-	<delete id="deleteGroup">
+	<delete id="deleteGroup" parameterType="com.example.studyproject.studygroup.StudyGroup">
 		DELETE
 		FROM studygroup
 		WHERE

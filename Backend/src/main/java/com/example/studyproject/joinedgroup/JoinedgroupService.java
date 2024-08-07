@@ -62,7 +62,12 @@ public class JoinedgroupService {
         return joinedgroupDao.createJoinedGroup(vo);
     }
 
-
+    // 그룹 삭제 시 함께 삭제
+    public void deleteEveryJoinedGroup(String group_id) {
+    	joinedgroupDao.deleteEveryJoinedGroup(group_id);
+    }
+    
+    // 가입 거절, 취소
     public int deleteJoinedgroup(String user_id, String group_id){
         return joinedgroupDao.deleteJoinedgroup(user_id, group_id);
     }
