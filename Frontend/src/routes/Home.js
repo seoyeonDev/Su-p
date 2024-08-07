@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import {Link} from "react-router-dom";
 import axios from 'axios';
 import StudyList from '../pages/studygroup/StudyList';
 import JoinedList from '../pages/joinedgroup/JoinedList';
@@ -74,6 +75,7 @@ function Home() {
 
 
             <main>
+            <div><Link to={"/updateStudygroup"}>그룹 수정</Link><br/></div>
                 <StudyList/>
             </main>
 
