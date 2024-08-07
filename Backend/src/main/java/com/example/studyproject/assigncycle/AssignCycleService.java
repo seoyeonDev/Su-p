@@ -74,6 +74,6 @@ public class AssignCycleService {
 	
 	// 그룹 회차 정보 삭제 - 그룹 수정할 때
 	public void deleteAssignCycle(String group_id) {
-		assignCycleDao.deleteAssignCycle(group_id);;
+		assignCycleDao.deleteAssignCycle(group_id);
 	}
 }
