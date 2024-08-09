@@ -30,14 +30,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,11 +48,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @EnableScheduling
 @SpringBootApplication
 @RestController
 @RequestMapping("/studygroup")
 public class StudyGroupController {
+
 	
 	@Autowired
 	private StudyGroupService groupService;
@@ -112,9 +117,11 @@ public class StudyGroupController {
 	}
 	
 
+
     //  그룹 수정
 	@PostMapping("/updateGroup")
     public void updateGroup(@RequestBody StudyGroup vo) {
+
 		// 총제출횟수
 		// 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
 		// 주단위: (종료일-시작일)/7 * 최소제출횟수
@@ -131,11 +138,12 @@ public class StudyGroupController {
 		LOGGER.info("사이클 리스트: " + list);
 		assignCycleService.insertAssignCycle(list);
 
+
         groupService.updateGroup(vo);
     }
 
     // 그룹 목록 호출
-    @PostMapping("/studyGroupList")
+    @GetMapping("/studyGroupList")
     public List<?> studyGroupList() {
 
 		List<?> studyGroupList = groupService.selectListStudyGroup();
@@ -196,6 +204,7 @@ public class StudyGroupController {
 		assignCycleService.deleteAssignCycle(vo.getGroup_id());
 	}
 
+
     // 그룹 상태 변경
     @Scheduled(cron = "0 0 0 * * *")
 //    @Scheduled(cron = "0 0/1 * * * ?")    // 테스트용
@@ -203,5 +212,20 @@ public class StudyGroupController {
     public void changeStatus() {
         groupService.changeStatus();
         LOGGER.info("Group Change Status success");
+    }
+
+    // 제목 & (날짜 or 조회수) 조회
+    @GetMapping("/list")
+    public ResponseEntity<List<?>> getStudyGroups(@RequestParam String title,
+                                                           @RequestParam(required = false, defaultValue = "false") Boolean isSortByViews,
+                                                           @RequestParam(required = false, defaultValue = "false") Boolean isSortByLatest) {
+        try {
+            List<?> studyGroups=groupService.getStudyGroups(title, isSortByViews, isSortByLatest);
+            return ResponseEntity.ok(studyGroups);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 }

@@ -45,4 +45,7 @@ public interface StudyGroupDao {
 	
 	// 그룹 제목으로 검색 
 	List<?> selectListByTitle(String title);
+
+	// 제목 & (날짜 or 조회수) 조회
+	List<?> getStudyGroups(String title, Boolean isSortByViews, Boolean isSortByLatest);
 }

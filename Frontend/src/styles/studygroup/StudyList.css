@@ -1,0 +1,13 @@
+.study-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* 아이템이 컨테이너의 너비를 초과하면 줄바꿈을 허용 */
+}
+
+.study-card {
+    width: 20%;
+    padding: 20px;
+    margin: 20px;
+    background-color: #F5F5F5;
+    border-radius: 30px;
+}
