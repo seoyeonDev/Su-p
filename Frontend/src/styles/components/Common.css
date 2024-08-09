@@ -44,6 +44,15 @@
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); 
 }
 
+.common-content-container{
+    display: flex;
+    justify-content: center;
+}
+
+.common-content{
+    width:80%;
+}
+
 
 /*
 .common-link{
