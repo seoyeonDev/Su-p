@@ -23,7 +23,14 @@
             #{submission_cnt}
      );
     </insert>
-
+	
+	<!-- 그룹 삭제 시 joinedgroup 테이블도 그룹id로 함께 삭제 -->
+	<delete id="deleteEveryJoinedGroup" parameterType="String">
+		DELETE FROM joinedgroup
+		WHERE 1=1
+		AND group_id = #{group_id}
+	</delete>
+	
     <!-- 가입 거절, 가입 취소 (delete) -->
     <delete id="deleteJoinedgroup">
         DELETE FROM joinedgroup

@@ -58,18 +58,20 @@
 			name = #{name},
 			study_desc = #{study_desc},
 			kind = #{kind},
+			status = #{status},
 			mem_cnt = #{mem_cnt},
 			startdate = #{startdate},
 			enddate = #{enddate},
 			chk_m = #{chk_m},
 			chk_min_cnt = #{chk_min_cnt},
-			chk_total_cnt = #{chk_total_cnt}
-		WHERE
-			leader_id = #{leader_id}
+			chk_total_cnt = #{chk_total_cnt},
+			penalty = #{penalty}
+		WHERE leader_id = #{leader_id}
+		AND group_id = #{group_id}
 	</update>
 
 	<!-- 그룹 삭제 -->
-	<delete id="deleteGroup">
+	<delete id="deleteGroup" parameterType="com.example.studyproject.studygroup.StudyGroup">
 		DELETE
 		FROM studygroup
 		WHERE

@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @EnableScheduling
@@ -62,8 +63,8 @@ public class StudyGroupController {
 	private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
 	
 
-  /**
-   * 시퀀스 생성 및 전체체출횟수 계산해서 그룹 추가 & JoinedGroup에 그룹장 추가
+	/**
+	 * 시퀀스 생성 및 전체체출횟수 계산해서 그룹 추가 & JoinedGroup에 그룹장 추가
 	 * @param vo - StudyGroup vo
 	 */
 	@PostMapping("/createGroup")
@@ -112,16 +113,23 @@ public class StudyGroupController {
 	
 
     //  그룹 수정
-    @PutMapping("(/updateGroup")
+	@PostMapping("/updateGroup")
     public void updateGroup(@RequestBody StudyGroup vo) {
-
-        // 총제출횟수
-        // 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
-        // 주단위: (종료일-시작일)/7 * 최소제출횟수
-        // 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
+		// 총제출횟수
+		// 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
+		// 주단위: (종료일-시작일)/7 * 최소제출횟수
+		// 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
 		int totCnt = groupService.getTotCnt(vo.getChk_m(), vo.getChk_min_cnt(), vo.getStartdate(), vo.getEnddate());
 		LOGGER.info("과제 총 제출 횟수: " + totCnt);
 		vo.setChk_total_cnt(totCnt);
+		
+		// 회차 정보 삭제
+		assignCycleService.deleteAssignCycle(vo.getGroup_id());
+		
+		// 시작일, 종료일, 제출기준(주, 월)으로 회차 새로 생성
+		List<AssignCycle> list = assignCycleService.createCycle(vo.getGroup_id(), vo.getStartdate(), vo.getEnddate(), vo.getChk_m());
+		LOGGER.info("사이클 리스트: " + list);
+		assignCycleService.insertAssignCycle(list);
 
         groupService.updateGroup(vo);
     }
@@ -150,6 +158,19 @@ public class StudyGroupController {
 		return map;
 	}  
   
+	// 그룹 상세 조회 - 수정페이지
+	@GetMapping("/studyInfo")
+	public Map<String, Object> studyDetailToUpdate(@RequestParam String group_id) {
+		
+		Map<String, Object> map = new HashMap<>();
+		StudyGroup vo = groupService.selectStudyGroup(group_id);
+		map.put("groupVo", vo);
+		LOGGER.info("sg vo: " + vo);
+		
+		return map;
+		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
+	}
+	
 	// 그룹 상세 조회 + 조회수 증가
 	@GetMapping("/studyDetail/{group_id}")
 	public void studyDetail(@PathVariable String group_id) {
@@ -167,7 +188,12 @@ public class StudyGroupController {
 	@Delete("/deleteGroup")
 	public void deleteGroup(@RequestBody StudyGroup vo) {
 
+		// 그룹 삭제
 		groupService.deleteGroup(vo);
+		// joinedgroup 삭제
+		joinedgroupService.deleteEveryJoinedGroup(vo.getGroup_id());
+		// assigncycle 삭제
+		assignCycleService.deleteAssignCycle(vo.getGroup_id());
 	}
 
     // 그룹 상태 변경

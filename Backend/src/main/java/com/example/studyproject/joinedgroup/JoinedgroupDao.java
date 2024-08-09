@@ -26,6 +26,8 @@ public interface JoinedgroupDao {
     // 그룹 참여 신청 (참여자)
     boolean createJoinedGroup(Joinedgroup vo);
 
+    // 그룹 삭제 시 함께 삭제
+    void deleteEveryJoinedGroup(String group_id);
 
     // 가입 거절 & 가입 취소
     int deleteJoinedgroup(String user_id, String group_id);

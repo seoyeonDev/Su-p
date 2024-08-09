@@ -56,9 +56,7 @@
             create_date
         )
         VALUES (
-            (SELECT COALESCE(MAX(CAST(post_id AS INTEGER)) + 1, 1)
-                FROM studylogs
-                WHERE group_id = #{group_id}),
+            #{post_id},
             #{user_id},
             #{group_id},
             #{title},
@@ -86,4 +84,14 @@
         FROM studylogs
     </select>
 
+    <!-- 스터디로그 id 검사 -->
+    <select id="getNextPostIdIfPrefixExists" parameterType="string" resultType="long">
+        SELECT
+            CASE
+                WHEN COUNT(*) > 0 THEN COALESCE(MAX(CAST(post_id AS BIGINT)), 0) + 1
+                ELSE 0
+            END
+        FROM studylogs
+        WHERE post_id LIKE CONCAT(#{group_id}, '%')
+    </select>
 </mapper>

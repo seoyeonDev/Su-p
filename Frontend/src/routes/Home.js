@@ -1,7 +1,9 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {Link} from "react-router-dom";
 import axios from 'axios';
 import StudyList from '../pages/studygroup/StudyList';
+import JoinedList from '../pages/joinedgroup/JoinedList';
 
 function Home() {
 
@@ -44,14 +46,21 @@ function Home() {
                 </form>
             </div>
 
-
+            <div>
+                서연
+                {/* <JoinedList/> */}
+            </div>
 
             <main>
-                <StudyList/>
+            <div>
+                <Link to={"/updateStudygroup"}>그룹 수정</Link><br/>
+            </div>
+              <StudyList/>
             </main>
 
         </div>
-
+        
+        
 
     );
 
