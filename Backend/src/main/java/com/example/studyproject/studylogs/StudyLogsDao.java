@@ -22,4 +22,7 @@ public interface StudyLogsDao {
 
     // 스터디로그 리스트
     ArrayList<StudyLogs> selectList();
+
+    // 스터디로그 아이디 검사
+    Long getNextPostIdIfPrefixExists(String group_id);
 }

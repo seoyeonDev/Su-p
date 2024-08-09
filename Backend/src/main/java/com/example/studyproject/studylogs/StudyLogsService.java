@@ -49,14 +49,20 @@ public class StudyLogsService {
 
     }
 
+    // 결과물 추가
     public String insertStudyLogs(StudyLogs vo) {
-
-        Member memberVo = memberService.getMemberById(vo.getUser_id());
         Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(vo.getUser_id(), vo.getGroup_id());
+        Long post_id = studyLogsDao.getNextPostIdIfPrefixExists(vo.getGroup_id());
+
+        if (post_id == 0) {
+            // 초기 studylogs id 지정
+            vo.setPost_id(String.valueOf(vo.getGroup_id()) + "00001");
+        } else {
+            vo.setPost_id(String.valueOf(post_id));
+        }
 
         if (joinedgroupVo != null) {
             studyLogsDao.insertStudyLogs(vo);
-
             LOGGER.info("================ " + "StudyLogs insert success");
         } else {
             LOGGER.info("================ " + "StudyLogs insert fail");
