@@ -1,9 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import '../styles/components/Header.css';
+import '../styles/components/Common.css';
 //import { useState, useEffect } from 'react';
+import {Cookies, useCookies} from 'react-cookie';
+import {useNavigate} from "react-router-dom";
 
 function Header() {
+    const [cookies, setCookie, removeCookie] = useCookies(['user_id']);
+    const [userId, setUserId] = useState('');
+    const navigate = useNavigate();
+
 
     // const [userId, setUserId] = useState('');
     //
@@ -27,16 +34,25 @@ function Header() {
       })
   });
 */
+    
+ const authCheck = ()=> {
+     const token = cookies.user_id;
+     // axios.post('/users/loginCheck', {token : token})
+ }
 
   const handleLogout = () => { // 서버쪽 /logout으로 보내기
 
-      alert(localStorage.getItem("user_id") + " 전");
-      if (localStorage.getItem("user_id") != null){
-          alert(localStorage.getItem("user_id"));
-
+      // alert(localStorage.getItem("user_id") + " 전");
+      
+      alert(cookies.user_id);
+      if (cookies.user_id){
+      // if (localStorage.getItem("user_id") != null){
+          // alert(localStorage.getItem("user_id"));
           localStorage.removeItem("user_id")
+          // alert(localStorage.getItem("user_id"));
 
-          alert(localStorage.getItem("user_id"));
+          removeCookie("user_id");
+          navigate('/');
 
       } else {
           alert("로그인 상태가 아닙니다. 재로그인해주세요.")

@@ -20,6 +20,7 @@ import FindId from "./pages/member/FindId";
 import FindPwd from "./pages/member/FindPwd";
 import StudyList from "./pages/studygroup/StudyList";
 import CreateStudygroup from "./pages/studygroup/CreateStudygroup";
+import UpdateStudygroup from "./pages/studygroup/UpdateStudygroup";
 import CreatePost from "./pages/studylogs/CreatePost"
 
 
@@ -49,6 +50,7 @@ function App() {
         {/* 스터디그룹 */}
         <Route path="/studylist" element={<StudyList/>}></Route>
         <Route path="/createStudygroup" element={<CreateStudygroup/>}></Route>
+        <Route path="/updateStudygroup" element={<UpdateStudygroup/>}></Route>
 
         {/* 가입한 그룹 */}
         <Route path="/joinedlist" element={<JoinedList/>}></Route>

@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +128,7 @@ public class MemberController {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PostMapping("/login")
-	public Map<String, Object> login(@RequestBody Member vo, HttpServletRequest request) throws NoSuchAlgorithmException {
+	public Map<String, Object> login(@RequestBody Member vo, HttpServletRequest request, HttpServletResponse response) throws NoSuchAlgorithmException, IOException {
         Member member = memberService.loginMember(vo);
         Map<String, Object> map = new HashMap<>();
         
@@ -142,6 +144,12 @@ public class MemberController {
           
 			session.setAttribute("loginId", member.getUser_id());
 			session.setAttribute("authorization", auth);	// 사용자 계정권한 세션에 추가
+
+			// Cookie
+
+			Cookie cookie = new Cookie("loginId", member.getUser_id());
+//			cookie.setMaxAge(3600); // 유효 기간 설정
+			cookie.setPath("/");
   
 			LOGGER.info("================ session member: " + session.getAttribute("loginSession"));
 			LOGGER.info("================ session id: " + session.getAttribute("loginId"));
@@ -156,6 +164,10 @@ public class MemberController {
 			LOGGER.info("================ " + msg);
 			map.put("msg", msg);
 			map.put("loginId", member.getUser_id());
+			response.addCookie(cookie);
+//			response.getWriter().println(cookie + " cookie");
+
+
 		} else if(member != null && member.getLock_yn().equals("Y")){
 			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
 //			msg = "unlocked";

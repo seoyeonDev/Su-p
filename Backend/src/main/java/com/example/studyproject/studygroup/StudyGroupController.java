@@ -39,86 +39,105 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+
 @EnableScheduling
 @SpringBootApplication
 @RestController
 @RequestMapping("/studygroup")
 public class StudyGroupController {
 
-    @Autowired
-    private StudyGroupService groupService;
+	
+	@Autowired
+	private StudyGroupService groupService;
 
-    @Autowired
-    private JoinedgroupService joinedgroupService;
+	@Autowired
+	private JoinedgroupService joinedgroupService;
+	
+	@Autowired AssignCycleService assignCycleService;
+	
+	// log4j2 로그 찍기
+	private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
+	
 
-    @Autowired
-    AssignCycleService assignCycleService;
-
-    // log4j2 로그 찍기
-    private static final Logger LOGGER = LogManager.getLogger(StudyGroupController.class);
-
-
-    /**
-     * 시퀀스 생성 및 전체체출횟수 계산해서 그룹 추가 & JoinedGroup에 그룹장 추가
-     *
-     * @param vo - StudyGroup vo
-     */
-    @PostMapping("/createGroup")
-    public void createGroup(@RequestBody StudyGroup vo) throws NoSuchAlgorithmException {
-
-        // 그룹장의 id는 로그인 시 세션에 아이디 저장하고, 프론트단에서 아이디 세션 불러서 vo로 넘기기
-        // 그룹ID 240517 + 0001 형식 로직.. 가장 큰 숫자 불러와서 없으면 만들어주고 있으면 +1
-        LocalDateTime now = LocalDateTime.now();
-        String year = String.valueOf(now.getYear());
-        LOGGER.info("year: " + year.substring(2, 4));
-        String month = groupService.addZero(now.getMonthValue());
-        LOGGER.info("month: " + month);
-        String day = groupService.addZero(now.getDayOfMonth());
-        LOGGER.info("day: " + day);
-        String yrmd = year.substring(2, 4) + month + day;
-        LOGGER.info("yrmd: " + yrmd);
-
-        String maxGroupId = groupService.getMaxGroupId(yrmd);
-        if (maxGroupId != null && !maxGroupId.equals("")) {
-            long nextValue = Long.valueOf(maxGroupId) + 1;
-            maxGroupId = String.valueOf(nextValue);
-            vo.setGroup_id(maxGroupId);
-        } else {
-            maxGroupId = yrmd + "0001";
-            vo.setGroup_id(maxGroupId);
-        }
-
-        // 총제출횟수
-        // 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
-        // 주단위: (종료일-시작일)/7 * 최소제출횟수
-        // 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
-        int totCnt = groupService.getTotCnt(vo.getChk_m(), vo.getChk_min_cnt(), vo.getStartdate(), vo.getEnddate());
-        LOGGER.info("과제 총 제출 횟수: " + totCnt);
-        vo.setChk_total_cnt(totCnt);
-
-        // 시작일, 종료일, 제출기준(주, 월)으로 회차 생성
-        List<AssignCycle> list = assignCycleService.createCycle(maxGroupId, vo.getStartdate(), vo.getEnddate(), vo.getChk_m());
-        LOGGER.info("사이클 리스트: " + list);
-        assignCycleService.insertAssignCycle(list);
-
-        groupService.createGroup(vo);
-        Joinedgroup joinedgroupVo = new Joinedgroup(vo.getGroup_id(), vo.getLeader_id(), null, null, 0);
-        // joinedgroupVo로 joinedgroup 생성, true : 그룹장
-        joinedgroupService.createJoinedGroup(joinedgroupVo, true);
-    }
+	/**
+	 * 시퀀스 생성 및 전체체출횟수 계산해서 그룹 추가 & JoinedGroup에 그룹장 추가
+	 * @param vo - StudyGroup vo
+	 */
+	@PostMapping("/createGroup")
+	public void createGroup(@RequestBody StudyGroup vo) throws NoSuchAlgorithmException {
+		
+		// 그룹장의 id는 로그인 시 세션에 아이디 저장하고, 프론트단에서 아이디 세션 불러서 vo로 넘기기
+		// 그룹ID 240517 + 0001 형식 로직.. 가장 큰 숫자 불러와서 없으면 만들어주고 있으면 +1
+		LocalDateTime now = LocalDateTime.now();
+		String year = String.valueOf(now.getYear());
+		LOGGER.info("year: " + year.substring(2, 4));
+		String month = groupService.addZero(now.getMonthValue());
+		LOGGER.info("month: " + month);
+		String day = groupService.addZero(now.getDayOfMonth());
+		LOGGER.info("day: " + day);
+		String yrmd = year.substring(2, 4) + month + day;
+		LOGGER.info("yrmd: " + yrmd);
+		
+		String maxGroupId = groupService.getMaxGroupId(yrmd);
+		if(maxGroupId != null && !maxGroupId.equals("")) {
+			long nextValue = Long.valueOf(maxGroupId) + 1;
+			maxGroupId = String.valueOf(nextValue);
+			vo.setGroup_id(maxGroupId);
+		} else {
+			maxGroupId = yrmd + "0001";
+			vo.setGroup_id(maxGroupId);
+		}
+		
+		// 총제출횟수
+		// 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
+		// 주단위: (종료일-시작일)/7 * 최소제출횟수
+		// 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
+		int totCnt = groupService.getTotCnt(vo.getChk_m(), vo.getChk_min_cnt(), vo.getStartdate(), vo.getEnddate());
+		LOGGER.info("과제 총 제출 횟수: " + totCnt);
+		vo.setChk_total_cnt(totCnt);
+		
+		// 시작일, 종료일, 제출기준(주, 월)으로 회차 생성
+		List<AssignCycle> list = assignCycleService.createCycle(maxGroupId, vo.getStartdate(), vo.getEnddate(), vo.getChk_m());
+		LOGGER.info("사이클 리스트: " + list);
+		assignCycleService.insertAssignCycle(list);
+		
+		groupService.createGroup(vo);
+		Joinedgroup joinedgroupVo = new Joinedgroup(vo.getGroup_id(), vo.getLeader_id(), null,null,0);
+		// joinedgroupVo로 joinedgroup 생성, true : 그룹장
+		joinedgroupService.createJoinedGroup(joinedgroupVo,true);
+	}
+	
 
 
     //  그룹 수정
-    @PutMapping("(/updateGroup")
+	@PostMapping("/updateGroup")
     public void updateGroup(@RequestBody StudyGroup vo) {
 
-        // 총제출횟수
-        // 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
-        // 주단위: (종료일-시작일)/7 * 최소제출횟수
-        // 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
-        int totCnt = groupService.getTotCnt(vo.getChk_m(), vo.getChk_min_cnt(), vo.getStartdate(), vo.getEnddate());
-        LOGGER.info("과제 총 제출 횟수: " + totCnt);
-        vo.setChk_total_cnt(totCnt);
+		// 총제출횟수
+		// 자바 타임 패키지 사용하여 날짜와 날짜 사이의 일 차이값, 월 차이값 구하기
+		// 주단위: (종료일-시작일)/7 * 최소제출횟수
+		// 월단위: 자바스크립트 Date util setMonth 기준 두 날짜 사이의 월 차이
+		int totCnt = groupService.getTotCnt(vo.getChk_m(), vo.getChk_min_cnt(), vo.getStartdate(), vo.getEnddate());
+		LOGGER.info("과제 총 제출 횟수: " + totCnt);
+		vo.setChk_total_cnt(totCnt);
+		
+		// 회차 정보 삭제
+		assignCycleService.deleteAssignCycle(vo.getGroup_id());
+		
+		// 시작일, 종료일, 제출기준(주, 월)으로 회차 새로 생성
+		List<AssignCycle> list = assignCycleService.createCycle(vo.getGroup_id(), vo.getStartdate(), vo.getEnddate(), vo.getChk_m());
+		LOGGER.info("사이클 리스트: " + list);
+		assignCycleService.insertAssignCycle(list);
+
 
         groupService.updateGroup(vo);
     }
@@ -127,41 +146,64 @@ public class StudyGroupController {
     @GetMapping("/studyGroupList")
     public List<?> studyGroupList() {
 
-        List<?> studyGroupList = groupService.selectListStudyGroup();
-        LOGGER.info("studyGroup 리스트: " + studyGroupList);
+		List<?> studyGroupList = groupService.selectListStudyGroup();
+		LOGGER.info("studyGroup 리스트: " + studyGroupList);
+		
+		// 리턴 변수 클라이언트단 작업하면서 수정 완료
+		return studyGroupList;
+    }  
+  
+	// 그룹 제목으로 검색 
+	@GetMapping("/listByTitle/{title}")
+	public Map<String, Object> listByTitle(@PathVariable String title) {
+		List<?> listByTitle = groupService.selectListByTitle(title);
+		LOGGER.info("studyGroup 리스트: " + listByTitle);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("listByTitle", listByTitle);
+		
+		// 리턴 변수 map으로 지정
+		return map;
+	}  
+  
+	// 그룹 상세 조회 - 수정페이지
+	@GetMapping("/studyInfo")
+	public Map<String, Object> studyDetailToUpdate(@RequestParam String group_id) {
+		
+		Map<String, Object> map = new HashMap<>();
+		StudyGroup vo = groupService.selectStudyGroup(group_id);
+		map.put("groupVo", vo);
+		LOGGER.info("sg vo: " + vo);
+		
+		return map;
+		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
+	}
+	
+	// 그룹 상세 조회 + 조회수 증가
+	@GetMapping("/studyDetail/{group_id}")
+	public void studyDetail(@PathVariable String group_id) {
 
-        // 리턴 변수 클라이언트단 작업하면서 수정 완료
-        return studyGroupList;
-    }
+		// 조회수 +1 카운트
+		groupService.updateViewCnt(group_id);
+		
+		StudyGroup vo = groupService.selectStudyGroup(group_id);
+		LOGGER.info("sg vo: " + vo);
+		
+		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
+	}
+	
+	// 그룹 삭제
+	@Delete("/deleteGroup")
+	public void deleteGroup(@RequestBody StudyGroup vo) {
 
-    // 그룹 제목으로 검색
-    @GetMapping("/listByTitle/{title}")
-    public List<?> listByTitle(@PathVariable String title) {
-        List<?> listByTitle = groupService.selectListByTitle(title);
-        LOGGER.info("studyGroup 리스트: " + listByTitle);
+		// 그룹 삭제
+		groupService.deleteGroup(vo);
+		// joinedgroup 삭제
+		joinedgroupService.deleteEveryJoinedGroup(vo.getGroup_id());
+		// assigncycle 삭제
+		assignCycleService.deleteAssignCycle(vo.getGroup_id());
+	}
 
-        return listByTitle;
-    }
-
-    // 그룹 상세 조회 + 조회수 증가
-    @GetMapping("/studyDetail/{group_id}")
-    public void studyDetail(@PathVariable String group_id) {
-
-        // 조회수 +1 카운트
-        groupService.updateViewCnt(group_id);
-
-        StudyGroup vo = groupService.selectStudyGroup(group_id);
-        LOGGER.info("sg vo: " + vo);
-
-        // 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
-    }
-
-    // 그룹 삭제
-    @Delete("/deleteGroup")
-    public void deleteGroup(@RequestBody StudyGroup vo) {
-
-        groupService.deleteGroup(vo);
-    }
 
     // 그룹 상태 변경
     @Scheduled(cron = "0 0 0 * * *")

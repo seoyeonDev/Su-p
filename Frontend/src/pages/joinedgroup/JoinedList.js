@@ -20,9 +20,9 @@ function JoinedList() {
 
     return (
         <div className="joined-list">
-            {joinedlistItems.map((item) => (
-                <div key={item.group_id}>{item.user_id}</div>
-            ))}
+            {/*{joinedlistItems.map((item) => (*/}
+            {/*    <div key={item.group_id}>{item.user_id}</div>*/}
+            {/*))}*/}
         </div>
     );
 }
