@@ -104,6 +104,8 @@
 			<include refid="studyGroupColumns"/>
 		FROM studygroup
 		WHERE 1=1
+			AND (status LIKE 'STAT10'
+			OR status LIKE 'STAT20')
 		ORDER BY group_id desc;
 	</select>
 	
@@ -113,7 +115,9 @@
 			<include refid="studyGroupColumns"/>
 		FROM studygroup
 		WHERE 1=1
-		AND title like '%'||#{title}||'%'
+			AND title like '%'||#{title}||'%'
+			AND (status LIKE 'STAT10'
+			OR status LIKE 'STAT20')
 		ORDER BY group_id desc;
 	</select>
     
@@ -150,7 +154,9 @@
 		<include refid="studyGroupColumns"/>
 		FROM studygroup
 		WHERE 1=1
-		AND title like '%'||#{title}||'%'
+			AND title like '%'||#{title}||'%'
+			AND (status LIKE 'STAT10'
+			OR status LIKE 'STAT20')
 		<choose>
 			<when test="isSortByViews">
 				ORDER BY view_cnt DESC
