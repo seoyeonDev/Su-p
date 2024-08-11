@@ -95,4 +95,10 @@ public class JoinedgroupService {
     ArrayList<Joinedgroup> selectList(String joinstatus, String role, String status, String user_id){
         return joinedgroupDao.selectList(joinstatus, role, status, user_id);
     }
+    
+    // 그룹아이디로 리스트 사이즈 체크
+    public int selectJoinedListSize(String group_id) {
+    	
+    	return joinedgroupDao.selectJoinedListSize(group_id);
+    }
 }
