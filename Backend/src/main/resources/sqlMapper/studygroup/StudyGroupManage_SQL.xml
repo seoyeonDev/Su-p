@@ -57,7 +57,7 @@
 			#{name},
 			#{study_desc},
 			#{kind},
-			#{status},
+			'STAT10',
 			#{mem_cnt},
 			#{startdate},
 			#{enddate},
