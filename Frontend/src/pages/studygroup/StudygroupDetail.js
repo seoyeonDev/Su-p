@@ -62,12 +62,12 @@ const StudygroupDetail = () => {
         <div>
             <div>
                 <h2>{studyGroupItems.title}</h2>
-                <h4>{studyGroupItems.leader_id} &nbsp;&nbsp;|&nbsp;&nbsp; {formattedDate} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 조회 {studyGroupItems.view_cnt}</h4>
+                <h4>{studyGroupItems.leader_id} &ensp;|&ensp; {formattedDate} &emsp;&ensp; 조회 {studyGroupItems.view_cnt}</h4>
             </div> <br/>
             <div>
-                <h4>모집인원 &nbsp;&nbsp;&nbsp; {studyGroupItems.mem_cnt}</h4>
-                <h4>시작일 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {studyGroupStartdate}</h4>
-                <h4>종료일 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {studyGroupEnddate}</h4>
+                <h4>모집인원 &ensp;&nbsp; {studyGroupItems.mem_cnt}</h4>
+                <h4>시작일 &emsp;&ensp; {studyGroupStartdate}</h4>
+                <h4>종료일 &emsp;&ensp; {studyGroupEnddate}</h4>
             </div>
             <div>
                 {studyGroupStatus === 1 && (
