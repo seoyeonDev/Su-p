@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Home from "./routes/Home";
 import Join from "./pages/member/Join"
 import Login from "./pages/member/Login";
+import MemberChangePwd from "./pages/member/ChangePwd";
 import AddPost from "./pages/mystudy/CreatePost"
 import MyStudy from "./pages/mystudy/MyStudy";
 
@@ -46,6 +47,7 @@ function App() {
         <Route path="/findId" element={<FindId/>}></Route>
         <Route path="/findPwd" element={<FindPwd/>}></Route>
         <Route path="/inputPassword" element={<InputPassword/>}></Route>
+        <Route path="/memberChangePwd" element={<MemberChangePwd/>}></Route>
 
         {/* 스터디그룹 */}
         <Route path="/studylist" element={<StudyList/>}></Route>
