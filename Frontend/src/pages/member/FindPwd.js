@@ -82,7 +82,11 @@ function FindPwd() {
             .then(response => {
                 if (response.data === true && (minutes > 0 || seconds > 0)) {
                     setEmailSent(false);
-                    navigate('/memberChangePwd');
+                    navigate('/memberChangePwd', {
+                        state: {
+                            userId: userId
+                        }
+                    });
                 } else if (minutes === 0 && seconds === 0) {
                     setMessage('emailMsg', '이메일 유효 시간을 확인해주세요.');
                 } else {
@@ -106,31 +110,33 @@ function FindPwd() {
     const seconds = (emailTime || 0) % 60;
 
     return (
-        <div>
-            <h1>비밀번호 찾기</h1>
-            <div>
-                <label>ID</label>
-                <input type="text" name={userId} placeholder={"아이디를 입력하세요."} onChange={(e) => setUserId(e.target.value)} />
-            </div>
-            <div>
-                <label>이름</label>
-                <input type="text" name={userName} placeholder={"이름을 입력하세요."} onChange={(e) => setUserName(e.target.value)} />
-            </div>
-            <div>
-                <label>이메일</label>
-                <input name={"email"} type="text" placeholder={"이메일을 입력하세요."} value={email} onChange={(e) => setEmail(e.target.value)} />
-                <button type="button" onClick={emailChk}>인증번호 발송</button>
-                <div id="emailTimeChk" style={{ display: emailSent ? 'block' : 'none' }}>
-                    {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
-                    {/* 이메일 인증 관련 컴포넌트 */}
+        <div className={"common-content-container"}>
+            <div className={"common-content"}>
+                <h1>비밀번호 찾기</h1>
+                <div>
+                    <label>ID</label>
+                    <input className={"common-input"} type="text" name={userId} placeholder={"아이디를 입력하세요."} onChange={(e) => setUserId(e.target.value)} />
                 </div>
-                <div>{messages.emailSendMsg}</div>
-            </div>
-            <div>
-                <label>인증번호</label>
-                <input name={"verificationCode"} type="text" placeholder={"인증번호를 입력하세요."} value={inputEmailNumber} onChange={(e) => setInputEmailNumber(e.target.value)} />
-                <button type="button" onClick={emailNumChk}>인증하기</button>
-                <div>{messages.emailMsg}</div>
+                <div>
+                    <label>이름</label>
+                    <input className={"common-input"} type="text" name={userName} placeholder={"이름을 입력하세요."} onChange={(e) => setUserName(e.target.value)} />
+                </div>
+                <div>
+                    <label>이메일</label>
+                    <input className={"common-input"} name={"email"} type="text" placeholder={"이메일을 입력하세요."} value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <button className={"common-btn"} type="button" onClick={emailChk}>인증번호 발송</button>
+                    <div id="emailTimeChk" style={{ display: emailSent ? 'block' : 'none' }}>
+                        {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
+                        {/* 이메일 인증 관련 컴포넌트 */}
+                    </div>
+                    <div>{messages.emailSendMsg}</div>
+                </div>
+                <div>
+                    <label>인증번호</label>
+                    <input className={"common-input"} name={"verificationCode"} type="text" placeholder={"인증번호를 입력하세요."} value={inputEmailNumber} onChange={(e) => setInputEmailNumber(e.target.value)} />
+                    <button className={"common-btn"} type="button" onClick={emailNumChk}>인증하기</button>
+                    <div>{messages.emailMsg}</div>
+                </div>
             </div>
         </div>
     );

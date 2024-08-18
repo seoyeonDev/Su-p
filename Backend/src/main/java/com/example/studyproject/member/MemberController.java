@@ -335,12 +335,11 @@ public class MemberController {
 			return chkImpl = 1;
 		}
 	}
-	
+
 	/**
 	 * 마이페이지 접속 - 비밀번호 검증
-	 * @param user_id
-	 * @param password
-	 * @return boolean
+	 * @param vo
+	 * @return
 	 */
 	@PostMapping("/inputPassword")
 	public boolean inputPassword(@RequestBody Member vo) {
@@ -387,25 +386,23 @@ public class MemberController {
 
 	/**
 	 * 비밀번호 찾기 - 비밀번호 변경
-	 * @param vo
-	 * @param newPassword
+	 * @param vo - id, password
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PostMapping("/changePwd")
-	public int changePwd(@RequestBody Member vo, String currentPassword, String newPassword) throws NoSuchAlgorithmException {
-		String id = vo.getUser_id();
-		String name = vo.getName();
-		String email = vo.getEmail();
-		int chk = memberService.chkPwd(id, name, email);
-		vo.setPassword(newPassword);
-		// 입력한 현재 비밀번호와 db가 일치할 때 & 멤버 결과가 한개일 때
-		if (memberService.isPasswordCorrect(id, currentPassword) && chk == 1) {
+	public int changePwd(@RequestBody Member vo) throws NoSuchAlgorithmException {
+
+		LOGGER.info("=========== ID : " + vo.getUser_id());
+		LOGGER.info("=========== newPassword : " + vo.getPassword());
+
+		try{
 			memberService.changePwd(vo);
 			return 1;
+		} catch(Exception e){
+			e.printStackTrace();
+			return 0;
 		}
-
-		return 0;
 	}
   
   /**
