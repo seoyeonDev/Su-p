@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import '../../styles/studygroup/StudyList.css';
 
 const StudyList = () => {
+    const navigate = useNavigate();
     const [studyItems, setStudyItems] = useState([]);
     const [title, setTitle] = useState('');
     const [isSortByViews, setIsSortByViews] = useState(false);
@@ -43,6 +44,10 @@ const StudyList = () => {
 
         fetchData();
     }, [title, isSortByViews, isSortByLatest]);
+    
+    const handleStudyGroupDetail = (groupId) => {
+        navigate(`/studygroupDetail/${groupId}`);
+    }
 
     const handleInputChange = (event) => {
         setTitle(event.target.value);
@@ -74,7 +79,7 @@ const StudyList = () => {
                 <div className='study-card-container'>
                     {studyItems.length > 0 ? (
                         studyItems.map(item => (
-                            <div key={item.group_id} className='study-card'>
+                            <div key={item.group_id} className='study-card' onClick={() => handleStudyGroupDetail(item.group_id)}>
 
                                 <h4>{item.title}</h4>
                                 <p>{item.study_desc}</p>

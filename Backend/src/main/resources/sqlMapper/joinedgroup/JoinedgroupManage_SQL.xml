@@ -93,7 +93,14 @@
         FROM joinedgroup
         WHERE 1=1
             AND user_id = #{user_id}
-
     </select>
 
+	<!-- 그룹 아이디로 리스트 사이즈 체크 -->
+	<select id="selectJoinedListSize" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM joinedgroup
+		WHERE 1=1
+		AND group_id = #{group_id}
+	</select>
 </mapper>

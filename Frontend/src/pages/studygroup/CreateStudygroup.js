@@ -118,6 +118,11 @@ function CreateStudygroup() {
         return minDate.toISOString().split('T')[0];
     };
 
+    // 취소
+    const handleCancle = () => {
+        navigate('/');
+    };
+
     // 저장 
     const handleSubmit = () => {
         setFormData((prevFormData) => ({
@@ -209,7 +214,7 @@ function CreateStudygroup() {
                     </div>
                 </div>
                 <div>
-                    <button>취소</button>
+                    <button onClick={handleCancle}>취소</button>
                     <button onClick={handleSubmit}>등록</button>
                 </div>
             </div>

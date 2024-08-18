@@ -52,9 +52,6 @@ function Home() {
             </div>
 
             <main>
-            <div>
-                <Link to={"/updateStudygroup"}>그룹 수정</Link><br/>
-            </div>
               <StudyList/>
             </main>
 

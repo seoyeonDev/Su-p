@@ -147,7 +147,6 @@ public class StudyGroupController {
     public List<?> studyGroupList() {
 
 		List<?> studyGroupList = groupService.selectListStudyGroup();
-		LOGGER.info("studyGroup 리스트: " + studyGroupList);
 		
 		// 리턴 변수 클라이언트단 작업하면서 수정 완료
 		return studyGroupList;
@@ -176,32 +175,62 @@ public class StudyGroupController {
 		LOGGER.info("sg vo: " + vo);
 		
 		return map;
-		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
 	}
 	
 	// 그룹 상세 조회 + 조회수 증가
-	@GetMapping("/studyDetail/{group_id}")
-	public void studyDetail(@PathVariable String group_id) {
+	@GetMapping("/studyDetail")
+	public Map<String, Object> studyDetail(@RequestParam String group_id, @RequestParam String user_id) {
+
+		Map<String, Object> map = new HashMap<>();
 
 		// 조회수 +1 카운트
 		groupService.updateViewCnt(group_id);
 		
 		StudyGroup vo = groupService.selectStudyGroup(group_id);
 		LOGGER.info("sg vo: " + vo);
+		map.put("vo", vo);
 		
-		// 리턴 변수 클라이언트단 작업하면서 수정(아마 map으로 보내지 않을까..)
+		int userCnt = joinedgroupService.selectJoinedListSize(group_id);
+		if(vo.getLeader_id().equals(user_id)) {
+			// 상세 조회 클릭을 그룹장이 했을 때,
+			LOGGER.info("0");
+			if(userCnt > 1) {
+				// 해당 그룹에 참여한 인원이 그룹장 이외에 더 있을 때,
+				map.put("status", 0);
+			} else {
+				// 해당 그룹에 참여한 인원이 그룹장 외엔 없을 때 삭제 및 수정 버튼 보여주도록,	
+				map.put("status", 1);
+			}
+		} else {
+			// 상세 조회 클릭을 일반 유저가 했을 때,
+			LOGGER.info("1");
+			Joinedgroup jgVo = joinedgroupService.getByUserIdAndGroupId(user_id, group_id);
+			if(jgVo != null) {
+				// 일반 유저가 이미 이 그룹에 신청을 했을 때,
+				map.put("status", 2);
+			} else {
+				// 일반 유저가 이 그룹에 신청을 아직 안했을 때,
+				map.put("status", 3);
+			}
+		}
+		return map;
 	}
 	
 	// 그룹 삭제
-	@Delete("/deleteGroup")
+	@DeleteMapping("/deleteGroup")
 	public void deleteGroup(@RequestBody StudyGroup vo) {
 
-		// 그룹 삭제
-		groupService.deleteGroup(vo);
-		// joinedgroup 삭제
-		joinedgroupService.deleteEveryJoinedGroup(vo.getGroup_id());
-		// assigncycle 삭제
-		assignCycleService.deleteAssignCycle(vo.getGroup_id());
+		try {
+			// 그룹 삭제
+			groupService.deleteGroup(vo);
+			// joinedgroup 삭제
+			joinedgroupService.deleteEveryJoinedGroup(vo.getGroup_id());
+			// assigncycle 삭제
+			assignCycleService.deleteAssignCycle(vo.getGroup_id());
+			LOGGER.info("그룹 삭제");
+		} catch(Exception e) {
+			LOGGER.info("Error: " + e.getMessage());
+		}
 	}
 
 

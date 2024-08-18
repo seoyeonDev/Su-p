@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 function UpdateStudygroup() {
@@ -21,25 +21,22 @@ function UpdateStudygroup() {
         penalty: 0,         // 패널티 기준
     });
 
+    const { groupId } = useParams();
     const [userId, setUserId] = useState('');
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        // 현재 글 id 가져오기
-        // const storeGroupId = localStorage.getItem('group_id');
-        const storeGroupId = '2407290005';
-
         const fetchData = async () => { 
             try {
                 const response = await axios.get('http://localhost:3000/studygroup/studyInfo', {
                     params: {
-                        group_id: storeGroupId
+                        group_id: groupId
                     }
                 });
                 setFormData(prevFormData => ({
                     ...prevFormData,
-                    group_id: storeGroupId,
+                    group_id: groupId,
                     leader_id: response.data.groupVo.leader_id,
                     title: response.data.groupVo.title,
                     name: response.data.groupVo.name,
@@ -139,6 +136,11 @@ function UpdateStudygroup() {
         return minDate.toISOString().split('T')[0];
     };
 
+    // 취소
+    const handleCancle = () => {
+        navigate('/');
+    };
+
     // 저장 
     const handleSubmit = () => {
         setFormData((prevFormData) => ({
@@ -230,7 +232,7 @@ function UpdateStudygroup() {
                     </div>
                 </div>
                 <div>
-                    <button>취소</button>
+                    <button onClick={handleCancle}>취소</button>
                     <button onClick={handleSubmit}>수정</button>
                 </div>
             </div>
