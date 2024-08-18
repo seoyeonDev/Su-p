@@ -65,6 +65,17 @@ public class MemberController {
 
 	// 20240406 커밋 테스트
 
+	@GetMapping("/loginChk")
+	public String loginChk(HttpSession session){
+		String loginId = (String) session.getAttribute("loginId");
+		if (loginId != null){
+			return "로그인 유지중 " + loginId;
+		}
+		return "로그인이 필요합니다.";
+	}
+
+
+
 	/**
 	 * 회원가입
 	 * @param vo
@@ -180,6 +191,13 @@ public class MemberController {
 		LOGGER.info("================ " + msg);
 		return map;
 	}
+
+	@PostMapping("/logout")
+	public String logout(HttpSession session){
+		session.invalidate();
+		return "로그아웃 성공";
+	}
+
 
 	// 마이페이지 정보 호출
 	@GetMapping("/mypage")

@@ -34,7 +34,9 @@ function Login () {
 
     const postLogin = () => {
         console.log('login button')
-        axios.post('http://localhost:3000/member/login', memberVo)
+        axios.post('http://localhost:3000/member/login',
+                memberVo
+            )
             .then(response => {
                 if (response.status === 200 && response.data.msg === 'unlocked') {
                     setMsg(response.data.msg);
@@ -53,6 +55,55 @@ function Login () {
             })
             .catch((err) => {
                 console.log('에러 , ', err);
+            })
+    }
+
+
+    const axiosInstance = axios.create({
+        baseURL: 'http://localhost:8080/member/loginChk',
+        timeout: 1000,
+    })
+
+    // 요청
+    axiosInstance.interceptors.request.use(
+        (config) => {
+            console.log('Request: ', config);
+            fetchUserInfo();
+            return config;
+        },
+        (error) => {
+            return Promise.reject(error);
+        }
+    )
+
+    // 응답
+    axiosInstance.interceptors.response.use(
+        (response) => {
+            console.log('Response : ', response);
+            return response;
+        },
+        (error)=> {
+            return Promise.reject(error);
+        }
+    )
+
+    const fetchUserInfo = () => {
+        axios.get('http://localhost:8080/member/loginChk',
+        { withCredentials: true })
+            .then(response => {
+                if (response.status === 200){
+                    alert(response.data + "  1");
+                } else {
+                    alert('로그인 체크 실패');
+                }
+            })
+
+    }
+
+    const logout = () => {
+        axiosInstance.post('http://localhost:8080/member/logout')
+            .then(response => {
+                alert('logout 완료 2');
             })
     }
 
@@ -81,13 +132,14 @@ function Login () {
             <div className = "menuTitle">로그인</div>
             <div className = "member-input">
                 <input type="text" id="userId" name={"userId"} placeholder={"아이디를 입력하세요."} onChange={handleUserIdChange}/><br/>
-                <input type="password" id="password" name={"password"} placeholder={"비밀번호를 입력하세요."} onChange={handleUserPwdChange}/>
+                <input type="password" id="userPwd" name={"userPwd"} placeholder={"비밀번호를 입력하세요."} onChange={handleUserPwdChange}/>
             </div>
             <div>
                 <button type="button" onClick={postLogin}>로그인</button><br/>
                 <Link to={"/join"} className={"button-style"}>회원가입</Link><br/>
                 <Link to={"/findId"}>아이디 찾기</Link><br/>
                 <Link to={"/findPwd"}>비밀번호 찾기</Link><br/>
+                <button type={"button"} onClick={logout}>로그아웃</button>
             </div>
 
 
