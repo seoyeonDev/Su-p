@@ -2,6 +2,8 @@ package com.example.studyproject.joinedgroup;
 
 import com.example.studyproject.member.MemberService;
 import com.example.studyproject.member.Member;
+import com.example.studyproject.studygroup.StudyGroup;
+import com.example.studyproject.studygroup.StudyGroupService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Update;
@@ -39,6 +41,9 @@ public class JoinedgroupController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private StudyGroupService sturyGroupService;
 
     // log4j2 로그 찍기
     private static final Logger LOGGER = LogManager.getLogger(JoinedgroupController.class);
@@ -149,5 +154,35 @@ public class JoinedgroupController {
         return map;
     }
 
+    /**
+     * 그룹장 신청한 목록 보기
+     * @param request
+     * @param group_id
+     * @return
+     */
+    @GetMapping("/groupOwnerJoinedList")
+    public Map selectGroupOwnerJoinedList(HttpServletRequest request, String group_id) {
+        HttpSession session = request.getSession();
+        Map map = new HashMap();
+        if (session == null) {
+            return null;
+        } else {
+            String loginId = (String) session.getAttribute("loginId");
+
+            ArrayList<JoinedUserInfo> list = new ArrayList<JoinedUserInfo>();
+
+            // 1. userId가 groupId랑 같은지 비교
+            StudyGroup studyGroup= sturyGroupService.selectStudyGroup(group_id);
+
+            // 2. 맞다면 목록 가져오기
+            if(loginId.equals(studyGroup.getLeader_id())){
+                list = joinedgroupService.selectListByGroupId(group_id);
+
+            }
+            LOGGER.info("================ " + list.size());
+            map.put("managedGroupsList", list);
+        }
+        return map;
+    }
 
 }

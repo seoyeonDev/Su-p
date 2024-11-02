@@ -101,4 +101,9 @@ public class JoinedgroupService {
     	
     	return joinedgroupDao.selectJoinedListSize(group_id);
     }
+
+    // 그룹아이디로 목록보기
+    public ArrayList<JoinedUserInfo> selectListByGroupId(String group_id) {
+        return joinedgroupDao.selectJoinedListByGroupId(group_id);
+    }
 }
