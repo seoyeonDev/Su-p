@@ -129,10 +129,10 @@ public class PenaltylogController {
      * 2024.11.02
      * @Author 이서연
      */
-//    @Scheduled(fixedRate = 5000)
-//    @GetMapping("/chkPenalty")
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void chkPenalty () {
+//    @Scheduled(fixedRate = 5000)  // 테스트용. 5초마다
+    @Scheduled(cron = "0 0 0 * * ?")    // 매일 자정
+    @GetMapping("/chkPenalty")
+    public String chkPenalty () {
         int result = 0;
         String msg = null;
         List<Map<String, Object>> penalty_chk = penaltyLogService.chkPenalty();
@@ -153,11 +153,12 @@ public class PenaltylogController {
 
             if (!penaltyChk) {  // 기준 미달 (penalty 추가 실행)
                 System.out.println(userId + "   user_id");
-                result = penaltyLogService.insertPenaltyLog(penaltylog, log_count);
+                result = penaltyLogService.insertPenaltyLog(penaltylog, log_count, penalty_round);
             }
             // 0: 기준충족, 1: insert, 2: penalty 이미 존재
             System.out.println(userId + "결과 : " + result);
         }
+        return "success";
     }
 
     // 240707 김혜원

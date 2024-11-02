@@ -30,7 +30,7 @@ public interface PenaltylogDao {
     int insertPenaltyLog(Penaltylog vo, int log_count);
 
     // penaltylog 추가 유효성 검사
-    boolean penaltyLogMultiChk(String group_id, String user_id);
+    boolean penaltyLogMultiChk(String group_id, String user_id, String penalty_round);
 
 }
 

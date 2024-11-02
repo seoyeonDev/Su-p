@@ -110,12 +110,12 @@ public class PenaltylogService {
 	}
 
 	// penaltylog 추가/ 241102 이서연
-	public int insertPenaltyLog(Penaltylog penaltylog, int log_count){
+	public int insertPenaltyLog(Penaltylog penaltylog, int log_count, String penalty_round){
 		String groupId = penaltylog.getGroup_id();
 		String userId = penaltylog.getUser_id();
 		int result = 0;
 
-		boolean is_empty = penaltyLogDao.penaltyLogMultiChk(groupId, userId);
+		boolean is_empty = penaltyLogDao.penaltyLogMultiChk(groupId, userId, penalty_round);
 		if (is_empty){
 			result = penaltyLogDao.insertPenaltyLog(penaltylog, log_count);	// 1 penaltylog 추가됨
 		} else {

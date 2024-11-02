@@ -113,5 +113,6 @@
         from penaltylog
         where group_id = #{group_id}
           and user_id = #{user_id}
+          and penalty_round = #{penalty_round}
     </select>
 </mapper>
