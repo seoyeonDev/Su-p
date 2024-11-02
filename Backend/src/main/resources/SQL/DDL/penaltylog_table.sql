@@ -1,17 +1,16 @@
 -- Table: public.penaltylog
 
--- DROP TABLE IF EXISTS public.penaltylog;
+DROP TABLE IF EXISTS public.penaltylog;
 
 CREATE TABLE IF NOT EXISTS public.penaltylog
 (
     user_id character(255) COLLATE pg_catalog."default" NOT NULL,
     group_id character(255) COLLATE pg_catalog."default" NOT NULL,
-    title character(500) COLLATE pg_catalog."default" NOT NULL,
     logcontent character(1000) COLLATE pg_catalog."default" NOT NULL,
-    penaltydate timestamp without time zone[] NOT NULL
+    penalty_round integer NOT NULL
 )
 
-TABLESPACE pg_default;
+    TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.penaltylog
     OWNER to studyproject;
@@ -25,22 +24,13 @@ COMMENT ON COLUMN public.penaltylog.user_id
 COMMENT ON COLUMN public.penaltylog.group_id
     IS '그룹 ID';
 
-COMMENT ON COLUMN public.penaltylog.title
-    IS '그룹 제목';
-
 COMMENT ON COLUMN public.penaltylog.logcontent
     IS '패널티 내용';
 
-COMMENT ON COLUMN public.penaltylog.penaltydate
-    IS '패널티 날짜';
+COMMENT ON COLUMN public.penaltylog.penalty_round
+    IS '회차(몇번째인지)';
 
--- 회차로 변경
-ALTER TABLE public.penaltylog
-DROP COLUMN penaltydate;
+-- 241102 이서연, sg_assigncycle 의 assigncycle 컬럼과 일치하도록 변경
+alter table public.penaltylog
+    alter column penalty_round type char(255) using penalty_round::char(255);
 
-ALTER TABLE public.penaltylog
-ADD COLUMN penalty_round int NOT NULL;
-
--- title 삭제
-alter table penaltylog
-drop column title;
