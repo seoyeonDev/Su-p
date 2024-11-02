@@ -7,6 +7,10 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +32,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @ -----------    --------    ---------------------------
  * @ 2024.05.01     봉선호        최초 생성
  * @ 2024.07.01     김혜원        getByUserId, getByGroupId 생성
+ * @ 2024.11.02     이서연        chkPenalty 생성
  */
+
 
 @RestController
 @RequestMapping("/penaltylog")
+@SpringBootApplication
+@EnableScheduling
 public class PenaltylogController {
 
     @Autowired
@@ -114,20 +122,53 @@ public class PenaltylogController {
         return map;
     }
 
-    @GetMapping("/chkPenalty")
-    public String chkPenalty (String group_id){
-        return penaltyLogService.chkPenalty(group_id);
+    /**
+     * 제출개수 확인 후 비교, 기준 미달 시 penalty 추가
+     * 매일 00시 실행
+     *
+     * 2024.11.02
+     * @Author 이서연
+     */
+//    @Scheduled(fixedRate = 5000)
+//    @GetMapping("/chkPenalty")
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void chkPenalty () {
+        int result = 0;
+        String msg = null;
+        List<Map<String, Object>> penalty_chk = penaltyLogService.chkPenalty();
+        for (Map<String, Object> penaltyMap : penalty_chk) {
+            System.out.println(penaltyMap);
 
-    }
+            String userId = (String) penaltyMap.get("user_id");
+            String groupId = (String) penaltyMap.get("group_id");
+            boolean penaltyChk = (boolean) penaltyMap.get("chk");
 
-    @PostMapping("/create")
-    public void createPenalty(@RequestBody Penaltylog vo){
-        try{
-            penaltyLogService.chkPenalty(vo.getGroup_id());
-            penaltyLogService.insertPenaltylog(vo);
+            // penaltylog 추가 파라메터 설정
+            Penaltylog penaltylog = new Penaltylog(userId, groupId, null, null);
+            int log_count = (int) penaltyMap.get("log_count");  // 기간 중 log 올린 횟수
 
-        } catch(Exception e){
-            e.printStackTrace();
+            // assigncycle 저장
+            String penalty_round = (String) penaltyMap.get("assigncycle");
+            penaltylog.setPenalty_round(penalty_round);
+
+            if (!penaltyChk) {  // 기준 미달 (penalty 추가 실행)
+                System.out.println(userId + "   user_id");
+                result = penaltyLogService.insertPenaltyLog(penaltylog, log_count);
+            }
+            // 0: 기준충족, 1: insert, 2: penalty 이미 존재
+            System.out.println(userId + "결과 : " + result);
         }
     }
+
+    // 240707 김혜원
+//    @PostMapping("/create")
+//    public void createPenalty(@RequestBody Penaltylog vo){
+//        try{
+//            penaltyLogService.chkPenalty(vo.getGroup_id());
+//            penaltyLogService.insertPenaltylog(vo);
+//
+//        } catch(Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 }
