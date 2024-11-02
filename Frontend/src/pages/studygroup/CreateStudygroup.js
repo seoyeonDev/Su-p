@@ -166,7 +166,7 @@ function CreateStudygroup() {
                         <input type="number" name="mem_cnt" value={formData.mem_cnt} onChange={handleChange} min="0" />
                     </div>
                     <div>
-                        <label>패널티</label>
+                        <label>패널티 상한선</label>
                         <input type="number" name="penalty" value={formData.penalty} onChange={handleChange} min="0" /> {/* 숫자만 */}
                     </div>
                 </div>
