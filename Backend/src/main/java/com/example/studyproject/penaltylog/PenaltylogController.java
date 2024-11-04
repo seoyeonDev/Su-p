@@ -123,53 +123,19 @@ public class PenaltylogController {
     }
 
     /**
+     * 테스트용 수동 컨트롤러
      * 제출개수 확인 후 비교, 기준 미달 시 penalty 추가
      * 매일 00시 실행
      *
      * 2024.11.02
      * @Author 이서연
      */
-//    @Scheduled(fixedRate = 5000)  // 테스트용. 5초마다
-    @Scheduled(cron = "0 0 0 * * ?")    // 매일 자정
-    @GetMapping("/chkPenalty")
-    public String chkPenalty () {
-        int result = 0;
-        String msg = null;
-        List<Map<String, Object>> penalty_chk = penaltyLogService.chkPenalty();
-        for (Map<String, Object> penaltyMap : penalty_chk) {
-            System.out.println(penaltyMap);
 
-            String userId = (String) penaltyMap.get("user_id");
-            String groupId = (String) penaltyMap.get("group_id");
-            boolean penaltyChk = (boolean) penaltyMap.get("chk");
-
-            // penaltylog 추가 파라메터 설정
-            Penaltylog penaltylog = new Penaltylog(userId, groupId, null, null);
-            int log_count = (int) penaltyMap.get("log_count");  // 기간 중 log 올린 횟수
-
-            // assigncycle 저장
-            String penalty_round = (String) penaltyMap.get("assigncycle");
-            penaltylog.setPenalty_round(penalty_round);
-
-            if (!penaltyChk) {  // 기준 미달 (penalty 추가 실행)
-                System.out.println(userId + "   user_id");
-                result = penaltyLogService.insertPenaltyLog(penaltylog, log_count, penalty_round);
-            }
-            // 0: 기준충족, 1: insert, 2: penalty 이미 존재
-            System.out.println(userId + "결과 : " + result);
-        }
-        return "success";
+    @GetMapping("/penaltyScheduler")
+    public void penaltyScheduler(){
+        penaltyLogService.penaltyScheduler();
     }
 
-    // 240707 김혜원
-//    @PostMapping("/create")
-//    public void createPenalty(@RequestBody Penaltylog vo){
-//        try{
-//            penaltyLogService.chkPenalty(vo.getGroup_id());
-//            penaltyLogService.insertPenaltylog(vo);
-//
-//        } catch(Exception e){
-//            e.printStackTrace();
-//        }
-//    }
+
+
 }
