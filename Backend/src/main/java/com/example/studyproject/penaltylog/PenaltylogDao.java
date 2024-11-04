@@ -1,5 +1,6 @@
 package com.example.studyproject.penaltylog;
 
+import com.example.studyproject.studygroup.StudyGroup;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,9 +24,13 @@ public interface PenaltylogDao {
 
     // assigncycle 기준 조회
     // 기준비교
-    List<Map<String,Object>> selectPenalty(String group_id);
+    List<Map<String,Object>> selectPenalty();
 
     // penaltylog 추가
-    int insertPenaltylog(Penaltylog vo);
+    int insertPenaltyLog(Penaltylog vo, int log_count);
+
+    // penaltylog 추가 유효성 검사
+    boolean penaltyLogMultiChk(String group_id, String user_id, String penalty_round);
+
 }
 

@@ -18,7 +18,7 @@ public class Penaltylog {
 	private String user_id;
 	private String group_id;
 	private String logcontent;
-	private long penalty_round;
+	private String penalty_round;
 	
 //	public Penaltylog() {
 //		// TODO Auto-generated constructor stub

@@ -1,5 +1,6 @@
 package com.example.studyproject.penaltylog;
 
+import com.example.studyproject.studygroup.StudyGroup;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -76,51 +77,64 @@ public class PenaltylogService {
 
 	// assigncycle 기준 조회 기준비교
 	// penalty insert
-	public String chkPenalty(String group_id){
+	public List<Map<String,Object>> chkPenalty() {
 		String msg = "";
-
-		System.out.println(group_id);
-		List<Map<String,Object>> penalty_chk = penaltyLogDao.selectPenalty(group_id);
-		for (Map<String, Object> penaltyMap : penalty_chk) {
+		List<Map<String, Object>> penalty_chk = penaltyLogDao.selectPenalty();
+		return penalty_chk;
 
 
-			String userId = (String) penaltyMap.get("user_id");
-			int penalty = (int) penaltyMap.get("penalty");
-			Long logCount = (Long) penaltyMap.get("log_count");
-			boolean penaltyChk = (boolean) penaltyMap.get("penalty_chk");
+//		for (Map<String, Object> penaltyMap : penalty_chk) {
+//
+////			System.out.println(penaltyMap);
+//			String userId = (String) penaltyMap.get("user_id");
+//			String groupId = (String) penaltyMap.get("group_id");
+//			int penalty = (int) penaltyMap.get("penalty");
+//			boolean penaltyChk = (boolean) penaltyMap.get("penalty_chk");
+//
+//			Penaltylog penaltylogVo = new Penaltylog(userId, groupId, null, null);
 
-			Penaltylog penaltylogVo = new Penaltylog(userId, group_id, (logCount + "패널티"), logCount);
 
-			if(!penaltyChk){	// penalty 기준 미만
-				System.out.println(userId + "   user_id");
-				msg += " " + userId;
-				int success = penaltyLogDao.insertPenaltylog(penaltylogVo);
-
-				if(success>=1){
-					LOGGER.info("================ penalty insert success" );
-				} else{
-					LOGGER.info("================ penalty insert fail" );
-				}
-				// TODO user_id 이용해서 PENALTY table 에 인서트하기
-			}else {
-				System.out.println(userId + "   XXX");
-			}
-		}
-		
-		return msg;
+//			if(!penaltyChk){	// penalty 기준 미만
+//				System.out.println(userId + "   user_id");
+//				msg += " " + userId;
+//				int success = penaltyLogDao.insertPenaltylog(penaltylogVo);
+//
+//				if(success>=1){
+//					LOGGER.info("================ penalty insert success" );
+//				} else{
+//					LOGGER.info("================ penalty insert fail" );
+//				}
+//			}else {
+//				System.out.println(userId + "   XXX");
+//			}
 	}
 
-	// penaltylog 추가
-	public int insertPenaltylog(Penaltylog penaltylog){
-		int success=0;
+	// penaltylog 추가/ 241102 이서연
+	public int insertPenaltyLog(Penaltylog penaltylog, int log_count, String penalty_round){
+		String groupId = penaltylog.getGroup_id();
+		String userId = penaltylog.getUser_id();
+		int result = 0;
 
-		try{
-			success = penaltyLogDao.insertPenaltylog(penaltylog);
-		}catch(Exception e){
-			e.printStackTrace();
+		boolean is_empty = penaltyLogDao.penaltyLogMultiChk(groupId, userId, penalty_round);
+		if (is_empty){
+			result = penaltyLogDao.insertPenaltyLog(penaltylog, log_count);	// 1 penaltylog 추가됨
+		} else {
+			result = 2;	// 이미 존재
 		}
-
-		return success;
+		return result;
 	}
+
+	// penaltylog 추가/ 240707 김혜원
+//	public int insertPenaltylog(Penaltylog penaltylog){
+//		int success=0;
+//
+//		try{
+//			success = penaltyLogDao.insertPenaltylog(penaltylog);
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+//
+//		return success;
+//	}
 
 }

@@ -38,41 +38,81 @@
         AND group_id = #{group_id}
     </select>
 
+
+    <!--  penalty 기준 이번 주, studylog 개수 조회 // 로직 검토 필요 -->
     <select id="selectPenalty" resultType="map">
-        with temp_date AS (
-            select * from sg_assigncycle
-            where group_id = #{ group_id }
-            and now() between date(startdate) and date(enddate)
-        )
-        select A.user_id
+        select
+            A.group_id
+            , A.user_id
             , B.penalty
-            , count(*) AS log_count
-            , B.penalty &lt;= count(*) AS penalty_chk
-        from studylogs  A
-            left join studygroup B
-            on A.group_id = B.group_id
-            left join temp_date C
+            , count(C.*)::INT               AS log_count
+            , B.penalty &lt;= count(C.*)    AS chk
+            , cy.assigncycle
+        from joinedgroup A
+        join sg_assigncycle cy
+            on cy.group_id = A.group_id
+            and now() - Interval '2 day' between date(cy.startdate) and date(cy.enddate)
+        left join studygroup B
+            on B.group_id = A.group_id
+        left join studylogs C
             on C.group_id = A.group_id
-        where A.create_date between date(C.startdate) AND date(C.enddate)
-        group by user_id, B.penalty, C.assigncycle
+            and C.user_id = A.user_id
+            and date(c.create_date) between date(cy.startdate) and date(cy.enddate)
+        group by A.group_id, A.user_id, B.leader_id, B.penalty, cy.assigncycle
 
     </select>
 
-    <!-- penalty log 추가 -->
-    <insert id="insertPenaltylog">
+<!--    &lt;!&ndash; penalty log 추가, 7/7 김혜원 &ndash;&gt;-->
+<!--    <insert id="insertPenaltylog">-->
+<!--        INSERT INTO penaltylog-->
+<!--        (-->
+<!--            user_id,-->
+<!--            group_id,-->
+<!--            logcontent,-->
+<!--            penalty_round-->
+<!--        )-->
+<!--        VALUES-->
+<!--        (-->
+<!--            #{user_id},-->
+<!--            #{group_id},-->
+<!--            #{logcontent},-->
+<!--            #{penalty_round}-->
+<!--        );-->
+<!--    </insert>-->
+
+
+    <!--  241102 이서연  -->
+    <!--  penaltylog 추가
+        chk 가 false 일 경우 penalty 추가
+        user_id,group_id 마다 추가되어야 함.
+        penalty_round 는 해당 주차 (몇회째(회))
+    -->
+    <insert id="insertPenaltyLog">
         INSERT INTO penaltylog
         (
-            user_id,
-            group_id,
-            logcontent,
-            penalty_round
+            user_id
+        , group_id
+        , logcontent
+        , penalty_round
         )
-        VALUES
-        (
-            #{user_id},
-            #{group_id},
-            #{logcontent},
-            #{penalty_round}
-        );
+        VALUES (
+                #{vo.user_id}
+               , #{vo.group_id}
+               , CONCAT ('기준 미달 : ', #{log_count}, '/', (select chk_min_cnt as 기준
+                                                                   from studygroup
+                                                                   where group_id = #{vo.group_id}))
+               , #{vo.penalty_round}
+               )
     </insert>
+
+    <!--  241102 이서연  -->
+    <!--  penaltylog 추가 유효성 검사 / 중복 패널티 방지 -->
+    <!--  group_id, penalty_round 가 일치할 경우 insert 금지  -->
+    <select id="penaltyLogMultiChk" resultType="boolean">
+        select count(*) = 0 as is_empty
+        from penaltylog
+        where group_id = #{group_id}
+          and user_id = #{user_id}
+          and penalty_round = #{penalty_round}
+    </select>
 </mapper>
