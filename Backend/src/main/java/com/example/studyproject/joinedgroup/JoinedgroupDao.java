@@ -43,4 +43,7 @@ public interface JoinedgroupDao {
     
     // 그룹아이디로 리스트 사이즈 체크
     int selectJoinedListSize(String group_id);
+
+    // groupId로 불러오기
+    ArrayList<JoinedUserInfo> selectJoinedListByGroupId(String groupId);
 }

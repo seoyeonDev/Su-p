@@ -103,4 +103,23 @@
 		WHERE 1=1
 		AND group_id = #{group_id}
 	</select>
+
+    <!-- groulId로 joindgroup list 검색  -->
+    <select id="selectJoinedListByGroupId" resultType="com.example.studyproject.joinedgroup.JoinedUserInfo">
+        SELECT
+            j.group_id,
+            j.user_id,
+            j.role,
+            j.joinstatus,
+            j.submission_cnt,
+            m.name,
+            m.nickname,
+            m.email,
+            m.profile_img
+        FROM joinedgroup j
+        JOIN member m ON j.user_id = m.user_id
+        WHERE 1=1
+        AND j.group_id = #{group_id}
+        AND j.role != 'ROLE10'
+    </select>
 </mapper>
