@@ -137,6 +137,13 @@ public class PenaltylogService {
 		}
 	}
 
+
+	/**
+	 * penaltylog 삭제
+	 *
+	 * 2024.11.08
+	 * @Author 이서연
+	 */
 	public boolean deletePenaltyLog(String user_id, String group_id){
 		boolean result = false;
 		result = penaltyLogDao.deletePenaltyLog(user_id, group_id);

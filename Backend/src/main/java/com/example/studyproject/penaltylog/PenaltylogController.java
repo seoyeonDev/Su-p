@@ -136,6 +136,13 @@ public class PenaltylogController {
         penaltyLogService.penaltyScheduler();
     }
 
+
+    /**
+     * penaltylog 삭제
+     *
+     * 2024.11.08
+     * @Author 이서연
+     */
     @DeleteMapping("/{group_id}/{user_id}")
     public boolean deletePenaltyLog(@PathVariable String user_id, @PathVariable String group_id){
         boolean result = false;
