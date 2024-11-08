@@ -137,4 +137,10 @@ public class PenaltylogService {
 		}
 	}
 
+	public boolean deletePenaltyLog(String user_id, String group_id){
+		boolean result = false;
+		result = penaltyLogDao.deletePenaltyLog(user_id, group_id);
+		return result;
+	}
+
 }

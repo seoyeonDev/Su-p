@@ -136,6 +136,13 @@ public class PenaltylogController {
         penaltyLogService.penaltyScheduler();
     }
 
+    @DeleteMapping("/{group_id}/{user_id}")
+    public boolean deletePenaltyLog(@PathVariable String user_id, @PathVariable String group_id){
+        boolean result = false;
+        result = penaltyLogService.deletePenaltyLog(user_id, group_id);
+        return result;
+    }
+
 
 
 }
