@@ -44,6 +44,6 @@ public interface JoinedgroupDao {
     // 그룹아이디로 리스트 사이즈 체크
     int selectJoinedListSize(String group_id);
 
-    // groupId로 불러오기
-    ArrayList<JoinedUserInfo> selectJoinedListByGroupId(String groupId);
+    // 그룹 ID와 가입 상태에 따라 joinedgroup 목록을 조회합니다.
+    ArrayList<JoinedUserInfo> selectJoinedListByGroupId(String group_id,  String joinStatus);
 }
