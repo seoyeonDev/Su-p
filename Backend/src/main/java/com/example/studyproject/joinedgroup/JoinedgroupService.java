@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Class Name : JoinedgroupService.java
@@ -26,10 +27,6 @@ public class JoinedgroupService {
     public static final Logger LOGGER = LogManager.getLogger(JoinedgroupService.class);
 
     private final JoinedgroupDao joinedgroupDao;
-
-    public static final String JOIN_REQUEST = "PERM10"; // 가입대기
-    public static final String JOIN_APPROVED = "PERM20"; // 가입승인
-    public static final String JOIN_REJECTED = "PERM30"; // 가입승인
 
     public JoinedgroupService(JoinedgroupDao joinedgroupDao){
         this.joinedgroupDao = joinedgroupDao;
@@ -79,17 +76,11 @@ public class JoinedgroupService {
     /**
      * 그룹 상태 변경
      */
-    public boolean updateJoinedStatus(String group_id, String user_id, String status){
-        if(!isValidStatus(status)){
-            return false;
-        }
+    public boolean updateJoinedStatus(Joinedgroup vo, String status){
+        vo.setJoinstatus(status);
 
-        Joinedgroup joinedgroup = new Joinedgroup();
-        joinedgroup.setGroup_id(group_id);
-        joinedgroup.setUser_id(user_id);
-        joinedgroup.setJoinstatus(status);
+        return joinedgroupDao.updateJoinedStatus(vo);
 
-        return joinedgroupDao.updateJoinedStatus(joinedgroup);
     }
 
     /**
@@ -116,10 +107,4 @@ public class JoinedgroupService {
     public ArrayList<JoinedUserInfo> selectListByGroupId(String group_id, String joinStatus) {
         return joinedgroupDao.selectJoinedListByGroupId(group_id, joinStatus);
     }
-
-    // 주어진 status 값이 유효한 값인지 확인합니다. (유효하면 true, 그렇지 않다면 false)
-    private boolean isValidStatus(String status) {
-        return JOIN_REQUEST.equals(status) || JOIN_APPROVED.equals(status) || JOIN_REJECTED.equals(status);
-    }
-
 }

@@ -127,9 +127,8 @@ public class JoinedgroupController {
      * @param status - 수정할 값
      */
     @PutMapping("/updateStatus/{status}")
-    public Map updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") String status){
-        Map map = new HashMap();
-        LOGGER.info("================ joinedgroup update");
+    public void updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") String status){
+        LOGGER.info("================ joinedgroup join");
         Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(vo.getUser_id(), vo.getGroup_id());
         // 나중 : status가 code 테이블에 있는지 검사
 
@@ -137,8 +136,9 @@ public class JoinedgroupController {
 
         // 값이 있을 때에만 수정 가능
         if(joinedgroupVo != null){
-            success = joinedgroupService.updateJoinedStatus(joinedgroupVo.getGroup_id(), joinedgroupVo.getUser_id(), status);
+            success = joinedgroupService.updateJoinedStatus(vo, status);
         }
+
 
         if(success){
             LOGGER.info("================ join update success");
@@ -146,9 +146,6 @@ public class JoinedgroupController {
             LOGGER.info("================ join update failed");
         }
 
-        map.put("success", success);
-
-        return map;
     }
 
     // 조건에 따른 목록보기
