@@ -150,4 +150,17 @@ public class PenaltylogService {
 		return result;
 	}
 
+	// 주어진 그룹 ID에 대한 penaltylog, member, joinedgroup 정보를 조회하여 반환
+	public List<PenaltylogFetcher> getPanaltylogByGroupIdAndUserId(String group_id){
+		List<PenaltylogFetcher> penaltylogInfoList = new ArrayList<>();
+
+		try{
+			penaltylogInfoList = penaltyLogDao.selectPenaltylogWithJoinedgroup(group_id);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return penaltylogInfoList;
+	}
+
 }

@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Class Name : JoinedgroupService.java
@@ -110,8 +111,8 @@ public class JoinedgroupService {
     }
 
     // 그룹아이디로 목록보기
-    public ArrayList<JoinedUserInfo> selectListByGroupId(String group_id) {
-        return joinedgroupDao.selectJoinedListByGroupId(group_id);
+    public ArrayList<JoinedUserInfo> selectListByGroupId(String group_id, String joinStatus) {
+        return joinedgroupDao.selectJoinedListByGroupId(group_id, joinStatus);
     }
 
     // 주어진 status 값이 유효한 값인지 확인합니다. (유효하면 true, 그렇지 않다면 false)
