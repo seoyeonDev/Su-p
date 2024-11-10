@@ -32,7 +32,13 @@ public interface PenaltylogDao {
     // penaltylog 추가 유효성 검사
     boolean penaltyLogMultiChk(String group_id, String user_id, String penalty_round);
 
+
     // 그룹 ID에 대한 penaltylog, member, joinedgroup에 대한 정보를 조회합니다.
     List<PenaltylogFetcher> selectPenaltylogWithJoinedgroup(String group_id);
+
+    // penaltylog 삭제
+    boolean deletePenaltyLog (@Param("user_id") String user_id, @Param("group_id") String group_id);
+
+
 }
 

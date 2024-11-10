@@ -12,10 +12,13 @@ import org.apache.ibatis.annotations.Update;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,25 +130,25 @@ public class JoinedgroupController {
      * @param status - 수정할 값
      */
     @PutMapping("/updateStatus/{status}")
-    public void updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") String status){
+    public ResponseEntity<Map<String, Object>> updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") String status){
+        Map map = new HashMap();
         LOGGER.info("================ joinedgroup join");
         Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(vo.getUser_id(), vo.getGroup_id());
         // 나중 : status가 code 테이블에 있는지 검사
-
         boolean success = false;
 
         // 값이 있을 때에만 수정 가능
         if(joinedgroupVo != null){
-            success = joinedgroupService.updateJoinedStatus(vo, status);
+            success = joinedgroupService.updateJoinedStatus(joinedgroupVo.getGroup_id(),joinedgroupVo.getUser_id(), status);
         }
-
 
         if(success){
             LOGGER.info("================ join update success");
+            return ResponseEntity.ok(Collections.singletonMap("success", true));
         } else {
             LOGGER.info("================ join update failed");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("success", false));
         }
-
     }
 
     // 조건에 따른 목록보기

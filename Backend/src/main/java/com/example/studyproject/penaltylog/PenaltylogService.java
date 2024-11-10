@@ -3,7 +3,9 @@ package com.example.studyproject.penaltylog;
 import com.example.studyproject.studygroup.StudyGroup;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.math.BigInteger;
@@ -81,32 +83,6 @@ public class PenaltylogService {
 		String msg = "";
 		List<Map<String, Object>> penalty_chk = penaltyLogDao.selectPenalty();
 		return penalty_chk;
-
-
-//		for (Map<String, Object> penaltyMap : penalty_chk) {
-//
-////			System.out.println(penaltyMap);
-//			String userId = (String) penaltyMap.get("user_id");
-//			String groupId = (String) penaltyMap.get("group_id");
-//			int penalty = (int) penaltyMap.get("penalty");
-//			boolean penaltyChk = (boolean) penaltyMap.get("penalty_chk");
-//
-//			Penaltylog penaltylogVo = new Penaltylog(userId, groupId, null, null);
-
-
-//			if(!penaltyChk){	// penalty 기준 미만
-//				System.out.println(userId + "   user_id");
-//				msg += " " + userId;
-//				int success = penaltyLogDao.insertPenaltylog(penaltylogVo);
-//
-//				if(success>=1){
-//					LOGGER.info("================ penalty insert success" );
-//				} else{
-//					LOGGER.info("================ penalty insert fail" );
-//				}
-//			}else {
-//				System.out.println(userId + "   XXX");
-//			}
 	}
 
 	// penaltylog 추가/ 241102 이서연
@@ -124,18 +100,55 @@ public class PenaltylogService {
 		return result;
 	}
 
-	// penaltylog 추가/ 240707 김혜원
-//	public int insertPenaltylog(Penaltylog penaltylog){
-//		int success=0;
-//
-//		try{
-//			success = penaltyLogDao.insertPenaltylog(penaltylog);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//
-//		return success;
-//	}
+	/**
+	 * 제출개수 확인 후 비교, 기준 미달 시 penalty 추가
+	 * 매일 00시 실행
+	 *
+	 * 2024.11.02
+	 * @Author 이서연
+	 */
+//    @Scheduled(fixedRate = 5000)  // 테스트용. 5초마다
+	@Scheduled(cron = "0 0 0 * * ?")    // 매일 자정
+	public void penaltyScheduler () {
+		int result = 0;
+		String msg = null;
+		List<Map<String, Object>> penalty_chk = chkPenalty();
+		for (Map<String, Object> penaltyMap : penalty_chk) {
+			System.out.println(penaltyMap);
+
+			String userId = (String) penaltyMap.get("user_id");
+			String groupId = (String) penaltyMap.get("group_id");
+			boolean penaltyChk = (boolean) penaltyMap.get("chk");
+
+			// penaltylog 추가 파라메터 설정
+			Penaltylog penaltylog = new Penaltylog(userId, groupId, null, null);
+			int log_count = (int) penaltyMap.get("log_count");  // 기간 중 log 올린 횟수
+
+			// assigncycle 저장
+			String penalty_round = (String) penaltyMap.get("assigncycle");
+			penaltylog.setPenalty_round(penalty_round);
+
+			if (!penaltyChk) {  // 기준 미달 (penalty 추가 실행)
+				System.out.println(userId + "   user_id");
+				result = insertPenaltyLog(penaltylog, log_count, penalty_round);
+			}
+			// 0: 기준충족, 1: insert, 2: penalty 이미 존재
+			System.out.println("-------- [penalty 스케줄러] " + userId + " 결과 : " + result);
+		}
+	}
+
+
+	/**
+	 * penaltylog 삭제
+	 *
+	 * 2024.11.08
+	 * @Author 이서연
+	 */
+	public boolean deletePenaltyLog(String user_id, String group_id){
+		boolean result = false;
+		result = penaltyLogDao.deletePenaltyLog(user_id, group_id);
+		return result;
+	}
 
 	// 주어진 그룹 ID에 대한 penaltylog, member, joinedgroup 정보를 조회하여 반환
 	public List<PenaltylogFetcher> getPanaltylogByGroupIdAndUserId(String group_id){

@@ -11,7 +11,6 @@
         DELETE FROM penaltylog
         WHERE user_id = #{user_id}
         AND group_id = #{group_id}
-        AND penalty_round = #{penalty_round}
     </delete>
 
     <!-- 유저 아이디로 penaltylog 불러오기 -->
@@ -39,47 +38,29 @@
     </select>
 
 
+    <!--  241102 이서연  -->
     <!--  penalty 기준 이번 주, studylog 개수 조회 // 로직 검토 필요 -->
     <select id="selectPenalty" resultType="map">
-        select
+        SELECT
             A.group_id
             , A.user_id
             , B.penalty
-            , count(C.*)::INT               AS log_count
+            , COUNT(C.*)::INT               AS log_count
             , B.penalty &lt;= count(C.*)    AS chk
             , cy.assigncycle
-        from joinedgroup A
-        join sg_assigncycle cy
-            on cy.group_id = A.group_id
-            and now() - Interval '2 day' between date(cy.startdate) and date(cy.enddate)
-        left join studygroup B
-            on B.group_id = A.group_id
-        left join studylogs C
-            on C.group_id = A.group_id
-            and C.user_id = A.user_id
-            and date(c.create_date) between date(cy.startdate) and date(cy.enddate)
-        group by A.group_id, A.user_id, B.leader_id, B.penalty, cy.assigncycle
+        FROM joinedgroup A
+        JOIN sg_assigncycle cy
+            ON cy.group_id = A.group_id
+            AND now() - INTERVAL '2 day' BETWEEN DATE(cy.startdate) and DATE(cy.enddate)
+        LEFT JOIN studygroup B
+            ON B.group_id = A.group_id
+        LEFT JOIN studylogs C
+            ON C.group_id = A.group_id
+            AND C.user_id = A.user_id
+            AND DATE(c.create_date) BETWEEN DATE(cy.startdate) AND DATE(cy.enddate)
+        GROUP BY A.group_id, A.user_id, B.leader_id, B.penalty, cy.assigncycle
 
     </select>
-
-<!--    &lt;!&ndash; penalty log 추가, 7/7 김혜원 &ndash;&gt;-->
-<!--    <insert id="insertPenaltylog">-->
-<!--        INSERT INTO penaltylog-->
-<!--        (-->
-<!--            user_id,-->
-<!--            group_id,-->
-<!--            logcontent,-->
-<!--            penalty_round-->
-<!--        )-->
-<!--        VALUES-->
-<!--        (-->
-<!--            #{user_id},-->
-<!--            #{group_id},-->
-<!--            #{logcontent},-->
-<!--            #{penalty_round}-->
-<!--        );-->
-<!--    </insert>-->
-
 
     <!--  241102 이서연  -->
     <!--  penaltylog 추가
@@ -98,9 +79,9 @@
         VALUES (
                 #{vo.user_id}
                , #{vo.group_id}
-               , CONCAT ('기준 미달 : ', #{log_count}, '/', (select chk_min_cnt as 기준
-                                                                   from studygroup
-                                                                   where group_id = #{vo.group_id}))
+               , CONCAT ('기준 미달 : ', #{log_count}, '/', (SELECT chk_min_cnt as 기준
+                                                                   FROM studygroup
+                                                                   WHERE group_id = #{vo.group_id}))
                , #{vo.penalty_round}
                )
     </insert>
@@ -109,12 +90,13 @@
     <!--  penaltylog 추가 유효성 검사 / 중복 패널티 방지 -->
     <!--  group_id, penalty_round 가 일치할 경우 insert 금지  -->
     <select id="penaltyLogMultiChk" resultType="boolean">
-        select count(*) = 0 as is_empty
-        from penaltylog
-        where group_id = #{group_id}
-          and user_id = #{user_id}
-          and penalty_round = #{penalty_round}
+        SELECT COUNT(*) = 0 AS is_empty
+        FROM penaltylog
+        WHERE group_id = #{group_id}
+          AND user_id = #{user_id}
+          AND penalty_round = #{penalty_round}
     </select>
+
 
     <!--
       'selectPenaltylogWithJoinedgroup' 쿼리: 특정 그룹에 대한 penaltylog를 조회하는 쿼리

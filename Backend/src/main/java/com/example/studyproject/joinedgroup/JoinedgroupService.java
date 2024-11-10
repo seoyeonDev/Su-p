@@ -32,6 +32,10 @@ public class JoinedgroupService {
         this.joinedgroupDao = joinedgroupDao;
     }
 
+    public static final String JOIN_REQUEST = "PERM10"; // 가입대기
+    public static final String JOIN_APPROVED = "PERM20"; // 가입승인
+    public static final String JOIN_REJECTED = "PERM30"; // 가입승인
+
     // 사용자별 가입한 그룹 목록
     ArrayList<Joinedgroup> selectJoinedList(String user_id){
         return joinedgroupDao.selectJoinedList(user_id);
@@ -73,14 +77,17 @@ public class JoinedgroupService {
         return joinedgroupDao.deleteJoinedgroup(user_id, group_id);
     }
   
-    /**
-     * 그룹 상태 변경
-     */
-    public boolean updateJoinedStatus(Joinedgroup vo, String status){
-        vo.setJoinstatus(status);
+    // 그룹 상태 변경
+    public boolean updateJoinedStatus(String group_id, String user_id, String status){
+        if(!isValidStatus(status)){
+            return false;
+        }
+        Joinedgroup joinedgroup = new Joinedgroup();
+        joinedgroup.setGroup_id(group_id);
+        joinedgroup.setUser_id(user_id);
+        joinedgroup.setJoinstatus(status);
 
-        return joinedgroupDao.updateJoinedStatus(vo);
-
+        return joinedgroupDao.updateJoinedStatus(joinedgroup);
     }
 
     /**
@@ -106,5 +113,10 @@ public class JoinedgroupService {
     // 그룹아이디로 목록보기
     public ArrayList<JoinedUserInfo> selectListByGroupId(String group_id, String joinStatus) {
         return joinedgroupDao.selectJoinedListByGroupId(group_id, joinStatus);
+    }
+
+    // 주어진 status 값이 유효한 값인지 확인합니다. (유효하면 true, 그렇지 않다면 false)
+    private boolean isValidStatus(String status) {
+        return JOIN_REQUEST.equals(status) || JOIN_APPROVED.equals(status) || JOIN_REJECTED.equals(status);
     }
 }

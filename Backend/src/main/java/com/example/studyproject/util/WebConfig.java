@@ -9,8 +9,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8080", "http://localhost:3000")
-                .allowedMethods("GET","POST")
+                .allowedOrigins("http://localhost:8080", "http://localhost:3000","chrome-extension://coohjcphdfgbiolnekdpbcijmhambjff")
+                // 백엔드, 프론트엔드, 크롬 확장프로그램
+                .allowedMethods("GET","POST","DELETE")
                 .allowCredentials(true)
                 .maxAge(3000);
 
