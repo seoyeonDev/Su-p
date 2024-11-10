@@ -32,5 +32,8 @@ public interface PenaltylogDao {
     // penaltylog 추가 유효성 검사
     boolean penaltyLogMultiChk(String group_id, String user_id, String penalty_round);
 
+    // penaltylog 삭제
+    boolean deletePenaltyLog (@Param("user_id") String user_id, @Param("group_id") String group_id);
+
 }
 
