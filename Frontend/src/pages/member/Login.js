@@ -106,25 +106,7 @@ function Login () {
                 alert('logout 완료 2');
             })
     }
-
-
-
-    // const loginTest = (() => {
-    //         // axios.post('/login')
-    //         //     .then(() => {
-    //         //         console.log('로그인 성공')
-    //         //     });
-    //
-    //         axios.get('/member/test')
-    //             .then(response => {
-    //                 // const data = response.data;
-    //                 setTest(response.data);
-    //             });
-    //     // }
-    // });
-
-
-// render() {
+    
     return (
         <div>
             {/*로그인 하는 페이지*/}
@@ -149,6 +131,5 @@ function Login () {
         </div>
     );
 }
-// }
 
 export default Login;
