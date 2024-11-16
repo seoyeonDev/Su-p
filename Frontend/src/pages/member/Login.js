@@ -106,7 +106,7 @@ function Login () {
                 alert('logout 완료 2');
             })
     }
-    
+
     return (
         <div>
             {/*로그인 하는 페이지*/}

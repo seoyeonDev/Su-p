@@ -100,7 +100,7 @@ public class JoinedgroupService {
     }
 
     // 조건에 따른 목록보기
-    ArrayList<Joinedgroup> selectList(String joinstatus, String role, String status, String user_id){
+    ArrayList<?> selectList(String joinstatus, String role, String status, String user_id){
         return joinedgroupDao.selectList(joinstatus, role, status, user_id);
     }
     
