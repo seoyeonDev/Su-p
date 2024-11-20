@@ -162,9 +162,11 @@ public class JoinedgroupController {
             return null;
         } else {
             String loginId = (String) session.getAttribute("loginId");
+            System.out.println(loginId + "  loginId");
 //            loginId = "sooyeon275";
-            ArrayList<Joinedgroup> list = joinedgroupService.selectList(joinstatus, role, status, loginId);
+            ArrayList<?> list = joinedgroupService.selectList(joinstatus, role, status, loginId);
             map.put("list",list);
+//            ResponseEntity.ok(list);
         }
 
         return map;
