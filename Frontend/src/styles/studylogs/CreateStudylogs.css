@@ -1,0 +1,49 @@
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.image-container, .file-container, .input-container{
+    margin-bottom: 20px; /* 각 항목 간의 간격 추가 */
+}
+
+.input-label {
+    flex-shrink: 0; /* label이 축소되지 않도록 */
+    width: 10%;
+}
+
+.input-field {
+    flex-grow: 1; /* input/textarea가 가능한 공간을 모두 차지하도록 */
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-container textarea {
+    height: 200px !important;
+}
+
+.file-container, .image-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-container button, .image-container button {
+    margin-left: 10px;
+}
+
+.file-container img {
+    width: 200px;
+    margin-top: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 20px; /* 버튼 간의 간격 */
+    margin-top: 20px; /* 상단 여백 (필요에 따라 조정) */
+}

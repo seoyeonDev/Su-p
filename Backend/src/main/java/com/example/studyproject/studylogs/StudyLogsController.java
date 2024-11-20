@@ -1,6 +1,7 @@
 package com.example.studyproject.studylogs;
 
 
+import com.example.studyproject.files.SupFilesInfo;
 import com.example.studyproject.studygroup.StudyGroupController;
 
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +10,7 @@ import java.util.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.jni.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -71,8 +73,11 @@ public class StudyLogsController {
         Map<String, Object> map = new HashMap<>();
 
         StudyLogs vo = studyLogsService.selectStudyLogs(post_id);
+        HashMap<String, Object> filsParam = new HashMap<>();
+        filsParam.put("fileId", post_id);
+        List<HashMap<String, Object>> fileList = filesSerivce.getFile(filsParam);
         map.put("vo", vo);
-
+        map.put("fileList", fileList);
         return map;
     }
 
@@ -140,26 +145,74 @@ public class StudyLogsController {
 
 
     /**
-     * 결과물 업데이트
+     * studylog 수정
+     * 11/16 hyewon
      *
-     * @param post_id - 결과물 id
-     * @param vo      - 결과물 vo
+     * @param vo
+     * @param files
+     * @param images
+     * @param deleteFiles
+     * @throws NoSuchAlgorithmException
      */
-    @PutMapping("/update/{post_id}")
-    public void updateLogs(@PathVariable String post_id, @RequestBody StudyLogs vo) {
+    @PostMapping("/update")
+    public void updateLogs(@RequestPart("vo") StudyLogs vo,
+                           @RequestParam(value = "files", required = false) List<MultipartFile> files,
+                           @RequestParam(value = "images", required = false) List<MultipartFile> images,
+                           @RequestPart("deleteFiles") List<SupFilesInfo> deleteFiles) throws NoSuchAlgorithmException {
 
-        StudyLogs studyLogs = studyLogsService.selectStudyLogs(post_id);
+        StudyLogs studyLogs = studyLogsService.selectStudyLogs(vo.getPost_id());
         LOGGER.info("StudyLogs updated: " + studyLogs);
 
         if (studyLogs == null) {
-            LOGGER.error("StudyLogs not found with post_id: " + post_id);
-            throw new RuntimeException("StudyLogs not found with post_id: " + post_id);
+            LOGGER.error("StudyLogs not found with post_id: " + vo.getPost_id());
+            throw new RuntimeException("StudyLogs not found with post_id: " + vo.getPost_id());
         }
 
         // 기존의 게시물을 업데이트
         // 제목, 내용, 수정일은 db에서 now로 처리
         studyLogs.setTitle(vo.getTitle());
         studyLogs.setContent(vo.getContent());
+
+        // 파일 삭제하기
+        deleteFiles.forEach(file ->{
+            HashMap<String, Object> param = new HashMap<>();
+
+            param.put("fileId", file.getFile_id());
+            param.put("fileSeq", file.getFile_seq());
+            filesSerivce.delFile(param);
+        });
+
+        List<SupFiles> supImageList = new ArrayList<>();
+        List<SupFiles> supFileList = new ArrayList<>();
+
+        String realPath = path + "study_logs/" + vo.getPost_id();
+        File dir = new File(realPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        supImageList = addSupFiles(images, "KIND10", vo);
+        supFileList = addSupFiles(files, "KIND20", vo);
+
+        // 두 리스트를 합치기
+        List<SupFiles> allFilesList = new ArrayList<>();
+        allFilesList.addAll(supImageList);
+        allFilesList.addAll(supFileList);
+
+        int success = 0;
+
+        try {
+            if (allFilesList.size() > 0) {
+                success = filesSerivce.insertFileList(allFilesList);
+                if (success > 0) {
+                    LOGGER.info("================ 파일 저장 성공 success : " + success);
+                }
+            } else {
+                LOGGER.info("================ 파일 없음");
+            }
+        } catch (Exception e) {
+            LOGGER.info("================ 파일 저장 실패 : " + e.getMessage());
+        }
 
         studyLogsService.updateStudyLogs(vo);
         LOGGER.info("StudyLogs updated: " + studyLogs);

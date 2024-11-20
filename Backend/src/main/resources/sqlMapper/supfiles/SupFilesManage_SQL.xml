@@ -6,8 +6,11 @@
 	
 	<!-- 파일 정보 불러오기 맵 -->
 	<resultMap type="HashMap" id="FileMap">
+		<result property="fileSeq" column="file_seq"/>
+		<result property="fileId" column="file_id"/>
 		<result property="fileName" column="file_name"/>
 		<result property="fileExt" column="file_ext"/>
+		<result property="fileType" column="file_type"/>
 	</resultMap>
 	
 	<!-- 파일 테이블 추가 -->
@@ -35,8 +38,11 @@
 	<!-- 파일 테이블 정보 불러오기 -->
 	<select id="getFile" parameterType="HashMap" resultMap="FileMap">
 		SELECT
+			file_seq,
+			file_id,
 			file_name,
-			file_ext
+			file_ext,
+			file_type
 		FROM supfiles
 		WHERE file_id = #{fileId}
 	</select>
@@ -45,6 +51,7 @@
 		DELETE
 		FROM supfiles
 		WHERE file_id = #{fileId}
+		AND file_seq = #{fileSeq}
 	</delete>
 
 	<!-- 여러 파일 삽입 -->
