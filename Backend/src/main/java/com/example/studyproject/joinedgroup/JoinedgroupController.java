@@ -1,5 +1,6 @@
 package com.example.studyproject.joinedgroup;
 
+import com.example.studyproject.enums.JoinStatus;
 import com.example.studyproject.member.MemberService;
 import com.example.studyproject.member.Member;
 import com.example.studyproject.penaltylog.PenaltylogFetcher;
@@ -37,6 +38,7 @@ import java.util.Map;
  * @ 2024.05.27     김혜원        get 메서드 추가
  * @ 2024.06.10     김혜원        joinedgroup 타입 바꾸기
  * @ 2024.11.09     김혜원        joinedlist 가져오기
+ * @ 2024.11.16     김혜원        JoinStatus enum 추가
  */
 
 @RestController
@@ -58,8 +60,8 @@ public class JoinedgroupController {
     // log4j2 로그 찍기
     private static final Logger LOGGER = LogManager.getLogger(JoinedgroupController.class);
 
-    public static final String JOIN_REQUEST = "PERM10"; // 가입대기
-    public static final String JOIN_APPROVED = "PERM20"; // 가입승인
+    //public static final String JOIN_REQUEST = "PERM10"; // 가입대기
+    //public static final String JOIN_APPROVED = "PERM20"; // 가입승인
     public static final String RECRUITING = "STAT10"; // 모집중
     public static final String IN_PROGRESS = "STAT20"; // 진행중
 
@@ -130,7 +132,7 @@ public class JoinedgroupController {
      * @param status - 수정할 값
      */
     @PutMapping("/updateStatus/{status}")
-    public ResponseEntity<Map<String, Object>> updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") String status){
+    public ResponseEntity<Map<String, Object>> updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") JoinStatus status){
         Map map = new HashMap();
         LOGGER.info("================ joinedgroup join");
         Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(vo.getUser_id(), vo.getGroup_id());
@@ -153,7 +155,7 @@ public class JoinedgroupController {
 
     // 조건에 따른 목록보기
     @GetMapping("/selectList")
-    public Map selectList(String joinstatus, String role, String status, HttpServletRequest request){
+    public Map selectList(JoinStatus joinstatus, String role, String status, HttpServletRequest request){
         HttpSession session = request.getSession();
         Map map = new HashMap();
         if (session == null){
@@ -199,9 +201,9 @@ public class JoinedgroupController {
         // 2. 맞다면 목록 가져오기
         if(studyGroup.getStatus().equals(RECRUITING)){ // 2-1. 오픈 전이라면
             // (1) 가입 신청한 목록 PERM10
-            List<JoinedUserInfo> joinRequestList = joinedgroupService.selectListByGroupId(group_id, JOIN_REQUEST);
+            List<JoinedUserInfo> joinRequestList = joinedgroupService.selectListByGroupId(group_id, JoinStatus.PERM10);
             // (2) 가입 승인된 목록 PERM20
-            List<JoinedUserInfo> joinApprovedList = joinedgroupService.selectListByGroupId(group_id, JOIN_APPROVED);
+            List<JoinedUserInfo> joinApprovedList = joinedgroupService.selectListByGroupId(group_id, JoinStatus.PERM20);
 
             map.put("joinRequestList", joinRequestList);
             map.put("joinApprovedList", joinApprovedList);

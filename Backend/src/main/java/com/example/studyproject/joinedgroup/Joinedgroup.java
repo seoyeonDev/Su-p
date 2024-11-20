@@ -1,7 +1,6 @@
 package com.example.studyproject.joinedgroup;
 
-import com.example.studyproject.member.Member;
-import com.example.studyproject.studygroup.StudyGroup;
+import com.example.studyproject.enums.JoinStatus;
 
 import lombok.*;
 
@@ -14,7 +13,7 @@ public class Joinedgroup {
     private String group_id;
     private String user_id;
     private String role;
-    private String joinstatus;
+    private JoinStatus joinstatus;
     private int submission_cnt;
 
 //    public Joinedgroup() {
