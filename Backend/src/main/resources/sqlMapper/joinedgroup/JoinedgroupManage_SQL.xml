@@ -63,22 +63,26 @@
     </select>
 
     <!-- 조건에 따른 목록보기 -->
-    <select id="selectList" resultType="com.example.studyproject.joinedgroup.Joinedgroup">
+    <select id="selectList" resultType="hashmap">
         SELECT
             a.group_id
+        , b.title
         , a.user_id
         , a.role
+        , c.comm_cdnm as role_nm
         , a.joinstatus
         , a.submission_cnt
         , b.status
         FROM joinedgroup a
         LEFT JOIN studygroup b
             ON a.group_id = b.group_id
+        LEFT JOIN code_d c
+            ON a.role = c.comm_cd
         WHERE 1=1
             AND a.user_id = #{user_id}
             AND (COALESCE(#{joinstatus},'')='' OR a.joinstatus = #{joinstatus})   <!-- 가입상태 -->
-            AND COALESCE(#{role},'')='' OR a.role = #{role}                     <!-- 그룹장/참여자 -->
-            AND COALESCE(#{status},'')='' OR b.status = #{status}               <!-- 그룹상태 -->
+            AND (COALESCE(#{role},'')='' OR a.role = #{role})                     <!-- 그룹장/참여자 -->
+            AND (COALESCE(#{status},'')='' OR b.status = #{status})               <!-- 그룹상태 -->
 
     </select>
 

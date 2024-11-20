@@ -39,7 +39,7 @@ public interface JoinedgroupDao {
     Joinedgroup getByUserIdAndGroupId(String user_id, String group_id);
 
     // 조건에 따른 목록보기
-    ArrayList<Joinedgroup> selectList(String joinstatus, String role, String status, String user_id);
+    ArrayList<?> selectList(String joinstatus, String role, String status, String user_id);
     
     // 그룹아이디로 리스트 사이즈 체크
     int selectJoinedListSize(String group_id);

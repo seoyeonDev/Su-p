@@ -23,4 +23,10 @@
 			<AppenderRef ref="console" />
 		</Root>
 	</Loggers>
+	<settings>
+		<setting name="logImpl" value="SLF4J" />
+	</settings>
+	<logger name="org.apache.ibatis" level="DEBUG"/>
+	<logger name="java.sql" level="DEBUG"/>
+	<logger name="jdbc.sqlonly" level="DEBUG"/>
 </Configuration>
