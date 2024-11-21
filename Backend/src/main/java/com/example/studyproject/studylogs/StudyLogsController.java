@@ -2,6 +2,7 @@ package com.example.studyproject.studylogs;
 
 
 import com.example.studyproject.files.SupFilesInfo;
+import com.example.studyproject.joinedgroup.Joinedgroup;
 import com.example.studyproject.studygroup.StudyGroupController;
 
 import java.security.NoSuchAlgorithmException;
@@ -352,5 +353,17 @@ public class StudyLogsController {
         }
 
         return supFilesList;
+    }
+
+
+    // 그룹별, 사용자별 studylog 전체 목록
+    @GetMapping("/selectStudyLogsListByGroup")
+    public ArrayList<StudyLogs> selectStudyLogsListByGroup(Joinedgroup vo) {
+        return studyLogsService.selectStudyLogsListByGroup(vo);
+    }
+
+    @GetMapping("/getMainLog")
+    public ArrayList<StudyLogs> studyMainListLimit5 (String group_id){
+        return studyLogsService.studyMainListLimit5(group_id);
     }
 }

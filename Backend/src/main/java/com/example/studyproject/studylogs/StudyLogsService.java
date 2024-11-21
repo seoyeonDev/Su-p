@@ -82,4 +82,16 @@ public class StudyLogsService {
         return studyLogsDao.selectList();
 
     }
+
+    // 그룹별, 사용자별 studylog 전체 목록
+    public ArrayList<StudyLogs> selectStudyLogsListByGroup(Joinedgroup vo){
+        String group_id = vo.getGroup_id();
+        String user_id = vo.getUser_id();
+        return studyLogsDao.selectStudyLogsListByGroup(group_id, user_id);
+    }
+
+    // 스터디 메인 글 LIMIT 5
+    public ArrayList<StudyLogs> studyMainListLimit5 (String group_id){
+        return studyLogsDao.studyMainListLimit5(group_id);
+    }
 }
