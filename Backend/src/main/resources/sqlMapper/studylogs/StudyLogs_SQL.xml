@@ -116,7 +116,7 @@
                             ON A.group_id = B.group_id
                                 AND A.create_date BETWEEN DATE(B.startdate) AND DATE(B.enddate)
         WHERE (COALESCE(#{group_id},'')='' OR A.GROUP_ID = #{group_id})
-          AND (COALESCE(#{user_id},'')='' OR A.GROUP_ID = #{user_id})
+          AND (COALESCE(#{user_id},'')='' OR A.USER_ID = #{user_id})
 
     </select>
 
