@@ -357,9 +357,9 @@ public class StudyLogsController {
 
 
     // 그룹별, 사용자별 studylog 전체 목록
-    @GetMapping("/selectStudyLogsListByGroup")
-    public ArrayList<StudyLogs> selectStudyLogsListByGroup(Joinedgroup vo) {
-        return studyLogsService.selectStudyLogsListByGroup(vo);
+    @GetMapping("/selectAll")
+    public ArrayList<StudyLogs> selectStudyLogsListByGroup(String group_id, String user_id) {
+        return studyLogsService.selectStudyLogsListByGroup(group_id, user_id);
     }
 
     @GetMapping("/getMainLog")

@@ -84,9 +84,7 @@ public class StudyLogsService {
     }
 
     // 그룹별, 사용자별 studylog 전체 목록
-    public ArrayList<StudyLogs> selectStudyLogsListByGroup(Joinedgroup vo){
-        String group_id = vo.getGroup_id();
-        String user_id = vo.getUser_id();
+    public ArrayList<StudyLogs> selectStudyLogsListByGroup(String group_id, String user_id){
         return studyLogsDao.selectStudyLogsListByGroup(group_id, user_id);
     }
 
