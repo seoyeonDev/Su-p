@@ -4,9 +4,11 @@ import MyStudyDetailHeader from "./MyStudyDetailHeader";
 import myStudyDetailHome from "./MyStudyDetailHome";
 import MyStudyDetailHome from "./MyStudyDetailHome";
 import Test from "../Test";
+import MyStudyDetailMyList from "./MyStudyDetailMyList";
+import MyStudyDetailGroupInfo from "./MyStudyDetailGroupInfo";
 
 const MyStudyDetail = () => {
-    const [selectedContent, setSelectedContenct] = useState([]);
+    const [selectedContent, setSelectedContent] = useState([]);
 
     // const getGroupInfo = async(group_id, user_id) => {
     //     console.log('getGroupInfo');
@@ -37,12 +39,17 @@ const MyStudyDetail = () => {
     //     }
     // }
 
+
     return (
         <div className={'common-content-container'}>
             <div className={'common-content'}>
-            <h1>나의 스터디</h1>
-            <MyStudyDetailHeader title = "스터디명" onSelect={setSelectedContenct}/>
-            <MyStudyDetailHome selectedContent={selectedContent}/>
+                <h1>나의 스터디</h1>
+                <MyStudyDetailHeader title="스터디명" onSelect={setSelectedContent}/>
+
+
+                <MyStudyDetailHome selectedContent={selectedContent}/>
+                <MyStudyDetailMyList selectedContent={selectedContent}/>
+                <MyStudyDetailGroupInfo selectedContent={selectedContent}/>
             </div>
         </div>
 

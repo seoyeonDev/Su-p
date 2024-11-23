@@ -8,6 +8,8 @@ const MyStudyDetailHome = ({selectedContent}) => {
         <div className={'common-content'}>
             {selectedContent === 'content1' && <p>content1</p>}
             {selectedContent === 'content2' && <p>content2</p>}
+            {selectedContent === 'HOME' && <p>HOME</p>}
+
         </div>
     );
 }
