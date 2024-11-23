@@ -115,8 +115,11 @@
             m.nickname,
             m.profile_img
         FROM penaltylog p
-        LEFT JOIN joinedgroup j ON p.user_id = j.user_id AND p.group_id = j.group_id
-        LEFT JOIN member m ON p.user_id = m.user_id
+        INNER JOIN joinedgroup j
+            ON p.user_id = j.user_id
+            AND p.group_id = j.group_id
+        INNER JOIN member m
+            ON p.user_id = m.user_id
         WHERE p.group_id = #{group_id}
         ORDER BY m.nickname
     </select>
