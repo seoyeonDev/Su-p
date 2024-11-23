@@ -28,4 +28,23 @@
 		DELETE FROM sg_assignCycle
 		WHERE group_id = #{group_id}
 	</delete>
+
+	<!-- 모든 스터디그룹의 총 출석 개수를 구하기 -->
+	<select id="getAssignCycleCountMultiple" parameterType="java.util.List" resultType="int">
+		SELECT count(*)
+		FROM sg_assignCycle
+		WHERE 1=1
+			AND group_id IN
+			<foreach collection="list" item="group_id" open="(" close=")" separator=",">
+				#{group_id}
+			</foreach>
+	</select>
+
+	<!-- 특정 스터디그룹의 총 출석 개수를 구하기 -->
+	<select id="getAssignCycleCount" parameterType="String" resultType="int">
+		SELECT count(*)
+		FROM sg_assignCycle
+		WHERE 1=1
+			AND group_id = #{group_id}
+	</select>
 </mapper>

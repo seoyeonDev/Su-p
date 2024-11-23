@@ -39,6 +39,7 @@ public interface PenaltylogDao {
     // penaltylog 삭제
     boolean deletePenaltyLog (@Param("user_id") String user_id, @Param("group_id") String group_id);
 
-
+    // 총 패널티 개수(사용자에 대한 or 사용자와 특정 스터디 그룹에 대한)
+    int getPenaltyCount(String user_id, String group_id);
 }
 

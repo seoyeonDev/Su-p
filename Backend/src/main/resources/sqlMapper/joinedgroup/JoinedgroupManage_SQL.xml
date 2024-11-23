@@ -125,4 +125,12 @@
         AND j.joinstatus = #{joinStatus}
         ORDER BY nickname
     </select>
+
+    <!-- 사용자별 가입한 group_id list 가져오기 -->
+    <select id="getJoinedListByUserId" resultType="String">
+        SELECT group_id
+        FROM joinedgroup
+        WHERE 1=1
+        AND user_id = #{user_id}
+    </select>
 </mapper>

@@ -1,12 +1,17 @@
 package com.example.studyproject.joinedgroup;
 
+import com.example.studyproject.assigncycle.AssignCycleService;
 import com.example.studyproject.enums.JoinStatus;
+import com.example.studyproject.penaltylog.PenaltylogDao;
+import com.example.studyproject.penaltylog.PenaltylogService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Class Name : JoinedgroupService.java
@@ -34,9 +39,11 @@ public class JoinedgroupService {
         this.joinedgroupDao = joinedgroupDao;
     }
 
-    //public static final String JOIN_REQUEST = "PERM10"; // 가입대기
-    //public static final String JOIN_APPROVED = "PERM20"; // 가입승인
-    //public static final String JOIN_REJECTED = "PERM30"; // 가입승인
+    @Autowired
+    private PenaltylogService penaltyLogService;
+
+    @Autowired
+    private AssignCycleService assignCycleService;
 
     // 사용자별 가입한 그룹 목록
     ArrayList<Joinedgroup> selectJoinedList(String user_id){
@@ -121,5 +128,53 @@ public class JoinedgroupService {
     // 주어진 status 값이 유효한 값인지 확인합니다. (유효하면 true, 그렇지 않다면 false)
     private boolean isValidStatus(JoinStatus status) {
         return JoinStatus.PERM10.equals(status) ||  JoinStatus.PERM20.equals(status) ||  JoinStatus.PERM30.equals(status);
+    }
+
+    // 모든 스터디그룹의 평균 출석률 구하기
+    public double getAttendanceCalculation(String user_id) throws Exception {
+        // 전체 패널티 개수
+        int penaltyCount = penaltyLogService.getPenaltyCount(user_id);
+
+        // 사용자가 가입한 group_id 가져오와 전체 assignCycle 개수 구하기
+        List<String> groupIds = getJoinedListByUserId(user_id);
+        int assignCycleCount = assignCycleService.getAssignCycleCountMultiple(groupIds);
+
+        // 전체 제출 회수 - 패널티 회수 = 0 이면 0% 반환
+        if (assignCycleCount - penaltyCount == 0) {
+            return 0;
+        } else {
+            return ((double) (assignCycleCount - penaltyCount) / assignCycleCount) * 100;
+        }
+    }
+
+    // 특정 스터디그룹의 평균 출석률 구하기
+    public StudyAttendanceResult getStudyAttendance(String user_id, String group_id){
+        StudyAttendanceResult studyAttendanceResult = new StudyAttendanceResult();
+        // 전체 패널티 개수
+        int penaltyCount = penaltyLogService.getPenaltyCount(user_id, group_id);
+        // 전체 총 개수 assignCycle
+        int assignCycleCount = assignCycleService.getAssignCycleCount(group_id);
+
+        double attendanceRate  = 0;
+
+        if (assignCycleCount - penaltyCount != 0) {
+            attendanceRate  = ((double)(assignCycleCount - penaltyCount) / assignCycleCount ) * 100 ;
+        }
+
+        studyAttendanceResult.setAttendanceRate(attendanceRate);
+        studyAttendanceResult.setPenaltyCount(penaltyCount);
+
+        return studyAttendanceResult;
+    }
+
+    // 사용자별 가입한 group_id list 가져오기
+    List<String> getJoinedListByUserId(String user_id) throws Exception {
+        List<String> joinedList = new ArrayList<>();
+        try{
+            joinedList = joinedgroupDao.getJoinedListByUserId(user_id);
+        } catch (Exception e){
+            throw new Exception("Error while fetching the joined list for user_id: " + user_id, e);
+        }
+        return joinedList;
     }
 }
