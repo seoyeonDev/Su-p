@@ -100,4 +100,15 @@ public class AssignCycleService {
 		}
 		return getAssignCycleCount;
 	}
+
+	// 사용자별 전체 스터디그룹의 총 출석 개수를 구하기
+	public int getAssignCycleCountByUserId(String user_id){
+		int getAssignCycleCount = 0;
+		try {
+			getAssignCycleCount = assignCycleDao.getAssignCycleCountByUserId(user_id);
+		} catch(Exception e){
+			throw new RuntimeException("Error fetching assign cycle count for group: " + user_id, e);
+		}
+		return getAssignCycleCount;
+	}
 }

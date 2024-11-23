@@ -136,8 +136,7 @@ public class JoinedgroupService {
         int penaltyCount = penaltyLogService.getPenaltyCount(user_id);
 
         // 사용자가 가입한 group_id 가져오와 전체 assignCycle 개수 구하기
-        List<String> groupIds = getJoinedListByUserId(user_id);
-        int assignCycleCount = assignCycleService.getAssignCycleCountMultiple(groupIds);
+        int assignCycleCount = assignCycleService.getAssignCycleCountByUserId(user_id);
 
         // 전체 제출 회수 - 패널티 회수 = 0 이면 0% 반환
         if (assignCycleCount - penaltyCount == 0) {
@@ -165,16 +164,5 @@ public class JoinedgroupService {
         studyAttendanceResult.setPenaltyCount(penaltyCount);
 
         return studyAttendanceResult;
-    }
-
-    // 사용자별 가입한 group_id list 가져오기
-    List<String> getJoinedListByUserId(String user_id) throws Exception {
-        List<String> joinedList = new ArrayList<>();
-        try{
-            joinedList = joinedgroupDao.getJoinedListByUserId(user_id);
-        } catch (Exception e){
-            throw new Exception("Error while fetching the joined list for user_id: " + user_id, e);
-        }
-        return joinedList;
     }
 }

@@ -47,4 +47,15 @@
 		WHERE 1=1
 			AND group_id = #{group_id}
 	</select>
+
+	<!-- 사용자별 전체 스터디그룹의 총 출석 개수를 구하기 -->
+	<select id="getAssignCycleCountByUserId" resultType="int">
+		SELECT COUNT(ac.group_id)
+		FROM sg_assignCycle ac
+		WHERE ac.group_id IN (
+			SELECT j.group_id
+			FROM joinedgroup j
+			WHERE j.user_id = #{user_id}
+		);
+	</select>
 </mapper>

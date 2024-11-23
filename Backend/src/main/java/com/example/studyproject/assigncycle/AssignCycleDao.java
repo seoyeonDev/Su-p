@@ -20,4 +20,7 @@ public interface AssignCycleDao {
 	// 사용자별 특정 스터디그룹의 총 출석 개수를 구하기
 	int getAssignCycleCount(String group_id);
 
+	// 사용자별 전체 스터디그룹의 총 출석 개수를 구하기
+	int getAssignCycleCountByUserId(String user_id);
+
 }

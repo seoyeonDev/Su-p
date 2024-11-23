@@ -48,7 +48,4 @@ public interface JoinedgroupDao {
 
     // 그룹 ID와 가입 상태에 따라 joinedgroup 목록을 조회합니다.
     ArrayList<JoinedUserInfo> selectJoinedListByGroupId(String group_id,  JoinStatus joinStatus);
-
-    // 사용자별 가입한 group_id list 가져오기
-    ArrayList<String> getJoinedListByUserId(String user_id);
 }
