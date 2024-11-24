@@ -79,18 +79,7 @@ public class AssignCycleService {
 		assignCycleDao.deleteAssignCycle(group_id);
 	}
 
-	// 모든 스터디그룹의 총 출석 개수를 구하기
-	public int getAssignCycleCountMultiple(List<String> groupIds){
-		int getAssignCycleCount = 0;
-		try {
-			getAssignCycleCount = assignCycleDao.getAssignCycleCountMultiple(groupIds);
-		} catch(Exception e){
-			throw new RuntimeException("Error fetching assign cycle count for multiple groups", e);
-		}
-		return getAssignCycleCount;
-	}
-
-	// 특정 스터디그룹의 총 출석 개수를 구하기
+	// 사용자별 특정 스터디그룹의 총 출석 개수를 구하기
 	public int getAssignCycleCount(String group_id){
 		int getAssignCycleCount = 0;
 		try {
