@@ -5,7 +5,10 @@
 
 <!-- namespace에 mapper가 생성되어 있는 패키지 경로를 적어준다. -->
 <mapper namespace="com.example.studyproject.studylogs.StudyLogsDao">
-	
+
+
+
+
 	<!-- 스터디로그 상세 조회 -->
 	<select id="selectStudyLogs" resultType="com.example.studyproject.studylogs.StudyLogs">
 		SELECT
@@ -76,7 +79,7 @@
         post_id = #{post_id}
     </update>
 
-    <!-- 스터디로그 리스트 -->
+    <!-- 스터디로그 전체 리스트 -->
     <select id = "selectList" resultType="com.example.studyproject.studylogs.StudyLogs">
         SELECT post_id
             , title
@@ -94,4 +97,49 @@
         FROM studylogs
         WHERE post_id LIKE CONCAT(#{group_id}, '%')
     </select>
+
+    <!--  그룹별, 사용자별 studylog 전체 목록  -->
+    <!--  TODO resulttype 수정 필요. assigncycle(회차) 있으면 좋을 것 같은데, 상의 필요 -->
+    <select id="selectStudyLogsListByGroup" resultType="com.example.studyproject.studylogs.StudyLogs">
+        SELECT A.POST_ID
+             , A.USER_ID
+             , A.GROUP_ID
+             , A.TITLE
+             , A.CONTENT
+             , A.CREATE_DATE
+             , A.UPDATE_DATE
+             , A.FILE_ID
+             , A.IMG_ID
+             , B.assigncycle
+        FROM STUDYLOGS A
+                 INNER JOIN sg_assigncycle B
+                            ON A.group_id = B.group_id
+                                AND A.create_date BETWEEN DATE(B.startdate) AND DATE(B.enddate)
+        WHERE (COALESCE(#{group_id},'')='' OR A.GROUP_ID = #{group_id})
+          AND (COALESCE(#{user_id},'')='' OR A.USER_ID = #{user_id})
+
+    </select>
+
+    <!--  스터디 메인 글 (LIMIT 5)  -->
+    <!--  TODO resulttype 수정 필요. assigncycle(회차) 있으면 좋을 것 같은데, 상의 필요 -->
+    <select id="studyMainListLimit5" resultType="com.example.studyproject.studylogs.StudyLogs">
+        SELECT A.POST_ID
+             , A.USER_ID
+             , A.GROUP_ID
+             , A.TITLE
+             , A.CONTENT
+             , A.CREATE_DATE
+             , A.UPDATE_DATE
+             , A.FILE_ID
+             , A.IMG_ID
+             , B.assigncycle
+        FROM STUDYLOGS A
+                 INNER JOIN sg_assigncycle B
+                            ON A.group_id = B.group_id
+                                AND A.create_date BETWEEN DATE(B.startdate) AND DATE(B.enddate)
+        WHERE A.GROUP_ID = #{group_id}
+        order by create_date desc
+        LIMIT 5
+    </select>
+
 </mapper>

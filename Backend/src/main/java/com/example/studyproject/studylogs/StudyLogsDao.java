@@ -25,4 +25,10 @@ public interface StudyLogsDao {
 
     // 스터디로그 아이디 검사
     Long getNextPostIdIfPrefixExists(String group_id);
+
+    // 그룹별, 사용자별 studylog 전체 목록
+    ArrayList<StudyLogs> selectStudyLogsListByGroup(String group_id, String user_id);
+
+    // 스터디 메인 글 LIMIT 5
+    ArrayList<StudyLogs> studyMainListLimit5(String group_id);
 }
