@@ -12,6 +12,7 @@ import MyStudy from "./pages/mystudy/MyStudy";
 import Test from "./pages/mystudy/Test";
 import MyStudyList from "./pages/mystudy/MyStudyList";
 import MyStudyHeader from "./pages/mystudy/MyStudyHeader"
+import MyStudyDetail from "./pages/mystudy/detail/MyStudyDetail"
 
 import MyPage from "./pages/mypage/MyPage";
 import Info from "./pages/mypage/Info";
@@ -63,11 +64,10 @@ function App() {
                 {/* 가입한 그룹 */}
                 <Route path="/joinedlist" element={<JoinedList/>}></Route>
                 <Route path="/Test" element={<Test/>}></Route>
+                <Route path="/MyStudyDetail" element={<MyStudyDetail/>}></Route>
 
                 {/*스터디 로그*/}
                 <Route path={"/createPost"} element={<CreatePost/>}></Route>
-
-
             </Routes>
         </BrowserRouter>
     );
