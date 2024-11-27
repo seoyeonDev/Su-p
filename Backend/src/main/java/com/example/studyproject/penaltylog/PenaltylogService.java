@@ -163,4 +163,25 @@ public class PenaltylogService {
 		return penaltylogInfoList;
 	}
 
+	// 사용자에 대한 전체 패널티 개수를 반환하는 메서드
+	public int getPenaltyCount(String user_id){
+		int penaltyCount = 0;
+		try{
+			penaltyCount = penaltyLogDao.getPenaltyCount(user_id, null);
+		} catch(Exception e) {
+			throw new RuntimeException("Error fetching penalty count for user: " + user_id, e);
+		}
+		return penaltyCount;
+	}
+
+	//사용자와 특정 스터디 그룹에 대한 총 패널티 개수
+	public int getPenaltyCount(String user_id, String group_id){
+		int penaltyCount = 0;
+		try{
+			penaltyCount = penaltyLogDao.getPenaltyCount(user_id, group_id);
+		} catch(Exception e) {
+			throw new RuntimeException("Error fetching penalty count for user: " + user_id + " and group: " + group_id, e);
+		}
+		return penaltyCount;
+	}
 }

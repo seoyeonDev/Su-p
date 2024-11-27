@@ -125,4 +125,5 @@
         AND j.joinstatus = #{joinStatus}
         ORDER BY nickname
     </select>
+
 </mapper>

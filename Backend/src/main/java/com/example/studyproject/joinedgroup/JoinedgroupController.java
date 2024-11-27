@@ -214,4 +214,54 @@ public class JoinedgroupController {
 
         return map;
     }
+
+    /**
+     * 전체 스터디의 평균 출석률 구하기
+     * @param user_id
+     * @return 출석율
+     */
+    @GetMapping("/overallAttendance")
+    public ResponseEntity<?> getOverallAttendance(String user_id){
+        try {
+            // 출석률 계산
+            double allAttendance = joinedgroupService.getAttendanceCalculation(user_id);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("attendance", allAttendance);
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 오류 발생 시 Map으로 반환
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "Error calculating attendance");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+    }
+
+    /**
+     * 특정 스터디의 평균 출석률
+     * @param user_id
+     * @param group_id
+     * @return 출석율 & 패널티 개수
+     */
+    @GetMapping("/individualStudyAttendance")
+    public ResponseEntity<?> getIndividualStudyAttendance(String user_id, String group_id){
+        try {
+            Map<String, Object> response = new HashMap<>();
+            // 특정 스터디의 출석률 계산
+            StudyAttendanceResult studyAttendanceResult = joinedgroupService.getStudyAttendance(user_id, group_id);
+            response.put("status", "success");
+            response.put("studyAttendanceResult", studyAttendanceResult);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 오류 발생 시 Map으로 반환
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "Error calculating attendance");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+    }
 }

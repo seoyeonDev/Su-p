@@ -3,7 +3,9 @@ package com.example.studyproject.assigncycle;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : AssginCycleService.java
@@ -75,5 +77,27 @@ public class AssignCycleService {
 	// 그룹 회차 정보 삭제 - 그룹 수정할 때
 	public void deleteAssignCycle(String group_id) {
 		assignCycleDao.deleteAssignCycle(group_id);
+	}
+
+	// 사용자별 특정 스터디그룹의 총 출석 개수를 구하기
+	public int getAssignCycleCount(String group_id){
+		int getAssignCycleCount = 0;
+		try {
+			getAssignCycleCount = assignCycleDao.getAssignCycleCount(group_id);
+		} catch(Exception e){
+			throw new RuntimeException("Error fetching assign cycle count for group: " + group_id, e);
+		}
+		return getAssignCycleCount;
+	}
+
+	// 사용자별 전체 스터디그룹의 총 출석 개수를 구하기
+	public int getAssignCycleCountByUserId(String user_id){
+		int getAssignCycleCount = 0;
+		try {
+			getAssignCycleCount = assignCycleDao.getAssignCycleCountByUserId(user_id);
+		} catch(Exception e){
+			throw new RuntimeException("Error fetching assign cycle count for group: " + user_id, e);
+		}
+		return getAssignCycleCount;
 	}
 }

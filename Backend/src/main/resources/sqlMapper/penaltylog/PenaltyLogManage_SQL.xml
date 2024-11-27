@@ -140,4 +140,14 @@
         </collection>
     </resultMap>
 
+    <!-- 사용자와 스터디 그룹에 대한 총 패널티 개수 -->
+    <select id="getPenaltyCount" resultType="int">
+        SELECT count(*)
+        FROM penaltylog
+        WHERE 1=1
+            AND user_id = #{user_id}
+            <if test="group_id != null">
+                AND group_id = #{group_id}
+            </if>
+    </select>
 </mapper>
