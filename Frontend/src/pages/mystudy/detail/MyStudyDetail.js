@@ -7,7 +7,7 @@ import Test from "../Test";
 import MyStudyDetailMyList from "./MyStudyDetailMyList";
 import MyStudyDetailGroupInfo from "./MyStudyDetailGroupInfo";
 
-const MyStudyDetail = () => {
+const MyStudyDetail = ({group_id, user_id}) => {
     const [selectedContent, setSelectedContent] = useState([]);
 
     // const getGroupInfo = async(group_id, user_id) => {
@@ -47,9 +47,9 @@ const MyStudyDetail = () => {
                 <MyStudyDetailHeader title="스터디명" onSelect={setSelectedContent}/>
 
 
-                <MyStudyDetailHome selectedContent={selectedContent}/>
-                <MyStudyDetailMyList selectedContent={selectedContent}/>
-                <MyStudyDetailGroupInfo selectedContent={selectedContent}/>
+                <MyStudyDetailHome selectedContent={selectedContent} group_id={group_id} user_id={user_id}/>
+                <MyStudyDetailGroupInfo selectedContent={selectedContent}  group_id={group_id} user_id={user_id}/>
+                <MyStudyDetailMyList selectedContent={selectedContent} />
             </div>
         </div>
 
