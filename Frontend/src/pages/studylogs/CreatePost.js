@@ -109,7 +109,7 @@ function CreatePost() {
     
     // studylog 정보 가져오는 useEffect
     useEffect(() => {
-        if (groupId && postId) {
+        if (postId) {
             axios.get(`http://localhost:3000/studylogs/studylogsdetail/${postId}`)
                 .then((response) => {
                     setIsEditMode(true);
