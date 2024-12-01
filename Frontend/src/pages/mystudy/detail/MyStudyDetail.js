@@ -18,6 +18,7 @@ const MyStudyDetail = ({group_id, user_id}) => {
     const [selectedPostId, setSelectedPostId] = useState('');
     const [selectAuthorId, setSelectAuthorId] = useState('');
 
+
     // 게시글 상세보기 클릭 시 호출되는 함수
     const handlePostSelect = (postId, authorId, content) => {
         setSelectedPostId(postId); 
@@ -87,12 +88,10 @@ const MyStudyDetail = ({group_id, user_id}) => {
                 <h1>나의 스터디</h1>
                 <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange}/>
 
-
-                <MyStudyDetailHome selectedContent={selectedContent}/>
+                <MyStudyDetailHome selectedContent={selectedContent} group_id={group_id} user_id={user_id}/>
                 <MyStudyDetailMyList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsMyList')} />
-                <MyStudyDetailGroupInfo selectedContent={selectedContent}/>
+                <MyStudyDetailGroupInfo selectedContent={selectedContent}  group_id={group_id} user_id={user_id}/>
                 <MyStudyDetailAllList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsAllList')} />
-               
 
                 {selectedPostId && (
                     <div>
@@ -100,6 +99,7 @@ const MyStudyDetail = ({group_id, user_id}) => {
                         <BackButton selectedContent={selectedContent} handleContentChange={handleContentChange} />
                     </div>
                 )}
+
             </div>
         </div>
 
