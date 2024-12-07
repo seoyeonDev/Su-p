@@ -134,6 +134,7 @@ public class JoinedgroupService {
     public double getAttendanceCalculation(String user_id) throws Exception {
         // 전체 패널티 개수
         int penaltyCount = penaltyLogService.getPenaltyCount(user_id);
+        double result;
 
         // 사용자가 가입한 group_id 가져오와 전체 assignCycle 개수 구하기
         int assignCycleCount = assignCycleService.getAssignCycleCountByUserId(user_id);
@@ -142,7 +143,8 @@ public class JoinedgroupService {
         if (assignCycleCount - penaltyCount == 0) {
             return 0;
         } else {
-            return ((double) (assignCycleCount - penaltyCount) / assignCycleCount) * 100;
+            result = ((double) (assignCycleCount - penaltyCount) / assignCycleCount) * 100;
+            return Math.round(result);
         }
     }
 
