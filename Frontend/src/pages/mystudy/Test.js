@@ -1,36 +1,48 @@
 // App.js
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from './MyStudyHeader';
 import Content from './MyStudyList';
 import axios from "axios";
+import ApexCharts from 'apexcharts';
+import Chart from 'react-apexcharts';
 import MyStudyHeader from "./MyStudyHeader";
 import MyStudyList from "./MyStudyList";
+
 
 const Test = () => {
     // const [selectedContent, setContents] = useState([]);
     const [selectedContent, setSelectedContent] = useState(['전체 스터디']);
     const [msg, setMsg] = useState('');
     const [allAttendance, setAllAttendace] = useState(0);
+    const [showCharts, setShowCharts] = useState(true);
+    const [chartOptions, setChartOptions] = useState({
+        series: [],
+        chart: {
+            type: 'donut',
+        },
+        labels: ['결석','출석']
+    });
 
-    const getJoinedList = () => {
-        console.log('selectJoinedList')
-        axios.get('http://localhost:3000/joinedgroup/joinedList')
-            .then (response => {
-                if (response.status === 200){
-                    setMsg(response.data.msg);
-                    alert('목록을 가져왔습니다 !');
-                    setSelectedContent((response.data));    // 응답 저장
+    // windowonload
+    useEffect(() => {
+        handleSelect('전체 스터디','','','');
+    },[]);
 
-                }else{
-                    setMsg (response.data);
-                    alert(response.data);
-                }
-            })
-    }
-
-    // const [joinedStatus,setJoinedStatus] = useState();
-    // const [role,setRole] = useState();
-    // const [status,setStatus] = useState();
+    // const getJoinedList = () => {
+    //     console.log('selectJoinedList')
+    //     axios.get('http://localhost:3000/joinedgroup/joinedList')
+    //         .then (response => {
+    //             if (response.status === 200){
+    //                 setMsg(response.data.msg);
+    //                 alert('목록을 가져왔습니다 !');
+    //                 setSelectedContent((response.data));    // 응답 저장
+    //
+    //             }else{
+    //                 setMsg (response.data);
+    //                 alert(response.data);
+    //             }
+    //         })
+    // }
 
 
     // 헤더 조건별 목록 조회
@@ -47,7 +59,10 @@ const Test = () => {
             setSelectedContent(response.data.list);
             console.log(response.data)
             if(buttonName === '전체 스터디'){
+                setShowCharts(true);
                 await getAllAttendance();
+            } else {
+                setShowCharts(false);
             }
         } catch (error) {
             console.error('Error fetching list:', error);
@@ -67,6 +82,10 @@ const Test = () => {
                 if (response.status === 200){
                     setAllAttendace(response.data.attendance);
                     console.log("attendance " + allAttendance);
+                    setChartOptions(prevOptions => ({
+                        ...prevOptions,
+                        series: [100 - response.data.attendance, response.data.attendance]
+                    }));
                 }
             })
     }
@@ -74,12 +93,14 @@ const Test = () => {
 
 
     return (
-        // <div>
-        //     <Header title="나의 스터디" onSelect={setSelectedContent} />
-        //     <Content selectedContent={selectedContent} />
-        // </div>
         <div>
             <MyStudyHeader title = "나의 스터디" onSelect={handleSelect} />
+            {showCharts.valueOf(true)&& (
+                <div id = "AllAttendance" className="apex-charts">
+                    <Chart options={chartOptions} series={chartOptions.series} type="donut" height={350} />
+                </div>
+            )}
+
             <MyStudyList selectedContent={selectedContent}/>
         </div>
     );
