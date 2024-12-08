@@ -156,13 +156,13 @@ public class JoinedgroupService {
         // 전체 총 개수 assignCycle
         int assignCycleCount = assignCycleService.getAssignCycleCount(group_id);
 
-        double attendanceRate  = 0;
+        double attendance  = 0;
 
         if (assignCycleCount - penaltyCount != 0) {
-            attendanceRate  = Math.round(((double)(assignCycleCount - penaltyCount) / assignCycleCount ) * 100) ;
+            attendance  = Math.round(((double)(assignCycleCount - penaltyCount) / assignCycleCount ) * 100) ;
         }
 
-        studyAttendanceResult.setAttendanceRate(attendanceRate);
+        studyAttendanceResult.setAttendance(attendance);
         studyAttendanceResult.setPenaltyCount(penaltyCount);
 
         return studyAttendanceResult;

@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import Header from './MyStudyHeader';
 import Content from './MyStudyList';
 import axios from "axios";
-import ApexCharts from 'apexcharts';
 import Chart from 'react-apexcharts';
 import MyStudyHeader from "./MyStudyHeader";
 import MyStudyList from "./MyStudyList";
@@ -96,7 +95,7 @@ const Test = () => {
         <div>
             <MyStudyHeader title = "나의 스터디" onSelect={handleSelect} />
             {showCharts.valueOf(true)&& (
-                <div id = "AllAttendance" className="apex-charts">
+                <div id = "Attendance" className="apex-charts">
                     <Chart options={chartOptions} series={chartOptions.series} type="donut" height={350} />
                 </div>
             )}
