@@ -159,7 +159,7 @@ public class JoinedgroupService {
         double attendanceRate  = 0;
 
         if (assignCycleCount - penaltyCount != 0) {
-            attendanceRate  = ((double)(assignCycleCount - penaltyCount) / assignCycleCount ) * 100 ;
+            attendanceRate  = Math.round(((double)(assignCycleCount - penaltyCount) / assignCycleCount ) * 100) ;
         }
 
         studyAttendanceResult.setAttendanceRate(attendanceRate);
