@@ -13,10 +13,11 @@ import MyStudyDetailAllList from './MyStudyDetailAllList';
 import PostDetail from '../../studylogs/PostDetail';
 
 const MyStudyDetail = ({group_id, user_id}) => {
-    const [selectedContent, setSelectedContent] = useState('');
+    const [selectedContent, setSelectedContent] = useState('HOME');
 
     const [selectedPostId, setSelectedPostId] = useState('');
     const [selectAuthorId, setSelectAuthorId] = useState('');
+
 
 
     // 게시글 상세보기 클릭 시 호출되는 함수
@@ -80,6 +81,9 @@ const MyStudyDetail = ({group_id, user_id}) => {
     //         console.log('ERROR MyStudyDetail : ', error);
     //     }
     // }
+
+
+
 
 
     return (
