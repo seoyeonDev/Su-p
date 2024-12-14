@@ -1,10 +1,15 @@
 // Content.js
 import React from 'react';
-import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const MyStudyList = ({ selectedContent }) => {
+    const navigate = useNavigate();
 
+    const user_id = localStorage.getItem("user_id");
 
+    const moveMyStudyDetail = (group_id) => {
+        navigate(`/MyStudyDetail/${group_id}/${user_id}`);
+    };
 
     return (
         // <div className = 'common-content-container'>
@@ -20,7 +25,10 @@ const MyStudyList = ({ selectedContent }) => {
             {selectedContent.map((item) => (
                 // console.log(study)
                 <div key={item.group_id} className='study-card'>
-                    <h4>{item.title}</h4>
+                    <button onClick={() => moveMyStudyDetail(item.group_id)}>
+                       <h4>{item.title}</h4>
+                    </button>
+                        
                     <p>{item.user_id}</p>
                     <p>{item.role_nm}</p>
 

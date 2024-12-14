@@ -9,7 +9,7 @@ import MemberChangePwd from "./pages/member/ChangePwd";
 import AddPost from "./pages/mystudy/CreatePost"
 
 import MyStudy from "./pages/mystudy/MyStudy";
-import Test from "./pages/mystudy/Test";
+import StudyList from "./pages/mystudy/Test";
 import MyStudyList from "./pages/mystudy/MyStudyList";
 import MyStudyHeader from "./pages/mystudy/MyStudyHeader"
 import MyStudyDetail from "./pages/mystudy/detail/MyStudyDetail"
@@ -24,7 +24,7 @@ import JoinedList from "./pages/joinedgroup/JoinedList";
 
 import FindId from "./pages/member/FindId";
 import FindPwd from "./pages/member/FindPwd";
-import StudyList from "./pages/studygroup/StudyList";
+// import StudyList from "./pages/studygroup/StudyList";
 import CreateStudygroup from "./pages/studygroup/CreateStudygroup";
 import UpdateStudygroup from "./pages/studygroup/UpdateStudygroup";
 import StudygroupDetail from "./pages/studygroup/StudygroupDetail";
@@ -56,15 +56,15 @@ function App() {
                 <Route path="/memberChangePwd" element={<MemberChangePwd/>}></Route>
 
                 {/* 스터디그룹 */}
-                <Route path="/studylist" element={<StudyList/>}></Route>
+                {/* <Route path="/studylist" element={<StudyList/>}></Route> */}
                 <Route path="/createStudygroup" element={<CreateStudygroup/>}></Route>
                 <Route path="/updateStudygroup/:groupId" element={<UpdateStudygroup/>}></Route>
                 <Route path="/studygroupDetail/:groupId" element={<StudygroupDetail/>}></Route>
 
                 {/* 가입한 그룹 */}
                 <Route path="/joinedlist" element={<JoinedList/>}></Route>
-                <Route path="/Test" element={<Test/>}></Route>
-                <Route path="/MyStudyDetail" element={<MyStudyDetail/>}></Route>
+                <Route path="/studyList" element={<StudyList/>}></Route>
+                <Route path="/MyStudyDetail/:group_id/:user_id" element={<MyStudyDetail/>}></Route>
 
                 {/*스터디 로그*/}
                 <Route path={"/createPost"} element={<CreatePost/>}></Route>

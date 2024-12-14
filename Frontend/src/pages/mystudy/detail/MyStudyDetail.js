@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Routes, Route  } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import { Routes, Route, useParams  } from 'react-router-dom';
 import axios from "axios";
 import {Link} from 'react-router-dom'; 
 
@@ -12,12 +12,12 @@ import MyStudyDetailGroupInfo from "./MyStudyDetailGroupInfo";
 import MyStudyDetailAllList from './MyStudyDetailAllList';
 import PostDetail from '../../studylogs/PostDetail';
 
-const MyStudyDetail = ({group_id, user_id}) => {
+const MyStudyDetail = () => {
     const [selectedContent, setSelectedContent] = useState('');
 
     const [selectedPostId, setSelectedPostId] = useState('');
     const [selectAuthorId, setSelectAuthorId] = useState('');
-
+    const { group_id, user_id } = useParams();
 
     // 게시글 상세보기 클릭 시 호출되는 함수
     const handlePostSelect = (postId, authorId, content) => {
@@ -35,7 +35,7 @@ const MyStudyDetail = ({group_id, user_id}) => {
     const BackButton = ({selectedContent, handleContentChange}) => {
         if (selectedContent === 'StudyLogsAllList') {
             return (
-                <Link to="/MyStudyDetail">
+                <Link to={`/MyStudyDetail/${group_id}/${user_id}`}>
                     <button onClick={() => handleContentChange('전체글 보기')}>뒤로가기</button>
                 </Link>
             );
@@ -43,7 +43,7 @@ const MyStudyDetail = ({group_id, user_id}) => {
     
         if (selectedContent === 'StudyLogsMyList') {
             return (
-                <Link to="/MyStudyDetail">
+                <Link to={`/MyStudyDetail/${group_id}/${user_id}`}>
                     <button onClick={() => handleContentChange('내 글 보기')}>뒤로가기</button>
                 </Link>
             );
