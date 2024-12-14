@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import { Routes, Route  } from 'react-router-dom';
+
+import React, {useEffect, useState} from 'react';
+import { Routes, Route, useParams  } from 'react-router-dom';
 import axios from "axios";
 import {Link} from 'react-router-dom'; 
 
@@ -14,13 +15,15 @@ import PostDetail from '../../studylogs/PostDetail';
 import MyStudyAdminBeforeOpen from './MyStudyAdminBeforeOpen';
 import MyStudyAdminAfterOpen from './MyStudyAdminAfterOpen';
 
-const MyStudyDetail = ({group_id, user_id}) => {
-
+const MyStudyDetail = () => {
     const [selectedContent, setSelectedContent] = useState('HOME');
 
     // authorId = 글쓴이 id, login_id와 비교하기 위해 넣음
     const [selectedPostId, setSelectedPostId] = useState('');
     const [selectAuthorId, setSelectAuthorId] = useState('');
+
+    const { group_id, user_id } = useParams();
+
 
     const [groupInfo, setGroupInfo] = useState(null);           // studygroup 정보
     const [currentDate, setCurrentDate] = useState(new Date()); // 현재 날짜 (startDate과 비교)
@@ -42,7 +45,7 @@ const MyStudyDetail = ({group_id, user_id}) => {
     const BackButton = ({selectedContent, handleContentChange}) => {
         if (selectedContent === 'StudyLogsAllList') {
             return (
-                <Link to="/MyStudyDetail">
+                <Link to={`/MyStudyDetail/${group_id}/${user_id}`}>
                     <button onClick={() => handleContentChange('전체글 보기')}>뒤로가기</button>
                 </Link>
             );
@@ -50,7 +53,7 @@ const MyStudyDetail = ({group_id, user_id}) => {
     
         if (selectedContent === 'StudyLogsMyList') {
             return (
-                <Link to="/MyStudyDetail">
+                <Link to={`/MyStudyDetail/${group_id}/${user_id}`}>
                     <button onClick={() => handleContentChange('내 글 보기')}>뒤로가기</button>
                 </Link>
             );
