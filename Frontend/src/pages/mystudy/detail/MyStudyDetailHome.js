@@ -21,21 +21,26 @@ const MyStudyDetailHome = ({selectedContent, group_id, user_id}) => {
     });
 
     useEffect(() => {
-        const fetchGroupInfo = async () => {
-            await getGroupInfo(group_id,user_id);
-            await getGroupLog5(group_id);
-            await getGroupAttendance(group_id);
-        };
-        fetchGroupInfo().then(r => {console.log('성공 @@')});
-    }, [group_id, user_id]);
+        if(selectedContent === 'HOME'){
+            const fetchGroupInfo = async () => {
+                await getGroupInfo(group_id,user_id);
+                await getGroupLog5(group_id);
+                await getGroupAttendance(group_id);
+            };
+            fetchGroupInfo().then(r => {console.log('성공 @@')});
+        }
+        
+    }, [group_id, user_id, selectedContent]);
+
 
 
     const getGroupInfo = async(group_id, user_id) => {
         console.log('getGroupInfo');
         axios.get('http://localhost:8080/studygroup/studyDetail',{
             params : {
-                group_id : '2411020001', // TODO 넘겨주는 group_id로 변경하기
-                user_id : localStorage.getItem("user_id")   // 그룹장일 경우 다른 헤더 반환
+                group_id : group_id,
+                user_id : user_id   // 그룹장일 경우 다른 헤더 반환
+
             }
         }) // 그룹 정보
             .then (response => {
@@ -60,7 +65,7 @@ const MyStudyDetailHome = ({selectedContent, group_id, user_id}) => {
         console.log('getGroupLog5')
         axios.get('http://localhost:8080/studylogs/getMainLog', {
             params : {
-                group_id : '2411020001'
+                group_id : group_id
             }
         })
             .then (response => {

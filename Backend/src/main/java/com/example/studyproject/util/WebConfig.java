@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080", "http://localhost:3000","chrome-extension://coohjcphdfgbiolnekdpbcijmhambjff")
                 // 백엔드, 프론트엔드, 크롬 확장프로그램
-                .allowedMethods("GET","POST","DELETE")
+                .allowedMethods("GET","POST","DELETE","PUT")
                 .allowCredentials(true)
                 .maxAge(3000);
 

@@ -128,15 +128,18 @@ public class JoinedgroupController {
 
     /**
      * 그룹 상태 변경
-     * @param vo - joinedgroup의 vo
-     * @param status - 수정할 값
+     * @param user_id
+     * @param group_id
+     * @param status
+     * @return
      */
-    @PutMapping("/updateStatus/{status}")
-    public ResponseEntity<Map<String, Object>> updateJoinStatus(@RequestBody Joinedgroup vo, @PathVariable("status") JoinStatus status){
+    @PutMapping("/updateStatus")
+    public ResponseEntity<Map<String, Object>> updateJoinStatus(String user_id, String group_id, JoinStatus status){
         Map map = new HashMap();
-        LOGGER.info("================ joinedgroup join");
-        Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(vo.getUser_id(), vo.getGroup_id());
-        // 나중 : status가 code 테이블에 있는지 검사
+        LOGGER.info("================ joinedgroup updateStatus");
+
+        Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(user_id, group_id);
+        // 나중 : status가 code 테이블에 있는지 검사 TODO.
         boolean success = false;
 
         // 값이 있을 때에만 수정 가능
@@ -184,17 +187,17 @@ public class JoinedgroupController {
      * @return
      */
     @GetMapping("/groupOwnerJoinedList")
-    public Map selectGroupOwnerJoinedList(HttpServletRequest request, String group_id) {
+    public Map selectGroupOwnerJoinedList(HttpServletRequest request, String group_id, String user_id) {
         HttpSession session = request.getSession();
         Map map = new HashMap();
         if (session == null) {
             return null;
         }
-        String loginId = (String) session.getAttribute("loginId");
+
         // 1. userId가 groupId랑 같은지 비교
         StudyGroup studyGroup= studyGroupService.selectStudyGroup(group_id);
 
-        if(studyGroup == null || !loginId.equals(studyGroup.getLeader_id())){
+        if(studyGroup == null || !user_id.equals(studyGroup.getLeader_id())){
             return map;  // 그룹 정보가 없거나, 로그인 ID가 그룹장과 일치하지 않으면 빈 맵 반환
         }
 
@@ -207,7 +210,7 @@ public class JoinedgroupController {
 
             map.put("joinRequestList", joinRequestList);
             map.put("joinApprovedList", joinApprovedList);
-        } else if(studyGroup.getStatus().equals(IN_PROGRESS)){ // 2-2. 모집중이라면
+        } else if(studyGroup.getStatus().equals(IN_PROGRESS)){ // 2-2. 오픈 후라면
             List<PenaltylogFetcher> penaltylogInfoList = penaltylogService.getPanaltylogByGroupIdAndUserId(group_id);
             map.put("penaltylogInfoList", penaltylogInfoList);
         }
