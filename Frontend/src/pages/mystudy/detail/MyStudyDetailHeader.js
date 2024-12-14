@@ -1,16 +1,12 @@
 // Header.js
 import React, {useState} from 'react';
 
-const MyStudyDetailHeader = ({title, onSelect}) => {
+const MyStudyDetailHeader = ({title, onSelect, isAdmin}) => {
 
     const [activeButton, setActiveButton] = useState('');
     const handleButtonClick = (buttonName) => {
-        // onSelect('select');
         setActiveButton(buttonName);
-        console.log(buttonName);
-
         onSelect(buttonName)
-
     };
 
     return (
@@ -36,6 +32,13 @@ const MyStudyDetailHeader = ({title, onSelect}) => {
             <button
                 className={`tab-button ${activeButton === '나의 출석' ? 'active' : ''}`}
                 onClick={() => handleButtonClick('나의 출석')}>나의 출석</button>
+            {isAdmin && (
+                <button
+                    className={`tab-button ${activeButton === '스터디 관리' ? 'active' : ''}`}
+                    onClick={() => handleButtonClick('스터디 관리')}>
+                    스터디 관리
+                </button>
+            )}
 
         </header>
     );
