@@ -8,19 +8,21 @@ const MyStudyDetailGroupInfo = ({selectedContent, group_id, user_id}) => {
     const [studydesc, setStudydesc] = useState(['']);   // 스터디 desc
 
     useEffect(() => {
-        const fetchGroupInfo = async () => {
-            await getGroupInfo(group_id,user_id);
-        };
-        fetchGroupInfo().then(r => {console.log('성공 @@')});
-    }, [group_id, user_id]);
+        if(selectedContent === '소개글 보기'){
+            const fetchGroupInfo = async () => {
+                await getGroupInfo(group_id,user_id);
+            };
+            fetchGroupInfo().then(r => {console.log('성공 @@')});
+        }
+    }, [group_id, user_id, selectedContent]);
 
 
     const getGroupInfo = async(group_id, user_id) => {
         console.log('getGroupInfo');
         axios.get('http://localhost:8080/studygroup/studyDetail',{
             params : {
-                group_id : '2411020001',
-                user_id : 'sylee'   // 그룹장일 경우 다른 헤더 반환
+                group_id : group_id,
+                user_id : user_id   // 그룹장일 경우 다른 헤더 반환
             }
         }) // 그룹 정보
             .then (response => {
@@ -38,7 +40,7 @@ const MyStudyDetailGroupInfo = ({selectedContent, group_id, user_id}) => {
             })
 
     }
-
+    
 
     return (
         <div className={'common-content'}>
