@@ -76,7 +76,6 @@ const StudyList = () => {
                     최신순
                 </button>
                 <div><Link to={"/createStudygroup"}>글쓰기</Link><br /></div>
-                <div><Link to={"/createPost?groupId=2410290001&postId=241029000100001"}>studylog 글쓰기</Link></div>
                 <div className='study-card-container'>
                     {studyItems.length > 0 ? (
                         studyItems.map(item => (
