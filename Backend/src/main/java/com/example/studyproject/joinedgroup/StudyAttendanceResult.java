@@ -9,5 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 public class StudyAttendanceResult {
     private int penaltyCount;       // 패널티 개수
-    private double attendanceRate;  // 출석률
+    private double attendance;  // 출석률
 }
