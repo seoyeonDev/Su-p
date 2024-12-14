@@ -15,8 +15,8 @@ import MyStudyAdminBeforeOpen from './MyStudyAdminBeforeOpen';
 import MyStudyAdminAfterOpen from './MyStudyAdminAfterOpen';
 
 const MyStudyDetail = ({group_id, user_id}) => {
-    
-    const [selectedContent, setSelectedContent] = useState('');
+
+    const [selectedContent, setSelectedContent] = useState('HOME');
 
     // authorId = 글쓴이 id, login_id와 비교하기 위해 넣음
     const [selectedPostId, setSelectedPostId] = useState('');
@@ -24,6 +24,7 @@ const MyStudyDetail = ({group_id, user_id}) => {
 
     const [groupInfo, setGroupInfo] = useState(null);           // studygroup 정보
     const [currentDate, setCurrentDate] = useState(new Date()); // 현재 날짜 (startDate과 비교)
+
 
     // 게시글 상세보기 클릭 시 호출되는 함수
     const handlePostSelect = (postId, authorId, content) => {
@@ -89,6 +90,9 @@ const MyStudyDetail = ({group_id, user_id}) => {
         }
         return false;
     };
+
+
+
 
     return (
         <div className={'common-content-container'}>
