@@ -9,7 +9,6 @@ import MemberChangePwd from "./pages/member/ChangePwd";
 import AddPost from "./pages/mystudy/CreatePost"
 
 import MyStudy from "./pages/mystudy/MyStudy";
-import StudyList from "./pages/mystudy/Test";
 import MyStudyList from "./pages/mystudy/MyStudyList";
 import MyStudyHeader from "./pages/mystudy/MyStudyHeader"
 import MyStudyDetail from "./pages/mystudy/detail/MyStudyDetail"
@@ -24,7 +23,7 @@ import JoinedList from "./pages/joinedgroup/JoinedList";
 
 import FindId from "./pages/member/FindId";
 import FindPwd from "./pages/member/FindPwd";
-// import StudyList from "./pages/studygroup/StudyList";
+import StudyList from "./pages/studygroup/StudyList";
 import CreateStudygroup from "./pages/studygroup/CreateStudygroup";
 import UpdateStudygroup from "./pages/studygroup/UpdateStudygroup";
 import StudygroupDetail from "./pages/studygroup/StudygroupDetail";

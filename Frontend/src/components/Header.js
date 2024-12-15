@@ -85,7 +85,7 @@ function Header() {
 
           {userId ? (
             <>
-              <li className="header-list"><a href="/studyList">나의스터디</a></li>
+              <li className="header-list"><a href="/mystudy">나의스터디</a></li>
               <li className="header-list"><a href="/mypage">마이페이지</a></li>
               <li className="header-list"><div className="logoutBtn" onClick={handleLogout}>로그아웃</div></li>
 
