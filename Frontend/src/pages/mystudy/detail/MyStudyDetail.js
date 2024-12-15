@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom';
 import MyStudyDetailHeader from "./MyStudyDetailHeader";
 import myStudyDetailHome from "./MyStudyDetailHome";
 import MyStudyDetailHome from "./MyStudyDetailHome";
-import Test from "../Test";
+import Test from "../MyStudy";
 import MyStudyDetailMyList from "./MyStudyDetailMyList";
 import MyStudyDetailGroupInfo from "./MyStudyDetailGroupInfo";
 import MyStudyDetailAllList from './MyStudyDetailAllList';
