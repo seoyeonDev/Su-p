@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom'; 
 import { useNavigate } from 'react-router-dom';
+import '../../../styles/studygroup/MyStudy.css';
 
 const MyStudyDetailHeader = ({title, onSelect, isAdmin, group_id}) => {
     const navigate = useNavigate();
