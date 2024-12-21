@@ -10,7 +10,7 @@ const MyStudyAdminBeforeOpen = ({ selectedContent, group_id }) => {
         REJECTED: "PERM30",
     };
 
-    const getStudyGroupJoinList = async (group_id) => {
+    const getStudyGroupJoinList = async () => {
         try {
             const user_id = localStorage.getItem('user_id');
 
@@ -22,6 +22,10 @@ const MyStudyAdminBeforeOpen = ({ selectedContent, group_id }) => {
             });
 
             if (response.status === 200) {
+                console.log(response.data);
+                console.log(group_id);
+                console.log(user_id);
+                console.log(selectedContent);
                 setJoinApprovedList(response.data.joinApprovedList);
                 setJoinRequestList(response.data.joinRequestList);
             }

@@ -1,13 +1,11 @@
 
 import React, {useEffect, useState} from 'react';
-import { Routes, Route, useParams  } from 'react-router-dom';
+import { useParams  } from 'react-router-dom';
 import axios from "axios";
 import {Link} from 'react-router-dom'; 
 
 import MyStudyDetailHeader from "./MyStudyDetailHeader";
-import myStudyDetailHome from "./MyStudyDetailHome";
 import MyStudyDetailHome from "./MyStudyDetailHome";
-import Test from "../MyStudy";
 import MyStudyDetailMyList from "./MyStudyDetailMyList";
 import MyStudyDetailGroupInfo from "./MyStudyDetailGroupInfo";
 import MyStudyDetailAllList from './MyStudyDetailAllList';
@@ -72,6 +70,7 @@ const MyStudyDetail = () => {
             });
 
             if(response.status === 200){
+                console.log(response.data);
                 setGroupInfo(response.data.vo);
             }
 
@@ -82,7 +81,7 @@ const MyStudyDetail = () => {
 
     useEffect(() => {
         getStudygroupInfo(group_id);
-    }, [group_id, user_id]);
+    }, [group_id]);
 
     // 날짜 비교 함수
     const isBeforeStartDate = () => {
@@ -101,7 +100,7 @@ const MyStudyDetail = () => {
         <div className={'common-content-container'}>
             <div className={'common-content'}>
                 <h1>나의 스터디</h1>
-                <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={group_id === user_id}/>
+                <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={groupInfo ? groupInfo.leader_id === user_id : false}/>
 
                 <MyStudyDetailHome selectedContent={selectedContent} group_id={group_id} user_id={user_id}/>
                 <MyStudyDetailMyList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsMyList')} />
@@ -114,7 +113,7 @@ const MyStudyDetail = () => {
                         <BackButton selectedContent={selectedContent} handleContentChange={handleContentChange} />
                     </div>
                 )}
-
+                
                 {/* 날짜 비교 후 페이지 변경 */}
                 {isBeforeStartDate() ? (
                     <MyStudyAdminBeforeOpen selectedContent={selectedContent}  group_id={group_id} />

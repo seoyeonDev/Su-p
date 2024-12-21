@@ -106,21 +106,22 @@
     <!-- penaltylog.xml -->
     <select id="selectPenaltylogWithJoinedgroup" resultMap="penaltylogFetcherResultMap">
         SELECT
-            p.user_id,
-            p.group_id,
+            m.user_id,
+            j.group_id,
             p.logcontent,
             p.penalty_round,
             j.submission_cnt,
             m.name,
             m.nickname,
             m.profile_img
-        FROM penaltylog p
-        INNER JOIN joinedgroup j
-            ON p.user_id = j.user_id
-            AND p.group_id = j.group_id
-        INNER JOIN member m
+        FROM member m
+        LEFT JOIN penaltylog p
             ON p.user_id = m.user_id
-        WHERE p.group_id = #{group_id}
+            AND p.group_id = #{group_id}
+        INNER JOIN joinedgroup j
+            ON j.user_id = m.user_id
+            AND j.group_id = #{group_id}
+            AND j.joinstatus = 'PERM20'
         ORDER BY m.nickname
     </select>
 
