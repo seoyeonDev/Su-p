@@ -100,4 +100,13 @@ public class AssignCycleService {
 		}
 		return getAssignCycleCount;
 	}
+
+	/* 나의 출석 조회
+		MyStudyDetail > 나의 출석
+	 */
+	public List<Map<String,Object>> getDetailGroupAttendance(String user_id, String group_id){
+		return assignCycleDao.getDetailGroupAttendance(user_id, group_id);
+
+	}
+
 }

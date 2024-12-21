@@ -14,6 +14,7 @@ import MyStudyDetailAllList from './MyStudyDetailAllList';
 import PostDetail from '../../studylogs/PostDetail';
 import MyStudyAdminBeforeOpen from './MyStudyAdminBeforeOpen';
 import MyStudyAdminAfterOpen from './MyStudyAdminAfterOpen';
+import MyStudyDetailMyAttendance from "./MyStudyDetailMyAttendance";
 
 const MyStudyDetail = () => {
     const [selectedContent, setSelectedContent] = useState('HOME');
@@ -107,6 +108,8 @@ const MyStudyDetail = () => {
                 <MyStudyDetailMyList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsMyList')} />
                 <MyStudyDetailGroupInfo selectedContent={selectedContent}  group_id={group_id} user_id={user_id}/>
                 <MyStudyDetailAllList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsAllList')} />
+
+                <MyStudyDetailMyAttendance selectedContent={selectedContent} group_id={group_id} user_id={user_id} groupInfo={groupInfo}/>
 
                 {selectedPostId && (
                     <div>
