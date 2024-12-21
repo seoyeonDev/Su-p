@@ -1,5 +1,6 @@
 package com.example.studyproject.joinedgroup;
 
+import com.example.studyproject.assigncycle.AssignCycleService;
 import com.example.studyproject.enums.JoinStatus;
 import com.example.studyproject.member.MemberService;
 import com.example.studyproject.member.Member;
@@ -56,6 +57,9 @@ public class JoinedgroupController {
 
     @Autowired
     private PenaltylogService penaltylogService;
+
+    @Autowired
+    private AssignCycleService assignCycleService;
 
     // log4j2 로그 찍기
     private static final Logger LOGGER = LogManager.getLogger(JoinedgroupController.class);
@@ -266,5 +270,10 @@ public class JoinedgroupController {
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
+    }
+
+    @GetMapping("/detailGroupAttendance")
+    public List<Map<String,Object>> getDetailGroupAttendance (String user_id, String group_id){
+        return assignCycleService.getDetailGroupAttendance(user_id, group_id);
     }
 }
