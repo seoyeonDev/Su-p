@@ -1,0 +1,43 @@
+li {
+    list-style: none;
+}
+
+.penalty-container {
+    position: relative;
+}
+
+.button-list-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 요소들 간의 간격 */
+}
+
+.hidden-list {
+    color: black;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #F3F3F3;
+    border: 1px solid #F3F3F3;
+    border-radius: 15px;
+    padding: 20px;
+    z-index: 100;
+}
+
+.hover-button:hover+.hidden-list {
+    display: block;
+}
+
+.hover-button {
+    background-color: #FF5555;
+    color : white;
+    padding : 5px 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+.hover-button:active {
+    background-color: #CC4444;
+}
