@@ -73,6 +73,7 @@ const MyStudyDetail = () => {
 
             if(response.status === 200){
                 setGroupInfo(response.data.vo);
+                console.log(groupInfo+ "detailinfo")
             }
 
         } catch (error) {
@@ -86,7 +87,6 @@ const MyStudyDetail = () => {
 
     // 날짜 비교 함수
     const isBeforeStartDate = () => {
-        
         if (groupInfo && groupInfo.startdate) {
             const startDate = new Date(groupInfo.startdate);
             return currentDate < startDate;
@@ -103,7 +103,11 @@ const MyStudyDetail = () => {
                 <h1>나의 스터디</h1>
                 <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={group_id === user_id}/>
 
-                <MyStudyDetailHome selectedContent={selectedContent} group_id={group_id} user_id={user_id}/>
+                {groupInfo ? (
+                    <MyStudyDetailHome selectedContent={selectedContent} groupInfo={groupInfo} group_id={group_id} user_id={user_id} />
+                ) : (
+                    <div> Loading... </div>
+                )}
                 <MyStudyDetailMyList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsMyList')} />
                 <MyStudyDetailGroupInfo selectedContent={selectedContent}  group_id={group_id} user_id={user_id}/>
                 <MyStudyDetailAllList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsAllList')} />
