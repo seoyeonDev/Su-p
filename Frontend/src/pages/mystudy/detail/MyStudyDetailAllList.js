@@ -9,7 +9,7 @@ const MyStudyDetailAllList = ({ selectedContent, group_id, onPostSelect  }) => {
         try {
             const response = await axios.get('http://localhost:3000/studylogs/selectAll', {
                 params: {
-                    group_id: '2410290001',  // group_id를 파라미터로 보내기
+                    group_id: group_id,
                     user_id: null
                 },
             });
