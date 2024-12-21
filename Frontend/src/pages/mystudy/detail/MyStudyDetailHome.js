@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from "axios";
 import Chart from 'react-apexcharts';
 
-const MyStudyDetailHome = ({selectedContent, group_id, user_id}) => {
+const MyStudyDetailHome = ({selectedContent, group_id, user_id, onPostSelect}) => {
 
     const [content, setContent] = useState(['']);   // 전체 그룹정보
     const [startdate, setStartdate] = useState(['']);   // 시작일
@@ -40,22 +40,17 @@ const MyStudyDetailHome = ({selectedContent, group_id, user_id}) => {
             params : {
                 group_id : group_id,
                 user_id : user_id   // 그룹장일 경우 다른 헤더 반환
-
             }
         }) // 그룹 정보
             .then (response => {
                 if (response.status === 200){
-                    // alert('그룹 정보를 가져왔습니다');
-                    console.log(response.data);
                     setContent(response.data);
-
                     setStartdate(response.data.vo.startdate);
                     setEnddate(response.data.vo.enddate);
                     setPenalty(response.data.vo.penalty);
 
                 }else {
                     alert(response.data);
-                    console.log(response.data);
                 }
             })
 
@@ -70,8 +65,6 @@ const MyStudyDetailHome = ({selectedContent, group_id, user_id}) => {
         })
             .then (response => {
                 if (response.status === 200){
-                    // alert('get main log 555 ');
-                    console.log(response.data);
                     setMainlog(response.data)
                 }else {
                     alert(response.data);
@@ -118,7 +111,12 @@ const MyStudyDetailHome = ({selectedContent, group_id, user_id}) => {
                     <p> 글ID, 제목, 글쓴이, 날짜 </p>
                     {mainlog.map((item)=> (
                         <div key={item.post_id}>
-                            <p>{item.post_id}, {item.user_id}, {item.title}, {item.create_date}</p>
+                            <p>
+                                {item.post_id}, 
+                                {item.user_id}, 
+                                <button onClick={() => onPostSelect(item.post_id, item.user_id)}>{item.title}</button>
+                                {item.create_date}
+                            </p>
                         </div>
                     ))}
                 </p>

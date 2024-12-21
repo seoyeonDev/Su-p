@@ -58,6 +58,14 @@ const MyStudyDetail = () => {
                 </Link>
             );
         }
+
+        if (selectedContent === 'MyStudyDetailHome') {
+            return (
+                <Link to={`/MyStudyDetail/${group_id}/${user_id}`}>
+                    <button onClick={() => handleContentChange('HOME')}>뒤로가기</button>
+                </Link>
+            );
+        }
     
         return null;
     };
@@ -101,13 +109,13 @@ const MyStudyDetail = () => {
         <div className={'common-content-container'}>
             <div className={'common-content'}>
                 <h1>나의 스터디</h1>
-                <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={group_id === user_id}/>
+                <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={group_id === user_id} group_id = {group_id}/>
 
-                <MyStudyDetailHome selectedContent={selectedContent} group_id={group_id} user_id={user_id}/>
+                <MyStudyDetailHome selectedContent={selectedContent} group_id={group_id} user_id={user_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'MyStudyDetailHome')}/>
                 <MyStudyDetailMyList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsMyList')} />
                 <MyStudyDetailGroupInfo selectedContent={selectedContent}  group_id={group_id} user_id={user_id}/>
                 <MyStudyDetailAllList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsAllList')} />
-
+                
                 {selectedPostId && (
                     <div>
                         <PostDetail selectedContent={selectedContent} postId={selectedPostId} authorId={selectAuthorId} />
