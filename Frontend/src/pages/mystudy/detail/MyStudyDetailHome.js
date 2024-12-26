@@ -89,7 +89,7 @@ const MyStudyDetailHome = ({selectedContent,groupInfo, group_id, user_id}) => {
         axios.get('http://localhost:8080/joinedgroup/individualStudyAttendance', {
             params: {
                 user_id : localStorage.getItem("user_id"),
-                group_id : '2411020001' // TODO 넘겨주는 group_id로 변경하기
+                group_id : group_id
             }
         })
             .then (response => {
