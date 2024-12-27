@@ -57,6 +57,14 @@ const MyStudyDetail = () => {
                 </Link>
             );
         }
+
+        if (selectedContent === 'MyStudyDetailHome') {
+            return (
+                <Link to={`/MyStudyDetail/${group_id}/${user_id}`}>
+                    <button onClick={() => handleContentChange('HOME')}>뒤로가기</button>
+                </Link>
+            );
+        }
     
         return null;
     };
@@ -104,7 +112,7 @@ const MyStudyDetail = () => {
                 <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={groupInfo ? groupInfo.leader_id === user_id : false}/>
 
                 {groupInfo ? (
-                    <MyStudyDetailHome selectedContent={selectedContent} groupInfo={groupInfo} group_id={group_id} user_id={user_id} />
+                    <MyStudyDetailHome selectedContent={selectedContent} groupInfo={groupInfo} group_id={group_id} user_id={user_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'MyStudyDetailHome')}/>
                 ) : (
                     <div> Loading... </div>
                 )}

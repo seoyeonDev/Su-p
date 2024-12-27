@@ -1,13 +1,21 @@
 // Header.js
 import React, {useState} from 'react';
+import {Link} from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+import '../../../styles/studygroup/MyStudy.css';
 
-const MyStudyDetailHeader = ({title, onSelect, isAdmin}) => {
+const MyStudyDetailHeader = ({title, onSelect, isAdmin, group_id}) => {
+    const navigate = useNavigate();
 
     const [activeButton, setActiveButton] = useState('');
     const handleButtonClick = (buttonName) => {
         setActiveButton(buttonName);
         onSelect(buttonName)
     };
+
+    const handleCreatePost = () => {
+        navigate(`/createPost?groupId=${group_id}`);
+    }
 
     return (
         <header className={'common-content'}>
@@ -32,6 +40,7 @@ const MyStudyDetailHeader = ({title, onSelect, isAdmin}) => {
             <button
                 className={`tab-button ${activeButton === '나의 출석' ? 'active' : ''}`}
                 onClick={() => handleButtonClick('나의 출석')}>나의 출석</button>
+            <button onClick={() => handleCreatePost()}>글쓰기</button>
             {isAdmin && (
                 <button
                     className={`tab-button ${activeButton === '스터디 관리' ? 'active' : ''}`}

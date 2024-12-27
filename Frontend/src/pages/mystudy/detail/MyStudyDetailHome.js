@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import axios from "axios";
 import Chart from 'react-apexcharts';
 
-const MyStudyDetailHome = ({selectedContent,groupInfo, group_id, user_id}) => {
+
+const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPostSelect}) => {
 
     const [content, setContent] = useState(['']);   // 전체 그룹정보
     const [startdate, setStartdate] = useState(['']);   // 시작일
@@ -29,8 +30,8 @@ const MyStudyDetailHome = ({selectedContent,groupInfo, group_id, user_id}) => {
             };
             fetchGroupInfo().then(r => {console.log('조회 성공')});
         }
-        
-    }, [group_id, user_id, selectedContent,groupInfo]);
+
+    }, [group_id, user_id, selectedContent, groupInfo]);
 
     const getGroupInfo = async() =>{
         setStartdate(groupInfo.startdate);
@@ -74,8 +75,6 @@ const MyStudyDetailHome = ({selectedContent,groupInfo, group_id, user_id}) => {
         })
             .then (response => {
                 if (response.status === 200){
-                    // alert('get main log 555 ');
-                    console.log(response.data);
                     setMainlog(response.data)
                 }else {
                     alert(response.data);
@@ -122,7 +121,12 @@ const MyStudyDetailHome = ({selectedContent,groupInfo, group_id, user_id}) => {
                     <p> 글ID, 제목, 글쓴이, 날짜 </p>
                     {mainlog.map((item)=> (
                         <div key={item.post_id}>
-                            <p>{item.post_id}, {item.user_id}, {item.title}, {item.create_date}</p>
+                            <p>
+                                {item.post_id}, 
+                                {item.user_id}, 
+                                <button onClick={() => onPostSelect(item.post_id, item.user_id)}>{item.title}</button>
+                                {item.create_date}
+                            </p>
                         </div>
                     ))}
                 </p>
