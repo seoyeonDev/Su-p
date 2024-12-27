@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; 
 
-const PostDetail = ({ postId, authorId }) => {
+const PostDetail = ({ postId, authorId, groupId }) => {
     const [postDetail, setPostDetail] = useState(null);
     const [fileList, setFileList] = useState([]);
 
@@ -59,7 +59,7 @@ const PostDetail = ({ postId, authorId }) => {
             </div>
 
             {authorId === currentUserId && (
-                <Link to={`/createPost?postId=${postId}`}>
+                <Link to={`/createPost?postId=${postId}&groupId=${groupId}`}>
                     <button>수정하기</button>
                 </Link>
             )}
