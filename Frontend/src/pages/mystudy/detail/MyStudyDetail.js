@@ -1,19 +1,18 @@
 
 import React, {useEffect, useState} from 'react';
-import { Routes, Route, useParams  } from 'react-router-dom';
+import { useParams  } from 'react-router-dom';
 import axios from "axios";
 import {Link} from 'react-router-dom'; 
 
 import MyStudyDetailHeader from "./MyStudyDetailHeader";
-import myStudyDetailHome from "./MyStudyDetailHome";
 import MyStudyDetailHome from "./MyStudyDetailHome";
-import Test from "../MyStudy";
 import MyStudyDetailMyList from "./MyStudyDetailMyList";
 import MyStudyDetailGroupInfo from "./MyStudyDetailGroupInfo";
 import MyStudyDetailAllList from './MyStudyDetailAllList';
 import PostDetail from '../../studylogs/PostDetail';
 import MyStudyAdminBeforeOpen from './MyStudyAdminBeforeOpen';
 import MyStudyAdminAfterOpen from './MyStudyAdminAfterOpen';
+import MyStudyDetailMyAttendance from "./MyStudyDetailMyAttendance";
 
 const MyStudyDetail = () => {
     const [selectedContent, setSelectedContent] = useState('HOME');
@@ -80,7 +79,9 @@ const MyStudyDetail = () => {
             });
 
             if(response.status === 200){
+                console.log(response.data);
                 setGroupInfo(response.data.vo);
+                console.log(groupInfo+ "detailinfo")
             }
 
         } catch (error) {
@@ -90,11 +91,10 @@ const MyStudyDetail = () => {
 
     useEffect(() => {
         getStudygroupInfo(group_id);
-    }, [group_id, user_id]);
+    }, [group_id]);
 
     // 날짜 비교 함수
     const isBeforeStartDate = () => {
-        
         if (groupInfo && groupInfo.startdate) {
             const startDate = new Date(groupInfo.startdate);
             return currentDate < startDate;
@@ -109,20 +109,26 @@ const MyStudyDetail = () => {
         <div className={'common-content-container'}>
             <div className={'common-content'}>
                 <h1>나의 스터디</h1>
-                <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={group_id === user_id} group_id = {group_id}/>
+                <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={groupInfo ? groupInfo.leader_id === user_id : false}/>
 
-                <MyStudyDetailHome selectedContent={selectedContent} group_id={group_id} user_id={user_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'MyStudyDetailHome')}/>
+                {groupInfo ? (
+                    <MyStudyDetailHome selectedContent={selectedContent} groupInfo={groupInfo} group_id={group_id} user_id={user_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'MyStudyDetailHome')}/>
+                ) : (
+                    <div> Loading... </div>
+                )}
                 <MyStudyDetailMyList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsMyList')} />
                 <MyStudyDetailGroupInfo selectedContent={selectedContent}  group_id={group_id} user_id={user_id}/>
                 <MyStudyDetailAllList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsAllList')} />
-                
+
+                <MyStudyDetailMyAttendance selectedContent={selectedContent} group_id={group_id} user_id={user_id} groupInfo={groupInfo}/>
+
                 {selectedPostId && (
                     <div>
                         <PostDetail selectedContent={selectedContent} postId={selectedPostId} authorId={selectAuthorId} />
                         <BackButton selectedContent={selectedContent} handleContentChange={handleContentChange} />
                     </div>
                 )}
-
+                
                 {/* 날짜 비교 후 페이지 변경 */}
                 {isBeforeStartDate() ? (
                     <MyStudyAdminBeforeOpen selectedContent={selectedContent}  group_id={group_id} />

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -127,7 +128,12 @@ public class JoinedgroupService {
 
     // 주어진 status 값이 유효한 값인지 확인합니다. (유효하면 true, 그렇지 않다면 false)
     private boolean isValidStatus(JoinStatus status) {
-        return JoinStatus.PERM10.equals(status) ||  JoinStatus.PERM20.equals(status) ||  JoinStatus.PERM30.equals(status);
+        for (JoinStatus validStatus : JoinStatus.values()) {
+            if (validStatus.equals(status)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // 모든 스터디그룹의 평균 출석률 구하기

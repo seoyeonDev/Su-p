@@ -58,4 +58,25 @@
 			WHERE j.user_id = #{user_id}
 		);
 	</select>
+
+	<!-- 나의 출석 조회 -->
+	<select id="getDetailGroupAttendance" resultType="map">
+		SELECT row_number() over ()
+    			, A.GROUP_ID
+		        , A.USER_ID
+				, COUNT(A.USER_ID) AS COUNT
+				, B.ASSIGNCYCLE
+				, C.PENALTY
+				, COUNT(A.USER_ID) >= C.PENALTY	AS PENALTY_CHK
+		FROM STUDYLOGS A
+		JOIN SG_ASSIGNCYCLE B
+			ON A.GROUP_ID = B.GROUP_ID
+			AND DATE(A.CREATE_DATE) BETWEEN DATE(B.STARTDATE) AND DATE(B.ENDDATE)
+		LEFT JOIN STUDYGROUP C
+			ON A.GROUP_ID = C.GROUP_ID
+		WHERE A.GROUP_ID = #{group_id}
+			AND (COALESCE(#{user_id},'')='' OR A.USER_ID = #{user_id})
+		GROUP BY A.GROUP_ID, A.USER_ID, B.ASSIGNCYCLE, C.PENALTY
+	</select>
+
 </mapper>
