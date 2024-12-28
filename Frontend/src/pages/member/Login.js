@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Link, useNavigate} from "react-router-dom";
 import {Cookies, useCookies} from 'react-cookie';
@@ -17,6 +17,7 @@ function Login () {
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
     const [cookies, setCookie] = useCookies(['user_id']);
+    const [sessionTime, setSessionTime] = useState(3600);
 
     const memberVo = {
         user_id : userId,
@@ -31,6 +32,18 @@ function Login () {
         setUserPwd(e.target.value);
     };
 
+    // 로컬 스토리지에 저장
+    const setLoginWithExpireTime = (key, value) => {
+        const expireTime = Date.now() + sessionTime * 1000;
+        localStorage.setItem(key, JSON.stringify({value, expireTime}));
+    }
+
+    // useEffect(() => {
+    //     // console.log (localStorage.getItem("user_id").expireTime())
+    //     getLoginExpireChk("user_id");
+    // }, []);
+
+
 
     const postLogin = () => {
         console.log('login button')
@@ -42,10 +55,11 @@ function Login () {
                     setMsg(response.data.msg);
                     // setUserId(response.data);
                     // console.log('로그인 완료 , ', msg);
-                    alert('로그인 성공 ! ' + userId + ' 님');
-                    localStorage.setItem("user_id", userId);
+                    // localStorage.setItem("user_id", userId);
+                    setLoginWithExpireTime("user_id", userId);
+                    alert('로그인 성공 ! ' + localStorage.getItem("user_id") + ' 님');
                     // setCookie("user_id",response.data.user_id);
-                    setCookie("user_id", userId);
+                    // setCookie("user_id", userId);
                     // alert(localStorage.getItem("user_id"));
                     navigate('/')
                 } else {
