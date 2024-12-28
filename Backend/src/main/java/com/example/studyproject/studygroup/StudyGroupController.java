@@ -23,6 +23,8 @@ import java.util.Map;
 
 import com.example.studyproject.assigncycle.AssignCycle;
 import com.example.studyproject.assigncycle.AssignCycleService;
+import com.example.studyproject.enums.JoinStatus;
+import com.example.studyproject.enums.StudygroupStatus;
 import com.example.studyproject.joinedgroup.Joinedgroup;
 import com.example.studyproject.joinedgroup.JoinedgroupService;
 import org.apache.ibatis.annotations.Delete;
@@ -196,10 +198,10 @@ public class StudyGroupController {
 			LOGGER.info("0");
 			if(userCnt > 1) {
 				// 해당 그룹에 참여한 인원이 그룹장 이외에 더 있을 때,
-				map.put("status", 0);
+				map.put("status", StudygroupStatus.STAT10); // 0
 			} else {
-				// 해당 그룹에 참여한 인원이 그룹장 외엔 없을 때 삭제 및 수정 버튼 보여주도록,	
-				map.put("status", 1);
+				// 해당 그룹에 참여한 인원이 그룹장 외엔 없을 때 삭제 및 수정 버튼 보여주도록,
+				map.put("status", StudygroupStatus.STAT00); // 1
 			}
 		} else {
 			// 상세 조회 클릭을 일반 유저가 했을 때,
@@ -207,10 +209,10 @@ public class StudyGroupController {
 			Joinedgroup jgVo = joinedgroupService.getByUserIdAndGroupId(user_id, group_id);
 			if(jgVo != null) {
 				// 일반 유저가 이미 이 그룹에 신청을 했을 때,
-				map.put("status", 2);
+				map.put("status", JoinStatus.PERM10); // 2
 			} else {
 				// 일반 유저가 이 그룹에 신청을 아직 안했을 때,
-				map.put("status", 3);
+				map.put("status", JoinStatus.PERM00); // 3
 			}
 		}
 		return map;
