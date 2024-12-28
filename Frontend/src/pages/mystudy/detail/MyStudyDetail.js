@@ -116,10 +116,10 @@ const MyStudyDetail = () => {
                 ) : (
                     <div> Loading... </div>
                 )}
-                <MyStudyDetailMyList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsMyList')} />
-                <MyStudyDetailGroupInfo selectedContent={selectedContent}  group_id={group_id} user_id={user_id}/>
-                <MyStudyDetailAllList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsAllList')} />
 
+                <MyStudyDetailGroupInfo selectedContent={selectedContent} groupInfo={groupInfo}  group_id={group_id} user_id={user_id}/>
+                <MyStudyDetailAllList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsAllList')} />
+                <MyStudyDetailMyList selectedContent={selectedContent} group_id={group_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'StudyLogsMyList')} />
                 <MyStudyDetailMyAttendance selectedContent={selectedContent} group_id={group_id} user_id={user_id} groupInfo={groupInfo}/>
 
                 {selectedPostId && (

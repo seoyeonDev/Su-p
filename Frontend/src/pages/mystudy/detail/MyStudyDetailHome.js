@@ -33,39 +33,14 @@ const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPos
 
     }, [group_id, user_id, selectedContent, groupInfo]);
 
+    // 그룹 정보 등록
     const getGroupInfo = async() =>{
         setStartdate(groupInfo.startdate);
         setEnddate(groupInfo.enddate);
         setPenalty(groupInfo.penalty);
     }
 
-    // const getGroupInfo = async(group_id, user_id) => {
-    //     console.log('getGroupInfo');
-    //     axios.get('http://localhost:8080/studygroup/studyDetail',{
-    //         params : {
-    //             group_id : group_id,
-    //             user_id : user_id   // 그룹장일 경우 다른 헤더 반환
-    //
-    //         }
-    //     }) // 그룹 정보
-    //         .then (response => {
-    //             if (response.status === 200){
-    //                 // alert('그룹 정보를 가져왔습니다');
-    //                 console.log(response.data);
-    //                 setContent(response.data);
-    //
-    //                 setStartdate(response.data.vo.startdate);
-    //                 setEnddate(response.data.vo.enddate);
-    //                 setPenalty(response.data.vo.penalty);
-    //
-    //             }else {
-    //                 alert(response.data);
-    //                 console.log(response.data);
-    //             }
-    //         })
-    //
-    // }
-
+    // 최신 5개 글 조회
     const getGroupLog5 = async (group_id) => {
         console.log('getGroupLog5')
         axios.get('http://localhost:8080/studylogs/getMainLog', {

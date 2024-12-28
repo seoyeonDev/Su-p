@@ -20,9 +20,6 @@ const MyStudyDetailHeader = ({title, onSelect, isAdmin, group_id}) => {
     return (
         <header className={'common-content'}>
             <h2>{title}</h2>
-            <button onClick={() => onSelect('content1')}>Content 1</button>
-            <button onClick={() => onSelect('content2')}>Content 2</button>
-
 
 
             <button
