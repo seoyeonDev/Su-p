@@ -54,6 +54,20 @@ const MyStudyAdminAfterOpen = ({ selectedContent, group_id }) => {
     }
   }
 
+  const resetPenalty = async (user_id) => {
+    try {
+      const response = await axios.delete(`http://localhost:8080/penaltylog/${group_id}/${user_id}`);
+
+      if (response.status === 200) {
+        getJoinedgroupList();
+        alert("리셋되었습니다.");
+      }
+
+    } catch (error) {
+      console.error('API call failed:', error);
+    }
+  }
+
   return (
     <div className={'common-content'}>
       {selectedContent === '스터디 관리' &&
@@ -61,19 +75,22 @@ const MyStudyAdminAfterOpen = ({ selectedContent, group_id }) => {
           {penaltylogInfoList.map((data) => (
             <div key={data.user_id}>
               <div className="button-list-container">
-              <p>{data.nickname}</p>
-              <p>{data.penaltylogList ? data.penaltylogList.length : 0}</p>
+                <p>{data.nickname}</p>
+                <p>{data.penaltylogList ? data.penaltylogList.length : 0}</p>
                 <button className="hover-button" onClick={() => updateUserStatus(data.user_id.trim(), STATUS.EXPELLED)}>
                   강퇴
                 </button>
                 {data.penaltylogList && data.penaltylogList.length > 0 && (
-                  <ul className="hidden-list">
-                    {data.penaltylogList.map((log, index) => (
-                      <li key={index}>
-                        <p>{log.penalty_round}회차 : {log.logcontent}</p>
-                      </li>
-                    ))}
-                  </ul>
+                  <>
+                    <ul className="hidden-list">
+                      {data.penaltylogList.map((log, index) => (
+                        <li key={index}>
+                          <p>{log.penalty_round}회차 : {log.logcontent}</p>
+                        </li>
+                      ))}
+                    </ul>
+                    <button onClick={() => resetPenalty(data.user_id.trim())}>리셋</button>
+                  </>
                 )}
               </div>
             </div>
