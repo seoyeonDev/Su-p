@@ -191,9 +191,11 @@ function CreatePost() {
             .then((response) => {
                 // 성공적인 응답 처리
                 if(isEditMode){
-                    // TODO. 디테일 url로 이동
+                    // 디테일 url로 이동
+                    navigate(`/MyStudyDetail/${groupId}/${postData.user_id}`, { state: { activeTab: 'MyStudyDetailHome', selectedPostId: postId } });
                 } else {
-                    // TODO. 글 목록 url로 이동 
+                    // 글 목록 url로 이동 
+                    navigate(`/MyStudyDetail/${groupId}/${postData.user_id}`, { state: { activeTab: '전체글 보기' } });
                 }
                 console.log(response.data);
             })

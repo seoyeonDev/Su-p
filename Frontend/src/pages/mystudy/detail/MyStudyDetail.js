@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState} from 'react';
-import { useParams  } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import axios from "axios";
 import {Link} from 'react-router-dom'; 
 
@@ -27,6 +27,22 @@ const MyStudyDetail = () => {
     const [groupInfo, setGroupInfo] = useState(null);           // studygroup 정보
     const [currentDate, setCurrentDate] = useState(new Date()); // 현재 날짜 (startDate과 비교)
 
+    const location = useLocation();
+
+    useEffect(() => {
+        // URL state에서 전달된 값 처리
+        if (location.state) {
+            const { activeTab, selectedPostId } = location.state;
+            if(activeTab){
+                setSelectedContent(activeTab);
+
+                if (selectedPostId) {
+                    setSelectedPostId(selectedPostId);
+                    handlePostSelect(selectedPostId, user_id, 'StudyLogsMyList');
+                }
+            }
+        }
+    }, [location]);
 
     // 게시글 상세보기 클릭 시 호출되는 함수
     const handlePostSelect = (postId, authorId, content) => {
@@ -109,7 +125,7 @@ const MyStudyDetail = () => {
         <div className={'common-content-container'}>
             <div className={'common-content'}>
                 <h1>나의 스터디</h1>
-                <MyStudyDetailHeader title="스터디명" onSelect={handleContentChange} isAdmin={groupInfo ? groupInfo.leader_id === user_id : false}/>
+                <MyStudyDetailHeader title="스터디명" selectedContent={selectedContent} onSelect={handleContentChange} isAdmin={groupInfo ? groupInfo.leader_id === user_id : false} group_id={group_id}/>
 
                 {groupInfo ? (
                     <MyStudyDetailHome selectedContent={selectedContent} groupInfo={groupInfo} group_id={group_id} user_id={user_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'MyStudyDetailHome')}/>
@@ -124,7 +140,7 @@ const MyStudyDetail = () => {
 
                 {selectedPostId && (
                     <div>
-                        <PostDetail selectedContent={selectedContent} postId={selectedPostId} authorId={selectAuthorId} />
+                        <PostDetail selectedContent={selectedContent} postId={selectedPostId} authorId={selectAuthorId} groupId={group_id}/>
                         <BackButton selectedContent={selectedContent} handleContentChange={handleContentChange} />
                     </div>
                 )}
