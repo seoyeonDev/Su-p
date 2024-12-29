@@ -70,14 +70,17 @@ const StudygroupDetail = () => {
                 <h4>종료일 &emsp;&ensp; {studyGroupEnddate}</h4>
             </div>
             <div>
-                {studyGroupStatus === 1 && (
+                {/* studyGroupStatus === 1 */}
+                {studyGroupStatus === 'STAT00' && (
                     <>
                         <button onClick={() => handleUpdateGroup(studyGroupItems.group_id)}>수정</button>
                         <button onClick={() => handleDeleteGroup(studyGroupItems.group_id, studyGroupItems.leader_id)}>삭제</button>
                     </>
                 )}
-                {studyGroupStatus === 2 && <button>가입취소</button>}
-                {studyGroupStatus === 3 && <button>가입하기</button>}
+                {/* studyGroupStatus === 2 */}
+                {studyGroupStatus === 'PERM10' && <button>가입취소</button>}
+                {/* studyGroupStatus === 3 */}
+                {studyGroupStatus === 'PERM00' && <button>가입하기</button>}
             </div>
             <div>
                 <textarea value={studyGroupItems.study_desc} style={{width:'600px', height:'300px', resize:'none' }}/>
