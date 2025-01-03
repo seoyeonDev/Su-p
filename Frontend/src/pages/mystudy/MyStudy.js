@@ -6,6 +6,7 @@ import axios from "axios";
 import Chart from 'react-apexcharts';
 import MyStudyHeader from "./MyStudyHeader";
 import MyStudyList from "./MyStudyList";
+import {getIdFromLocalStorage} from "../Common";
 
 
 const Test = () => {
@@ -74,7 +75,7 @@ const Test = () => {
         console.log("getAllAttendance");
         axios.get('http://localhost:8080/joinedgroup/overallAttendance', {
             params: {
-                user_id : localStorage.getItem("user_id")
+                user_id : getIdFromLocalStorage()
             }
         })
             .then (response => {

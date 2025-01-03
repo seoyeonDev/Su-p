@@ -2,6 +2,7 @@ import React, {Component, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
 import Chart from 'react-apexcharts';
+import {getIdFromLocalStorage} from "../../Common";
 
 
 const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPostSelect}) => {
@@ -62,7 +63,7 @@ const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPos
         console.log("getAttendance");
         axios.get('http://localhost:8080/joinedgroup/individualStudyAttendance', {
             params: {
-                user_id : localStorage.getItem("user_id"),
+                user_id :getIdFromLocalStorage(),
                 group_id : group_id
             }
         })

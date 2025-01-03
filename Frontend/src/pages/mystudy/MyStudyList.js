@@ -1,11 +1,12 @@
 // Content.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import {getIdFromLocalStorage} from "../Common";
 
 const MyStudyList = ({ selectedContent }) => {
     const navigate = useNavigate();
 
-    const user_id = localStorage.getItem("user_id");
+    const user_id = getIdFromLocalStorage();
 
     const moveMyStudyDetail = (group_id) => {
         navigate(`/MyStudyDetail/${group_id}/${user_id}`);

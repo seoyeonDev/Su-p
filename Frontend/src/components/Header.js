@@ -5,6 +5,8 @@ import '../styles/components/Common.css';
 //import { useState, useEffect } from 'react';
 import {Cookies, useCookies} from 'react-cookie';
 import {useNavigate} from "react-router-dom";
+import {getIdFromLocalStorage} from "../pages/Common";
+
 
 function Header() {
     const [cookies, setCookie, removeCookie] = useCookies(['user_id']);
@@ -14,7 +16,7 @@ function Header() {
 
     // localStorage Id 가져오기
     useEffect(() => {
-        setUserId(localStorage.getItem("user_id"));
+        setUserId(getIdFromLocalStorage());
         // console.log("useruser "+ userId)
         getLoginExpireChk("user_id");
         getUserId("user_id");

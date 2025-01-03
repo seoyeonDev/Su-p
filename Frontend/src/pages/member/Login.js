@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Link, useNavigate} from "react-router-dom";
 import {Cookies, useCookies} from 'react-cookie';
+import { getIdFromLocalStorage } from '../Common'
 
 
 
@@ -57,7 +58,7 @@ function Login () {
                     // console.log('로그인 완료 , ', msg);
                     // localStorage.setItem("user_id", userId);
                     setLoginWithExpireTime("user_id", userId);
-                    alert('로그인 성공 ! ' + localStorage.getItem("user_id") + ' 님');
+                    alert('로그인 성공 ! ' + localStorage.getItem("user_id") + ' ' + getIdFromLocalStorage() + ' 님');
                     // setCookie("user_id",response.data.user_id);
                     // setCookie("user_id", userId);
                     // alert(localStorage.getItem("user_id"));
