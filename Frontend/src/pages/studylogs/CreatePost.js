@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, useLocation} from "react-router-dom";
 
 import '../../styles/studylogs/CreateStudylogs.css';
+import {getIdFromLocalStorage} from "../Common";
 
 function CreatePost() {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ function CreatePost() {
     const [postData, setPostData] = useState({
         title: '',
         content: '',
-        user_id: localStorage.getItem('user_id') || '',
+        user_id: getIdFromLocalStorage() || '',
         post_id: '', 
         image: null,
         file: null,

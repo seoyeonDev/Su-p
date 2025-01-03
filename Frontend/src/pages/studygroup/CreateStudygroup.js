@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
 import axios from 'axios';
+import {getIdFromLocalStorage} from "../Common";
 
 function CreateStudygroup() {
     const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ function CreateStudygroup() {
 
     useEffect(() => {
         // 현재 로그인 한 아이디 가져오기
-        const storedUserId = localStorage.getItem('user_id');
+        const storedUserId = getIdFromLocalStorage();
         if (storedUserId) {
             setUserId(storedUserId);
 
