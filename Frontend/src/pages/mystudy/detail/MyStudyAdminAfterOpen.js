@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../../styles/mystudy/detail/MyStudyAdminAfterOpen.css';
+import {getIdFromLocalStorage} from "../../Common";
 
 
 const MyStudyAdminAfterOpen = ({ selectedContent, group_id }) => {
@@ -15,7 +16,7 @@ const MyStudyAdminAfterOpen = ({ selectedContent, group_id }) => {
       const response = await axios.get('http://localhost:8080/joinedgroup/groupOwnerJoinedList', {
         params: {
           group_id: group_id,
-          user_id: localStorage.getItem('user_id')
+          user_id: getIdFromLocalStorage()
         }
       });
 

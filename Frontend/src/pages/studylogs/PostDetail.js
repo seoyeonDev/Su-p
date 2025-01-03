@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
+import {getIdFromLocalStorage} from "../Common";
 
 const PostDetail = ({ postId, authorId, groupId }) => {
     const [postDetail, setPostDetail] = useState(null);
     const [fileList, setFileList] = useState([]);
 
-    const currentUserId = localStorage.getItem('user_id'); 
+    const currentUserId = getIdFromLocalStorage();
 
     const fetchPostDetail = async () => {
         try {

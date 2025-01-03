@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import {getIdFromLocalStorage} from "../../Common";
 
 const MyStudyDetailMyList = ({ selectedContent, group_id, onPostSelect }) => {
     const [posts, setPosts] = useState([]);  
@@ -10,7 +11,7 @@ const MyStudyDetailMyList = ({ selectedContent, group_id, onPostSelect }) => {
             const response = await axios.get('http://localhost:3000/studylogs/selectAll', {
                 params: {
                     group_id: group_id,
-                    user_id: localStorage.getItem('user_id')
+                    user_id: getIdFromLocalStorage()
                 },
             });
 

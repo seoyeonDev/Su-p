@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
+import {getIdFromLocalStorage} from "../../Common";
 
 const MyStudyAdminBeforeOpen = ({ selectedContent, group_id }) => {
     const [joinApprovedList, setJoinApprovedList] = useState([]);
@@ -12,7 +13,7 @@ const MyStudyAdminBeforeOpen = ({ selectedContent, group_id }) => {
 
     const getStudyGroupJoinList = async () => {
         try {
-            const user_id = localStorage.getItem('user_id');
+            const user_id = getIdFromLocalStorage();
 
             const response = await axios.get('http://localhost:8080/joinedgroup/groupOwnerJoinedList', {
                 params: {

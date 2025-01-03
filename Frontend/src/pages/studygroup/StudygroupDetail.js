@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {getIdFromLocalStorage} from "../Common";
 
 const StudygroupDetail = () => {
     const { groupId } = useParams();
@@ -9,7 +10,7 @@ const StudygroupDetail = () => {
     const [studyGroupStatus, setStudyGroupStatus] = useState();
     const [studyGroupStartdate, setStudyGroupStartdate] = useState();
     const [studyGroupEnddate, setStudyGroupEnddate] = useState();
-    const user_id = localStorage.getItem('user_id');
+    const user_id = getIdFromLocalStorage();
 
     useEffect(() => {
         const fecthData = async () => {
