@@ -6,6 +6,16 @@ import {getIdFromLocalStorage} from "../../Common";
 const MyStudyDetailMyList = ({ selectedContent, group_id, onPostSelect }) => {
     const [posts, setPosts] = useState([]);  
     
+    useEffect(() => {
+        if (selectedContent === '내 글 보기') {
+            getStudylogs(group_id);
+        }
+    }, [group_id, selectedContent]);
+
+    /**
+     * studylogs - 나의 글 보기
+     * @param {string} group_id 
+     */
     const getStudylogs = async (group_id) => {
         try {
             const response = await axios.get('http://localhost:3000/studylogs/selectAll', {
@@ -24,13 +34,6 @@ const MyStudyDetailMyList = ({ selectedContent, group_id, onPostSelect }) => {
             console.error('API call failed:', error);
         }
     };
-
-    useEffect(() => {
-        if (selectedContent === '전체글 보기') {
-            getStudylogs(group_id);
-        }
-    }, [group_id, selectedContent]);
-
 
     return (
         <div className={'common-content'}>
@@ -61,7 +64,7 @@ const MyStudyDetailMyList = ({ selectedContent, group_id, onPostSelect }) => {
 MyStudyDetailMyList.propTypes = {
     selectedContent: PropTypes.string.isRequired,
     group_id: PropTypes.string.isRequired,
-    user_id: PropTypes.string.isRequired,
+    onPostSelect: PropTypes.func.isRequired,
 };
 
 export default MyStudyDetailMyList;

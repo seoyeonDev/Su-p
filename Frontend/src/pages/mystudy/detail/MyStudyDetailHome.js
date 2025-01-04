@@ -7,10 +7,9 @@ import {getIdFromLocalStorage} from "../../Common";
 
 const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPostSelect}) => {
 
-    const [content, setContent] = useState(['']);   // 전체 그룹정보
-    const [startdate, setStartdate] = useState(['']);   // 시작일
-    const [enddate, setEnddate] = useState(['']);   // 종료일
-    const [penalty, setPenalty] = useState(['']);   // 목표
+    const [startdate, setStartdate] = useState('');   // 시작일
+    const [enddate, setEnddate] = useState('');   // 종료일
+    const [penalty, setPenalty] = useState('');   // 목표
     const [mainlog, setMainlog] = useState([]);   // 스터디로그 5개
     const [attendance, setAttendance] = useState(0);
     const [showCharts, setShowCharts] = useState(false);
@@ -88,7 +87,7 @@ const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPos
                 </div>
             }
             {selectedContent === 'HOME' &&
-                <p>
+                <div>
                     {/*{JSON.stringify(content)}*/}
                     시작일 : {startdate} <br/>
                     종료일 : {enddate} <br/>
@@ -105,7 +104,7 @@ const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPos
                             </p>
                         </div>
                     ))}
-                </p>
+                </div>
             }
 
         </div>
