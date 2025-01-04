@@ -10,7 +10,8 @@ li {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 10px; /* 요소들 간의 간격 */
+    gap: 20px; /* 요소들 간의 간격 */
+    padding:5px 0px;
 }
 
 .hidden-list {
@@ -40,4 +41,11 @@ li {
 
 .hover-button:active {
     background-color: #CC4444;
+}
+
+.study-admin {
+    font-size: 14px;
+    background-color: #f3f3f3;
+    padding: 5px 20px;
+    border-radius: 5px;
 }
