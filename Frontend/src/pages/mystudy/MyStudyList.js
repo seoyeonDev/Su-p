@@ -13,29 +13,22 @@ const MyStudyList = ({ selectedContent }) => {
     };
 
     return (
-        // <div className = 'common-content-container'>
-        //     <div className='common-content'>
-        //         {selectedContent === '전체 스터디' && <p>전체 스터디</p>}
-        //         {selectedContent === '참여중인 스터디' && <p>This is 참여중인 스터디</p>}
-        //         {selectedContent === '운영중인 스터디' && <p>This is 운영중인 스터디</p>}
-        //         {selectedContent === '종료된 스터디' && <p>This is 종료된 스터디</p>}
-        //     </div>
-        //
-        // </div>
         <div className='study-card-container'>
-            {selectedContent.map((item) => (
-                // console.log(study)
-                <div key={item.group_id} className='study-card'>
-                    <button onClick={() => moveMyStudyDetail(item.group_id)}>
-                       <h4>{item.title}</h4>
-                    </button>
-                        
-                    <p>{item.user_id}</p>
-                    <p>{item.role_nm}</p>
+            {selectedContent.length > 0 ? (
+                selectedContent.map((item) => (
+                    // console.log(study)
+                    <div key={item.group_id} className='study-card'>
+                        <button onClick={() => moveMyStudyDetail(item.group_id)}>
+                           <h4>{item.title}</h4>
+                        </button>
 
-                </div>
-
-            ))}
+                        <p>{item.user_id}</p>
+                        <p>{item.role_nm}</p>
+                    </div>
+                ))
+            ) : (
+                <p> 조회된 그룹이 없습니다.</p>
+            )}
         </div>
     );
 };
