@@ -11,7 +11,6 @@ const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPos
     const [enddate, setEnddate] = useState('');   // 종료일
     const [penalty, setPenalty] = useState('');   // 목표
     const [mainlog, setMainlog] = useState([]);   // 스터디로그 5개
-    const [attendance, setAttendance] = useState(0);
     const [showCharts, setShowCharts] = useState(false);
     const [chartOptions, setChartOptions] = useState({
         series: [],
@@ -68,11 +67,9 @@ const MyStudyDetailHome = ({selectedContent, groupInfo, group_id, user_id, onPos
         })
             .then (response => {
                 if (response.status === 200){
-                    setAttendance(response.data.studyAttendanceResult.attendance);
-                    console.log("attendance " + attendance);
                     setChartOptions(prevOptions => ({
                         ...prevOptions,
-                        series: [100 - attendance, attendance]
+                        series: [100 - response.data.studyAttendanceResult.attendance, response.data.studyAttendanceResult.attendance]
                     }));
                 }
             })

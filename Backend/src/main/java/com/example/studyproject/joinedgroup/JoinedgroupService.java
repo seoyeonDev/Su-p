@@ -51,28 +51,23 @@ public class JoinedgroupService {
         return joinedgroupDao.selectJoinedList(user_id);
     }
 
-    /**
-     * 그룹 가입 신청
-     */
-    public boolean createJoinedGroup(Joinedgroup vo, boolean role){
-        // 그룹장이라면 true, 참여자라면 false
-        String roleStatus;
+    // 그룹 가입 신청 - 참여자 : ROLE10, 관리자 : ROLE20
+    public boolean createJoinedGroup(String user_id, String group_id, JoinStatus role_status){
         JoinStatus joinStatus;
+        Joinedgroup vo = new Joinedgroup();
 
-        // 그룹장(true) : ROLE10, 참여자(false) : ROLE20
         // PERM10 : 가입대기, PERM20 : 가입승인, PERM30 : 가입거절
-        if(role){ // 그룹장 true : ROLE10
-            // 코드 테이블로 검사하는 logic 구현해야함
-            roleStatus = "ROLE10";
+        if(role_status == JoinStatus.ROLE10){ // 그룹장 true : ROLE10
             joinStatus = JoinStatus.PERM20;
-        } else { // 참여자 false : ROLE20
-            roleStatus = "ROLE20";
+        } else { // 참여자 : ROLE20
             joinStatus = JoinStatus.PERM10;
         }
 
+        vo.setUser_id(user_id);
+        vo.setGroup_id(group_id);
         vo.setSubmission_cnt(0); // 총 제출 횟수
         vo.setJoinstatus(joinStatus); // 가입 신청 상태
-        vo.setRole(roleStatus); // 역할
+        vo.setRole(role_status); // 역할
 
         return joinedgroupDao.createJoinedGroup(vo);
     }

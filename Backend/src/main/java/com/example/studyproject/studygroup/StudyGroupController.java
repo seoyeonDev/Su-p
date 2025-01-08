@@ -113,9 +113,8 @@ public class StudyGroupController {
 		assignCycleService.insertAssignCycle(list);
 		
 		groupService.createGroup(vo);
-		Joinedgroup joinedgroupVo = new Joinedgroup(vo.getGroup_id(), vo.getLeader_id(), null,null,0);
-		// joinedgroupVo로 joinedgroup 생성, true : 그룹장
-		joinedgroupService.createJoinedGroup(joinedgroupVo,true);
+		// ROLE10 : 그룹장
+		joinedgroupService.createJoinedGroup(vo.getLeader_id(), vo.getGroup_id(), JoinStatus.ROLE10);
 	}
 	
 

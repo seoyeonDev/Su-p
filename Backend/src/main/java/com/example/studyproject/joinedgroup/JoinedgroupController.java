@@ -84,39 +84,50 @@ public class JoinedgroupController {
     }
 
     /**
-     * 그룹 가입 신청자
-     * @param vo - Joinedgroup vo의 user_id, group_id
+     * study group 가입하기
+     * @param user_id
+     * @param group_id
+     * @param role_status - 그룹장 or 참여자
      */
     @PostMapping("/join")
-    public void joinGroup(@RequestBody Joinedgroup vo){
-        LOGGER.info("================ joinedgroup join");
+    public Map joinGroup(@RequestParam String user_id, @RequestParam String group_id, @RequestParam JoinStatus role_status){
+        Map<String, Object> response = new HashMap<>();
+        LOGGER.info("================ joinedgroup join, user_id :" + user_id + ", group_id :" + group_id + ", role_status :" + role_status);
 
-        Member memberVo = memberService.getMemberById(vo.getUser_id());
+        Member memberVo = memberService.getMemberById(user_id);
         // group getGroupById 도 만들면 검사하는 logic 넣기
 
         boolean success;
 
         if(memberVo != null){
-            success = joinedgroupService.createJoinedGroup(vo, false);
+            success = joinedgroupService.createJoinedGroup(user_id, group_id, role_status);
         } else {
             success = false;
         }
 
         if(success){
             LOGGER.info("================ join success");
+            response.put("status", "success");
         } else {
             LOGGER.info("================ join failed");
+            response.put("status", "fail");
         }
+
+        return response;
     }
 
-
+    /**
+     * studygroup 가입 취소 및 탈퇴하기
+     * @param user_id
+     * @param group_id
+     */
     @DeleteMapping("/user/{user_id}/group/{group_id}")
     public void deleteJoinedgroup(@PathVariable("user_id") String user_id, @PathVariable("group_id") String group_id){
         Joinedgroup joinedgroupVo = joinedgroupService.getByUserIdAndGroupId(user_id, group_id);
 
         int success = 0;
 
-        LOGGER.info("================ vo : "+joinedgroupVo);
+        LOGGER.info("================ deleteJoinedgroup joiendgroupVo : "+joinedgroupVo);
 
         if(joinedgroupVo != null){
             success = joinedgroupService.deleteJoinedgroup(user_id, group_id);
