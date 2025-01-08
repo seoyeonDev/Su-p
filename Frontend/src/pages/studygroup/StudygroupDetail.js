@@ -11,33 +11,46 @@ const StudygroupDetail = () => {
     const [studyGroupStartdate, setStudyGroupStartdate] = useState();
     const [studyGroupEnddate, setStudyGroupEnddate] = useState();
     const user_id = getIdFromLocalStorage();
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}.${String(currentDate.getMonth() + 1).padStart(2, '0')}.${String(currentDate.getDate()).padStart(2, '0')}`;
 
     useEffect(() => {
-        const fecthData = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/studygroup/studyDetail', {
-                    params: {
-                        group_id: groupId,
-                        user_id
-                    }
-                });
-                setStudyGroupItems(response.data.vo);
-                setStudyGroupStartdate(response.data.vo.startdate.split('T')[0]);
-                setStudyGroupEnddate(response.data.vo.enddate.split('T')[0]);
-                setStudyGroupStatus(response.data.status);
-            } catch (error) {
-                console.error('Error fetching data:', error)
-            }
-        }
-        fecthData();
+        getStudyGroupInfo();
     }, [groupId]);
 
-    // 수정 페이지로 이동
+    /**
+     * studygroup 정보 가져오기
+     */
+    const getStudyGroupInfo = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/studygroup/studyDetail', {
+                params: {
+                    group_id: groupId,
+                    user_id
+                }
+            });
+            setStudyGroupItems(response.data.vo);
+            setStudyGroupStartdate(response.data.vo.startdate.split('T')[0]);
+            setStudyGroupEnddate(response.data.vo.enddate.split('T')[0]);
+            setStudyGroupStatus(response.data.status);
+        } catch (error) {
+            console.error('Error fetching data:', error)
+        }
+    }
+
+    /**
+     * 관리자 전용 - 수정 페이지로 이동
+     * @param {string} groupId 
+     */
     const handleUpdateGroup = (groupId) => {
         navigate(`/updateStudygroup/${groupId}`);
     };
 
-    // 그룹 삭제
+    /**
+     * 관리자 전용 - 그룹 삭제
+     * @param {string} groupId 
+     * @param {string} leaderId 
+     */
     const handleDeleteGroup = async (groupId, leaderId) => {
         try {
             const vo = {
@@ -56,9 +69,48 @@ const StudygroupDetail = () => {
         }
     };
 
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getFullYear()}.${String(currentDate.getMonth() + 1).padStart(2, '0')}.${String(currentDate.getDate()).padStart(2, '0')}`;
+    /**
+     * 스터디그룹 가입 취소하기
+     * @param {string} groupId 
+     * @param {string} user_id 
+     */
+    const handleCancleJoin = async (groupId, user_id) => {
+        console.log("클릭");
+        try {
+            const response = await axios.delete(`http://localhost:8080/joinedgroup/user/${user_id}/group/${groupId}`);
 
+            if (response.status === 200) {
+                getStudyGroupInfo();
+            }
+        } catch (error) {
+            console.error('API call failed:', error);
+        }
+    }
+
+    /**
+     * 스터디그룹 가입하기
+     * @param {string} groupId 
+     * @param {string} user_id 
+     */
+    const handleJoinGroup = async (groupId, user_id) => {
+        try {
+            const response = await axios.post('http://localhost:8080/joinedgroup/join', null,
+                {
+                    params: {
+                        user_id: user_id,
+                        group_id: groupId,
+                        role_status: 'ROLE20',
+                    },
+                }
+            );
+            if (response.data.status === 'success') {
+                getStudyGroupInfo();
+            }
+        } catch (error) {
+            console.error('API call failed:', error);
+        }
+    }
+    
     return (
         <div>
             <div>
@@ -71,17 +123,14 @@ const StudygroupDetail = () => {
                 <h4>종료일 &emsp;&ensp; {studyGroupEnddate}</h4>
             </div>
             <div>
-                {/* studyGroupStatus === 1 */}
                 {studyGroupStatus === 'STAT00' && (
                     <>
                         <button onClick={() => handleUpdateGroup(studyGroupItems.group_id)}>수정</button>
                         <button onClick={() => handleDeleteGroup(studyGroupItems.group_id, studyGroupItems.leader_id)}>삭제</button>
                     </>
                 )}
-                {/* studyGroupStatus === 2 */}
-                {studyGroupStatus === 'PERM10' && <button>가입취소</button>}
-                {/* studyGroupStatus === 3 */}
-                {studyGroupStatus === 'PERM00' && <button>가입하기</button>}
+                {studyGroupStatus === 'PERM10' && <button onClick={() => handleCancleJoin(studyGroupItems.group_id, user_id)}>가입취소</button>}
+                {studyGroupStatus === 'PERM00' && <button onClick={() => handleJoinGroup(studyGroupItems.group_id, user_id)}>가입하기</button>}
             </div>
             <div>
                 <textarea value={studyGroupItems.study_desc} style={{width:'600px', height:'300px', resize:'none' }}/>
