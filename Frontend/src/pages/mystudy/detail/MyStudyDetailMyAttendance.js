@@ -1,16 +1,12 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
-import Chart from 'react-apexcharts';
 import {getIdFromLocalStorage} from "../../Common";
 
 const MyStudyDetailMyAttendance = ({selectedContent, group_id, user_id, groupInfo}) => {
 
-    const [content, setContent] = useState(['']);   // 전체 그룹정보
-    const [startdate, setStartdate] = useState(['']);   // 시작일
-    const [enddate, setEnddate] = useState(['']);   // 종료일
-    const [penalty, setPenalty] = useState(['']);   // 목표
-
+    const [content, setContent] = useState([]);   // 전체 그룹정보
+    
     useEffect(() => {
         if (selectedContent === '나의 출석') {
             const fetchInfo = async()=> {
@@ -18,7 +14,7 @@ const MyStudyDetailMyAttendance = ({selectedContent, group_id, user_id, groupInf
             };
             fetchInfo().then(r => {console.log('성공 @@')});
         }
-    },[group_id]);
+    },[group_id, selectedContent]);
 
 
     // 상세 그룹 평균 출석율
@@ -34,16 +30,13 @@ const MyStudyDetailMyAttendance = ({selectedContent, group_id, user_id, groupInf
                 if (response.status === 200){
                     console.log(response.data)
                     setContent(response.data)
-
                 }
             })
     }
-
-
     return (
         <div className={'common-content'}>
             {selectedContent === '나의 출석' &&
-                <p>
+                <div>
                     {/*{JSON.stringify(content)}*/}
                     {groupInfo.startdate} <br/>
                     {groupInfo.enddate} <br/>
@@ -55,9 +48,8 @@ const MyStudyDetailMyAttendance = ({selectedContent, group_id, user_id, groupInf
                             <p>{item.row_number}, {item.group_id}, {item.user_id}, {item.count}, {item.assigncycle}, {item.penalty}, {item.penalty_chk}</p>
                         </div>
                     ))}
-                </p>
+                </div>
             }
-
         </div>
     );
 }
