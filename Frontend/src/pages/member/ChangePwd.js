@@ -8,8 +8,7 @@ function ChangePwd() {
     const [checkPassword, setCheckPassword] = useState('');
     const [isMatching, setIsMatching] = useState(true);
     const [pwdMsg, setPwdMsg] = useState('');
-    // 전달된 state 값들을 받아오기
-    const { userId } = location.state || {};
+    const { userId, email, name } = location.state || {};
     const navigate = useNavigate(); // useNavigate 훅 사용
 
     // 비밀번호 입력
@@ -52,7 +51,9 @@ function ChangePwd() {
 
             axios.post(`http://localhost:3000/member/changePwd`, {
                 user_id: userId,
-                password: password
+                password: password,
+                name: name,
+                email: email
             })
                 .then(response => {
                     setIsMatching(false);
