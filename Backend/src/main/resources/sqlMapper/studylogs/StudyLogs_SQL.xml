@@ -26,28 +26,6 @@
 		AND post_id = #{post_id}
 	</select>
 
-    <!-- 결과물 신규추가 -->
-    <insert id ="insertLogs">
-        INSERT INTO studylogs
-        (
-            post_id
-            , user_id
-            , group_id
-            , title
-            , content
-            , create_date
-        )
-        VALUES (
-            ( SELECT COALESCE(CAST(max(post_id) AS INTEGER) + 1 , 1)
-                       FROM studylogs WHERE group_id = #{group_id}
-                       )
-            , #{user_id}
-            , #{group_id}
-            , #{title}
-            , #{content}
-            , now()
-        )
-    </insert>
 
     <insert id="insertStudyLogs" parameterType="com.example.studyproject.studylogs.StudyLogs" useGeneratedKeys="true" keyProperty="post_id">
         INSERT INTO studylogs (
