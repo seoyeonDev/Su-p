@@ -25,11 +25,13 @@ const MyStudyDetail = () => {
 
 
     const [groupInfo, setGroupInfo] = useState(null);           // studygroup 정보
-    const [currentDate, setCurrentDate] = useState(new Date()); // 현재 날짜 (startDate과 비교)
+    const currentDate = useState(new Date()); // 현재 날짜 (startDate과 비교)
 
     const location = useLocation();
 
     useEffect(() => {
+        getStudygroupInfo(group_id);
+
         // URL state에서 전달된 값 처리
         if (location.state) {
             const { activeTab, selectedPostId } = location.state;
@@ -42,7 +44,8 @@ const MyStudyDetail = () => {
                 }
             }
         }
-    }, [location]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location, group_id, user_id]);
 
     // 게시글 상세보기 클릭 시 호출되는 함수
     const handlePostSelect = (postId, authorId, content) => {
@@ -105,9 +108,6 @@ const MyStudyDetail = () => {
         }
     }
 
-    useEffect(() => {
-        getStudygroupInfo(group_id);
-    }, [group_id]);
 
     // 날짜 비교 함수
     const isBeforeStartDate = () => {

@@ -17,7 +17,7 @@ const MyStudyList = ({ selectedContent }) => {
             {selectedContent.length > 0 ? (
                 selectedContent.map((item) => (
                     // console.log(study)
-                    <div key={item.group_id} className='study-card'>
+                    <div key={String(item.group_id)} className='study-card'>
                         <button onClick={() => moveMyStudyDetail(item.group_id)}>
                            <h4>{item.title}</h4>
                         </button>
