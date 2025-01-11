@@ -30,7 +30,7 @@
 			#{file_name},
 			#{file_ext},
 			#{ins_id},
-			#{ins_date}
+			#{ins_date},
 			#{file_type}
 		);
 	</select>

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -87,41 +88,49 @@ public class MemberController {
 		Member member = memberService.getMemberById(vo.getUser_id());
 		String realPath = path;
 		if(member == null) {
-			path = path + "user_img/" + vo.getUser_id();
-			LOGGER.info("File path: " + path);
-			File dir = new File(path);
-			dir.mkdir();
-			String fname = f.getOriginalFilename();
-			
-			String imgPath = "";
-			if(fname != null && !fname.equals("")) {
-				imgPath = path + "/" + fname;
-				File imgSave = new File(imgPath);
-				try {
-					f.transferTo(imgSave);
-				} catch (Exception e) {
-					e.printStackTrace();
+
+			// 파일이 등록될 경우
+			if (f != null){
+				path = path + "user_img/" + vo.getUser_id();
+				LOGGER.info("File path: " + path);
+				File dir = new File(path);
+				dir.mkdir();
+				String fname = f.getOriginalFilename();
+
+				String imgPath = "";
+				if(fname != null && !fname.equals("")) {
+					imgPath = path + "/" + fname;
+					File imgSave = new File(imgPath);
+					try {
+						f.transferTo(imgSave);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
 				}
-				
+				vo.setProfile_img(imgPath);
+
+				// 파일 테이블에 이미지 정보 추가
+				SupFiles files = new SupFiles();
+				String[] parts = fname.split("\\.");
+				String fileName = parts[0]; // 원본파일명
+				String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
+				LocalDateTime now = LocalDateTime.now();
+
+				files.setFile_seq(UUID.randomUUID().toString());
+				files.setFile_id(vo.getUser_id());
+				files.setFile_name(fileName);
+				files.setFile_ext(fileExtension);
+				files.setIns_id(vo.getUser_id());
+				files.setIns_date(now);
+				filesSerivce.insertFiles(files);
+			} else {
+				vo.setProfile_img(realPath + "default.jpg");
 			}
-			vo.setProfile_img(imgPath);
 			memberService.insertMember(vo);
-			
-			// 파일 테이블에 이미지 정보 추가
-			SupFiles files = new SupFiles();
-			String[] parts = fname.split("\\.");
-			String fileName = parts[0]; // 원본파일명
-	        String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
-	        LocalDateTime now = LocalDateTime.now();
-			
-			files.setFile_id(vo.getUser_id());
-			files.setFile_name(fileName);
-			files.setFile_ext(fileExtension);
-			files.setIns_id(vo.getUser_id());
-			files.setIns_date(now);
-			
-			filesSerivce.insertFiles(files);
-			
+
+
+
       path = realPath;
       LOGGER.info("================path: " + path);
 			LOGGER.info("================ " + "Join");
@@ -213,48 +222,59 @@ public class MemberController {
     // 멤버 - 이미지
     @GetMapping("/getImage/{user_id}")
     public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
-    	
+		ResponseEntity rtn = null;
     	map.put("fileId", user_id);
     	List<HashMap<String, Object>> list = filesSerivce.getFile(map);
-    	String img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
-        String imagePath = path + "user_img/" + user_id + "/" + img_name;
-        
-        // 파일이 존재하는지 확인
-        Path imageFilePath = Paths.get(imagePath);
-        LOGGER.info("이미지파일 경로: " + imagePath);
-        if (!Files.exists(imageFilePath)) {
-            // 파일이 존재하지 않을 경우 404 에러를 반환
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+		String imagePath = null;
+		String fileExtension = null;
 
-        // 이미지 파일을 읽어와 byte 배열로 변환
-        byte[] imageBytes;
-        try {
-            imageBytes = Files.readAllBytes(imageFilePath);
-        } catch (IOException e) {
-            // 이미지 파일을 읽어오는 중에 에러가 발생한 경우 500 에러를 반환
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-        
-        // 응답에 이미지 데이터와 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        
-        String fileExtension = (String) list.get(0).get("fileExt"); // 이미지 확장자
-        
-        MediaType mediaType;
-        if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension)) {
-            mediaType = MediaType.IMAGE_JPEG;
-        } else if ("png".equalsIgnoreCase(fileExtension)) {
-            mediaType = MediaType.IMAGE_PNG;
-        } else {
-            // 기본적으로 JPEG로 설정
-            mediaType = MediaType.IMAGE_JPEG;
-        }
-        
-        headers.setContentType(mediaType);
-        headers.setContentLength(imageBytes.length);
-        
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+		if (list.isEmpty()){	// default 이미지일 경우
+			imagePath = path + "default.jpeg";
+			fileExtension = "jpeg";
+		} else {				// default 이미지가 아닐 경우 / supfiles 에 파일이 있을 경우
+			String img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
+			imagePath = path + "user_img/" + user_id + "/" + img_name;
+			fileExtension = (String) list.get(0).get("fileExt"); // 이미지 확장자
+		}
+
+			// 파일이 존재하는지 확인
+			Path imageFilePath = Paths.get(imagePath);
+			LOGGER.info("이미지파일 경로: " + imagePath);
+			if (!Files.exists(imageFilePath)) {
+				// 파일이 존재하지 않을 경우 404 에러를 반환
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+
+			// 이미지 파일을 읽어와 byte 배열로 변환
+			byte[] imageBytes;
+			try {
+				imageBytes = Files.readAllBytes(imageFilePath);
+			} catch (IOException e) {
+				// 이미지 파일을 읽어오는 중에 에러가 발생한 경우 500 에러를 반환
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			}
+
+			// 응답에 이미지 데이터와 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+
+
+//			String fileExtension = (String) list.get(0).get("fileExt"); // 이미지 확장자
+
+			MediaType mediaType;
+			if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension)) {
+				mediaType = MediaType.IMAGE_JPEG;
+			} else if ("png".equalsIgnoreCase(fileExtension)) {
+				mediaType = MediaType.IMAGE_PNG;
+			} else {
+				// 기본적으로 JPEG로 설정
+				mediaType = MediaType.IMAGE_JPEG;
+			}
+
+			headers.setContentType(mediaType);
+			headers.setContentLength(imageBytes.length);
+
+			return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+//		return rtn;
     }
 	
 	/**
