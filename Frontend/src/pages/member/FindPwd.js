@@ -84,7 +84,9 @@ function FindPwd() {
                     setEmailSent(false);
                     navigate('/memberChangePwd', {
                         state: {
-                            userId: userId
+                            userId: userId,
+                            email: email,
+                            name: userName
                         }
                     });
                 } else if (minutes === 0 && seconds === 0) {
