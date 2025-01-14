@@ -15,7 +15,8 @@
 			name,
 			nickname,
 			email,
-			profile_img
+			profile_img,
+			"authorization"
 		)
 		VALUES
 		(
@@ -24,7 +25,8 @@
 			#{name},
 			#{nickname},
 			#{email},
-			#{profile_img}
+			#{profile_img},
+		 	'AUTH20'
 		);
 	</insert>
 	
