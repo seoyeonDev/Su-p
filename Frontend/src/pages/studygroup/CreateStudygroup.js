@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import {getIdFromLocalStorage} from "../Common";
+import { getIdFromLocalStorage } from "../Common";
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
 
 function CreateStudygroup() {
     const [formData, setFormData] = useState({
@@ -9,12 +11,12 @@ function CreateStudygroup() {
         leader_id: '',      // 로그인 한 아이디 넣기
         title: '',          // 스터디제목
         name: '',           // 스터디명
-        study_desc: '',
-        kind: '',           //아직 구현 미정
+        study_desc: '',     // 설명
+        kind: '',           // 스터디 종류 (아직 구현 미정)
         status: '',
         mem_cnt: 0,
-        startdate: '',      // 시작일
-        enddate: '',
+        startdate: null,    // 시작일
+        enddate: null,      // 종료일
         view_cnt: 0,        // 조회수 
         chk_m: '',          // 제출 기준
         chk_min_cnt: 0,     // 제출최소횟수
@@ -22,22 +24,31 @@ function CreateStudygroup() {
         penalty: 0,         // 패널티 기준
     });
 
-    const [userId, setUserId] = useState('');
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    useEffect(() => {
-        // 현재 로그인 한 아이디 가져오기
-        const storedUserId = getIdFromLocalStorage();
-        if (storedUserId) {
-            setUserId(storedUserId);
+    const [interval, setInterval] = useState('');           // 제출 기준 : 7 or 30
+    const [availableDate, setAvailableDate] = useState([]); // 종료일 선택 가능 날짜 
 
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                leader_id: storedUserId
-            }));
+    useEffect(() => {
+        if (isSubmitting) {
+            if (formData.title && formData.name && formData.mem_cnt && formData.chk_m && formData.chk_min_cnt && formData.startdate && formData.enddate && formData.study_desc) {
+                axios.post('http://localhost:3000/studygroup/createGroup', formData)
+                    .then(response => {
+                        if (response.status === 200) {
+                            navigate('/');
+                        }
+                    })
+                    .catch(error => {
+                        alert('서버 요청에 실패했습니다.' + error);
+                        console.log(error);
+                    });;
+            } else {
+                alert('그룹 생성에 필요한 모든 정보를 입력해주세요.');
+            }
+            setIsSubmitting(false);
         }
-    }, []);
+    }, [formData, isSubmitting, navigate]);
 
     // 기타 정보 핸들링
     const handleChange = (e) => {
@@ -48,77 +59,6 @@ function CreateStudygroup() {
         });
     };
 
-    // 제출기준 핸들링
-    const handleChkmChange = (e) => {
-        const { value } = e.target;
-        setFormData({
-            ...formData,
-            chk_m: value,
-            enddate: '' // 시작일 변경 시 종료일 초기화
-        });
-    };
-
-    // 시작날짜 핸들링
-    const handleStartDateChange = (e) => {
-        const { value } = e.target;
-        setFormData({
-            ...formData,
-            startdate: value,
-            enddate: '' // 시작일 변경 시 종료일 초기화
-        });
-    };
-
-    // 시작일과 제출기준에 따른 선택 가능한 종료날짜 핸들링
-    const isValidEndDate = (startDate, endDate) => {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-    
-        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-            return false;
-        }
-    
-        const diffInDays = Math.floor((end - start) / (1000 * 60 * 60 * 24));
-
-        const isDateIntervalValid = (interval) => {
-            return (Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1) % interval === 0;
-        };
-    
-        if (formData.chk_m === 'SUBM10') {
-            return isDateIntervalValid(7);
-        } else if (formData.chk_m === 'SUBM20') {
-            return isDateIntervalValid(30);
-        }
-    
-        return false;
-    };
-
-    // 선택한 종료날짜 핸들링
-    const handleEndDateChange = (e) => {
-        const { value } = e.target;
-        if(isValidEndDate(formData.startdate, value)){
-            setFormData({
-                ...formData,
-                enddate: value,
-            });
-        } else {
-            alert('종료일은 선택된 제출 기준에 맞는 날짜여야 합니다.');
-        }
-    };
-
-    // 시작일 = 오늘 이후
-    const getTodayDate = () => {
-        const today = new Date();
-        return today.toISOString().split('T')[0];
-    };
-
-    // 시작일 기준 종료일 최소 선택 가능 날짜
-    const getMinEndDate = (startDate) => {
-        const datePart = startDate.split('T')[0];
-        const minDate = new Date(datePart);
-        minDate.setDate(minDate.getDate() + 1); // 시작일 이후 하루
-        return minDate.toISOString().split('T')[0];
-    };
-
     // 취소
     const handleCancle = () => {
         navigate('/');
@@ -126,29 +66,82 @@ function CreateStudygroup() {
 
     // 저장 
     const handleSubmit = () => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            startdate: prevFormData.startdate + 'T00:00:00',
-            enddate: prevFormData.enddate + 'T23:59:59'
-        }));
+        if (formData.startdate && formData.enddate) {
+            const formattedStartDate = formatDateForServer(formData.startdate, true); // 시작일 포맷팅
+            const formattedEndDate = formatDateForServer(formData.enddate, false); // 종료일 포맷팅
+
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                startdate: formattedStartDate,
+                enddate: formattedEndDate,
+                leader_id: getIdFromLocalStorage()
+            }));
+        }
         setIsSubmitting(true);
     };
 
-    useEffect(() => {
-        if (isSubmitting) {
-            if (formData.title && formData.name && formData.mem_cnt && formData.chk_m && formData.chk_min_cnt && formData.startdate && formData.enddate && formData.study_desc) {
-                axios.post('http://localhost:3000/studygroup/createGroup', formData)
-                    .then(response => {
-                        if (response.status === 200) {
-                            navigate('/');
-                        }
-                    });
-            } else {
-                alert('그룹 생성에 필요한 모든 정보를 입력해주세요.');
-            }
-            setIsSubmitting(false);
+    // 날짜 포맷팅 함수 (LocalDateTime에 맞게 변환)
+    const formatDateForServer = (date, isStart = true) => {
+        const updatedDate = new Date(date);
+        updatedDate.setHours(isStart ? 0 : 23, isStart ? 0 : 59, isStart ? 0 : 59, isStart ? 0 : 999);
+
+        // 'yyyy-MM-dd'T'HH:mm:ss' 포맷으로 반환
+        return updatedDate.toISOString().slice(0, 19); // 마지막 초, 밀리초 제거
+    };
+
+    // 시작일 선택
+    const startDateChange = (startDate) => {
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            startdate: new Date(startDate),
+            enddate: null,
+            chk_m: null
+        }));
+    }
+
+    // 종료일 선택
+    const endDateChange = (endDate) => {
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            enddate: new Date(endDate)
+        }));
+    }
+
+    // 제출 기준 선택
+    const handleIntervalChange = (e) => {
+        let days = parseInt(e.target.value, 10);
+        setInterval(days);
+
+        let chk_m = days === 7 ? 'SUBM10' : 'SUBM20';
+
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            enddate: null,
+            chk_m: chk_m
+        }));
+
+        if (formData.startdate) {
+            calculateAvailableDates(formData.startdate, days);
         }
-    }, [formData, isSubmitting, navigate]);
+    }
+
+    // 시작일 & 제출 기준을 토대로, 종료일 선택 가능 날짜 계산하기
+    const calculateAvailableDates = (startDate, interval) => {
+        const dates = [];
+        let currentDate = new Date(startDate);
+        let firstInterval = interval === 7 ? 6 : 29; // 첫 번째 간격 설정 (7일 기준: 6일, 30일 기준: 29일)
+        let length = interval === 7 ? 120 : 30; // (약 2년 5개월 뒤까지 availableDate setting)
+
+        currentDate.setDate(currentDate.getDate() + firstInterval);
+        dates.push(new Date(currentDate));
+
+        for (let i = 1; i < length; i++) {
+            currentDate.setDate(currentDate.getDate() + interval);
+            dates.push(new Date(currentDate));
+        }
+
+        setAvailableDate(dates);
+    }
 
     return (
         <div>
@@ -173,14 +166,6 @@ function CreateStudygroup() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor="chk_m">제출기준</label>
-                        <select id="chk_m" name="chk_m" onChange={handleChkmChange}>
-                            <option value="">기준 선택</option>
-                            <option value="SUBM10">일주일 단위</option>
-                            <option value="SUBM20">한 달 단위</option>
-                        </select>
-                    </div>
-                    <div>
                         <label>제출횟수</label>
                         <input type="number" name="chk_min_cnt" value={formData.chk_min_cnt} onChange={handleChange} min="0" /> {/* 숫자만 */}
                     </div>
@@ -188,23 +173,29 @@ function CreateStudygroup() {
                 <div>
                     <div>
                         <label>시작일</label>
-                        <input 
-                            type="date" 
-                            name="startdate" 
-                            value={formData.startdate} 
-                            onChange={handleStartDateChange} 
-                            min={getTodayDate()} 
+                        <DatePicker
+                            selected={formData.startdate ? new Date(formData.startdate) : null}
+                            onChange={startDateChange}
+                            dateFormat="yyyy-MM-dd"
+                            minDate={new Date()}
                         />
                     </div>
                     <div>
+                        <label>제출 기준</label>
+                        <select value={interval || ""} onChange={handleIntervalChange}>
+                            <option value="" disabled>선택</option>
+                            <option value={7}>7일</option>
+                            <option value={30}>30일</option>
+                        </select>
+                    </div>
+                    <div>
                         <label>종료일</label>
-                        <input 
-                            type="date" 
-                            name="enddate" 
-                            value={formData.enddate} 
-                            onChange={handleEndDateChange} 
-                            min={(formData.startdate && formData.chk_m) ? getMinEndDate(formData.startdate) : getTodayDate()} 
-                            disabled={!formData.startdate || !formData.chk_m} // 시작일이 없으면 비활성화
+                        <DatePicker
+                            selected={formData.enddate ? new Date(formData.enddate) : null}
+                            onChange={endDateChange}
+                            dateFormat="yyyy-MM-dd"
+                            includeDates={availableDate}
+                            disabled={!formData.startdate || !formData.chk_m}
                         />
                     </div>
                 </div>
