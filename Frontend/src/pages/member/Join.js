@@ -283,13 +283,15 @@ function Join() {
                 <div>
                     {/* 이미지 */}
                     <div className={"img"} id={"img"}>
-                        <input type="file" ref={fileInputRef} onChange={handleFileChange} />
-                        {selectedImage && (
-                            <div>
-                                <img src={selectedImage} alt="Selected" />
-                                <button onClick={handleFileRemove}>파일 삭제</button>
-                            </div>
-                        )}
+                        <div>
+                            <input type="file" ref={fileInputRef} onChange={handleFileChange} />
+                            {selectedImage && (
+                                <div>
+                                    <img src={selectedImage} alt="Selected" style={ {width: '40%', height: 'auto'}}/>
+                                </div>
+                            )}
+                        </div>
+                            <button onClick={handleFileRemove}>파일 삭제</button>
                     </div>
 
                     {/* 가입란 */}
