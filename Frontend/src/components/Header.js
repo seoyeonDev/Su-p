@@ -70,7 +70,7 @@ function Header() {
     //     // axios.post('/users/loginCheck', {token : token})
     // }
 
-    const handleLogout = () => { // 서버쪽 /logout으로 보내기
+    const handleLogout = () => { // TODO 서버쪽 /logout으로 보내기
 
         // alert(localStorage.getItem("user_id") + " 전");
         const user_id = getLoginExpireChk("user_id");
