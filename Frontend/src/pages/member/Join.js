@@ -337,6 +337,7 @@ function Join() {
                             <input name={"nickname"} type="text" placeholder={"닉네임을 입력하세요."} value={nickname} onChange={(e) => setNickname(e.target.value)} />
                             <button type="button" onClick={nicknameChk} >중복확인</button>
                             <div>{messages.nicknameMsg}</div>
+                            <div>{messages.checkNickname}</div>
                         </div>
                         <div>
                             <label>이메일</label>

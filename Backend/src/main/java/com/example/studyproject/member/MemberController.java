@@ -364,14 +364,18 @@ public class MemberController {
 		Member member = memberService.getMemberByNickNm(nickname);
 		
 		LOGGER.info("================ nickname: " + nickname);
-		
+
 		int chkImpl;
-		if(member == null || nickname.equals(member.getNickname())) {
-			return chkImpl = 0;
-		} else {
-			LOGGER.info("================ nickname: " + member.getNickname());
-			return chkImpl = 1;
+		if(member == null){
+//				|| nickname.equals(member.getNickname())) {
+			return 0;
+		} else if(nickname.equals(member.getNickname())) {
+			LOGGER.info("================ getnickname: " + member.getNickname());
+			return 1;
 		}
+		LOGGER.info("================ checkNickNm: ERROR" );
+		return 2;
+
 	}
 
 	/**
