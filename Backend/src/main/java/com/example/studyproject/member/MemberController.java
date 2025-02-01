@@ -49,7 +49,7 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	@Autowired
-	private SupFilesService filesSerivce;
+	private SupFilesService filesService;
 	
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
@@ -134,8 +134,9 @@ public class MemberController {
 					files.setFile_ext(fileExtension);
 					files.setIns_id(vo.getUser_id());
 					files.setIns_date(now);
+					files.setFile_type("profile");
 
-					filesSerivce.insertFiles(files);
+					filesService.insertFiles(files);
 				} catch (Exception e) {
 					LOGGER.error("Error while inserting file metadata", e);
 					throw new RuntimeException("File metadata insertion failed", e);
@@ -234,7 +235,7 @@ public class MemberController {
     public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
 		ResponseEntity rtn = null;
     	map.put("fileId", user_id);
-    	List<HashMap<String, Object>> list = filesSerivce.getFile(map);
+    	List<HashMap<String, Object>> list = filesService.getProfileFile(map);
 		String imagePath = null;
 		String fileExtension = null;
 
@@ -298,7 +299,7 @@ public class MemberController {
 			@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 		
 		map.put("fileId", vo.getUser_id());
-		List<HashMap<String, Object>> list = filesSerivce.getFile(map);
+		List<HashMap<String, Object>> list = filesService.getProfileFile(map);
 
 		String img_name = null;
 		String realPath = path;
@@ -326,7 +327,7 @@ public class MemberController {
 			File imgSave = new File(imgPath);
 			File imgDel = new File(oldImg);
 			imgDel.delete();
-			filesSerivce.delFile(map);
+			filesService.delProfileFile(map);
 			try {
 				f.transferTo(imgSave);
 				vo.setProfile_img(imgPath);
@@ -351,8 +352,9 @@ public class MemberController {
 		files.setFile_ext(fileExtension);
 		files.setIns_id(vo.getUser_id());
 		files.setIns_date(now);
+		files.setFile_type("profile");
 		
-		filesSerivce.insertFiles(files);
+		filesService.insertFiles(files);
 		path = realPath;
 	}
 	
