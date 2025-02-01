@@ -46,6 +46,7 @@ function Join() {
     const [messages, setMessages] = useState({
         idCheckMsg: '',
         passwordCheckMsg: '',
+        pwdValidChk:'',
         nicknameMsg: '',
         emailSendMsg: '',
         emailMsg: '',
@@ -91,16 +92,16 @@ function Join() {
         const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         setPassword(e.target.value);
         if (whitespaceCheck(password)) {
-            setMessage('passwordCheckMsg', '공백을 입력할 수 없습니다.');
+            setMessage('pwdValidChk', '공백을 입력할 수 없습니다.');
             joinCheckAll("checkInvalidPwd", false);
         } else if (password.length < 8) {
-            setMessage('passwordCheckMsg', '8자 이상 입력해주세요.');
+            setMessage('pwdValidChk', '8자 이상 입력해주세요.');
             joinCheckAll("checkInvalidPwd", false);
         } else if (!regex.test(password)) {
-            setMessage('passwordCheckMsg', '영문, 숫자, 특수문자 3가지 이상을 조합하여 비밀번호를 생성해주세요.');
+            setMessage('pwdValidChk', '영문, 숫자, 특수문자 3가지 이상을 조합하여 비밀번호를 생성해주세요.');
             joinCheckAll("checkInvalidPwd", false);
         } else {
-            setMessage('passwordCheckMsg', '');
+            setMessage('pwdValidChk', '');
             joinCheckAll("checkInvalidPwd", true);
         }
     };
@@ -320,6 +321,7 @@ function Join() {
                         <div>
                             <label>비밀번호</label>
                             <input id="password" name={"password"} type="password" placeholder={"비밀번호를 입력하세요."} value={password} onChange={handlePasswordChange} />
+                            <div>{messages.pwdValidChk}</div>
                         </div>
                         <div>
                             <label>비밀번호 재확인</label>
