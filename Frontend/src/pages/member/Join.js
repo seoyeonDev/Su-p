@@ -241,18 +241,31 @@ function Join() {
         }
     }
 
+    // 파일 타입 유효성 검사
+    const fileTypes = [
+        'image'
+    ]
     // 파일 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        setFile(file);
 
         if (file) {
+            // 파일 타입 유효성 검사
+            const type = file.type;
+            if (!fileTypes.includes(type.substring(0,type.indexOf('/')))) {
+                event.target.value = '';
+                alert('사진 파일만 첨부가 가능합니다.');
+                return;
+            }
+
             const reader = new FileReader();
             reader.onloadend = () => {
                 setSelectedImage(reader.result);
             };
             reader.readAsDataURL(file);
         }
+
+        setFile(file);
     }
 
     // 파일 삭제 
