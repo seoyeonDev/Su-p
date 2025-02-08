@@ -230,7 +230,7 @@ public class MemberController {
 		return map;
 	}
 
-    // 멤버 - 이미지
+	// 멤버 - 이미지
     @GetMapping("/getImage/{user_id}")
     public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
 		ResponseEntity rtn = null;
@@ -289,20 +289,38 @@ public class MemberController {
     }
 	
 	/**
-	 * 수정
+	 * 내 정보 수정
 	 * @param vo
+	 * @param isDeleteImg - 이미지 기본으로 변경 여부
 	 * @param f
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PostMapping("/update")
-	public void update(@RequestParam HashMap<String, Object> map,
-			@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
-		
-		map.put("fileId", vo.getUser_id());
-		List<HashMap<String, Object>> list = filesService.getProfileFile(map);
+	public void update(@RequestPart("vo") Member vo, @RequestPart("isDeleteImg") Boolean isDeleteImg, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 
+		// 1. 파일이 없으면 기존 데이터만 업데이트 (기본 이미지)
+		if(f == null && !isDeleteImg) {
+			memberService.updateMember(vo);
+			return;
+		}
+
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("fileId", vo.getUser_id());
+
+		String updatePath = ""; // 최종 업데이트 파일 경로
+
+		List<HashMap<String, Object>> list = filesService.getProfileFile(map); // 기존 프로필 이미지 정보 조회
+
+		// 2. 사진 → 기본 이미지로 변경
+		if (f== null && isDeleteImg){ // 사진 → 기본 이미지로 변경
+			vo.setProfile_img(null);
+			filesService.delProfileFile(map);
+			memberService.updateMember(vo);
+			return;
+		}
+
+		// 3. 사진 → 사진 or 기본 → 사진
 		String img_name = null;
-		String realPath = path;
 		String oldImg = null;
 		if (list.isEmpty()){	// img 가 없을 경우
 			oldImg = path + "default.jpeg";
@@ -311,22 +329,27 @@ public class MemberController {
 			oldImg = path + "user_img/" + vo.getUser_id() + "/" + img_name;
 		}
 
-		String fname = f.getOriginalFilename();
-		
+		String fname = f != null ? f.getOriginalFilename() : null;
+
 		String imgPath = "";
-		if(fname != null && !fname.equals("")) {
-			path = path + "user_img/" + vo.getUser_id();
+		if(fname != null && !fname.isEmpty()) {
+			updatePath = path + "user_img/" + vo.getUser_id(); // 최종 저장될 프로필 파일 경로
 
 			File dir = new File(path);	// 파일 경로 존재 여부 확인
 			if (!dir.exists() && !dir.mkdirs()) {
-				LOGGER.error("Failed to create directory: " + path);
+				LOGGER.error("Failed to create directory: " + updatePath);
 				throw new RuntimeException("Failed to create directory for user images");
 			}
 
-			imgPath = path + "/" + fname;
+			imgPath = updatePath + "/" + fname;
 			File imgSave = new File(imgPath);
-			File imgDel = new File(oldImg);
-			imgDel.delete();
+
+			// default 이미지는 삭제 대상에서 제외
+			if(!oldImg.contains("default")){
+				File imgDel = new File(oldImg);
+				imgDel.delete();
+			}
+
 			filesService.delProfileFile(map);
 			try {
 				f.transferTo(imgSave);
@@ -334,28 +357,43 @@ public class MemberController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		} else {
 			vo.setProfile_img(oldImg);
 		}
+
+		// member 정보 update
 		memberService.updateMember(vo);
-		
+
 		// 파일 테이블에 이미지 정보 추가
-		SupFiles files = new SupFiles();
-		String[] parts = fname.split("\\.");
-		String fileName = parts[0]; // 원본파일명
-        String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
-        LocalDateTime now = LocalDateTime.now();
-		
-		files.setFile_id(vo.getUser_id());
-		files.setFile_name(fileName);
-		files.setFile_ext(fileExtension);
-		files.setIns_id(vo.getUser_id());
-		files.setIns_date(now);
-		files.setFile_type("profile");
-		
-		filesService.insertFiles(files);
-		path = realPath;
+		try {
+			SupFiles files = new SupFiles();
+			String[] parts = null;
+
+			if(fname != null){
+				parts =  fname.split("\\.");
+			} else {
+				parts = new String[] {"default", "jpeg"};
+			}
+
+			String fileName = parts.length > 1 ? parts[0] : fname; // 확장자가 없을 경우
+			String fileExtension = parts.length > 1 ? parts[parts.length - 1].toLowerCase() : ""; // 확장자 추출
+
+			LocalDateTime now = LocalDateTime.now();
+
+			files.setFile_seq(UUID.randomUUID().toString());
+			files.setFile_id(vo.getUser_id());
+			files.setFile_name(fileName);
+			files.setFile_ext(fileExtension);
+			files.setIns_id(vo.getUser_id());
+			files.setIns_date(now);
+			files.setFile_type("profile");
+
+			filesService.insertFiles(files);
+		} catch (Exception e) {
+			LOGGER.error("Error while inserting file metadata", e);
+			throw new RuntimeException("File metadata insertion failed", e);
+		}
 	}
 	
   /**

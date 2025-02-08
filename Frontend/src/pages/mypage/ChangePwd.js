@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {getIdFromLocalStorage} from '../Common.js';
 
 
 const ChangePwd = () => {
-  const user_id = localStorage.getItem('loginId');
+  const user_id = getIdFromLocalStorage();
   const user_name = localStorage.getItem('userName');
   const user_email = localStorage.getItem('userEmail');
   const [newPwd, setNewPwd] = useState('');
@@ -13,7 +14,8 @@ const ChangePwd = () => {
   const vo = {
     user_id : user_id,
     name : user_name,
-    email : user_email
+    email : user_email,
+    password : newPwd
   }
 
   const handleCurrentPassword = (event) => {

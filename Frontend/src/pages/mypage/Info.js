@@ -16,6 +16,8 @@ const Info = () => {
     const user_id = getIdFromLocalStorage();
     const [emailTime, setEmailTime] = useState(10 * 60);            // 이메일 10분
     const [emailSent, setEmailSent] = useState(false);              // 이메일 발송됐을 때 타이머 보이게 만들기
+    const [isDeleteImg, setIsDeleteImg] = useState(false);          // 기존 프로필 파일 삭제 여부
+    const [isDefaultImg, setIsDefaultImg] = useState(false);        // default img인지
 
     useEffect(() => {
         if (emailTime > 0) {
@@ -37,10 +39,17 @@ const Info = () => {
                 setUserInfo(response.data);
                 setInputNickNm(response.data.member.nickname);
                 setEmail(response.data.member.email);
+
+                if(response.data.member.profile_img === null){
+                    setIsDefaultImg(true);
+                    setImgUrl('http://localhost:3000/member/getImage/default.jpeg');
+                } else {
+                    setImgUrl('http://localhost:3000/member/getImage/' + user_id);
+                }
+
                 localStorage.setItem('userName', response.data.member.name);
                 localStorage.setItem('userEmail', response.data.member.email);
 
-                setImgUrl('http://localhost:3000/member/getImage/' + user_id);
             } catch(error) {
                 console.log("error: " + error);
             }
@@ -116,6 +125,7 @@ const Info = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("vo", new Blob([JSON.stringify(vo)], { type: "application/json" }));
+    formData.append("isDeleteImg", new Blob([JSON.stringify(isDeleteImg)], { type: "application/json" }));
 
     const changeInfo = () => {
         console.log("editEmail: " + editEmail);
@@ -155,6 +165,7 @@ const Info = () => {
           const reader = new FileReader();
           reader.onloadend = () => {
             setImgUrl(reader.result);
+            setIsDefaultImg(false);
           };
           reader.readAsDataURL(selectedFile);
 
@@ -172,12 +183,31 @@ const Info = () => {
     const minutes = Math.floor((emailTime || 0) / 60);
     const seconds = (emailTime || 0) % 60;
 
+    const handleDeleteImage = () => {
+        setImgUrl(''); // 미리보기 삭제
+        setFile(null); // 파일 상태 삭제
+        setImgUrl('http://localhost:3000/member/getImage/default.jpeg'); // 기본 이미지로 변경
+        setIsDeleteImg(true);
+        setIsDefaultImg(true);
+    };
+
   return (
     <div>
       <h2>내 정보</h2>
       <div className='info-area'>
         <div className='info-area-image'>
-            <img src={imageUrl} style={{ width: '80%', height: 'auto' }}/>
+            {imageUrl && (
+                <>
+                    <img src={imageUrl} style={{ width: '80%', height: 'auto' }} />
+
+                    {!isDefaultImg && (
+                        <>
+                            <button onClick={handleDeleteImage}>프로필 삭제</button>
+                        </>
+                    )}
+                </>
+            )}
+
             <input type="file" onChange={handleFileChange} />
         </div>
 
