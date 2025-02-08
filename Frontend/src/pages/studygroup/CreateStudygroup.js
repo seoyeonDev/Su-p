@@ -32,6 +32,12 @@ function CreateStudygroup() {
 
     useEffect(() => {
         if (isSubmitting) {
+            // TODO. SWEETALERT으로 변경하기
+            if (!window.confirm("스터디 생성 후 종료일까지 탈퇴 불가합니다. 진행할까요?")) {
+                console.log("스터디 생성 안 함");
+                return;
+            } 
+
             if (formData.title && formData.name && formData.mem_cnt && formData.chk_m && formData.chk_min_cnt && formData.startdate && formData.enddate && formData.study_desc) {
                 axios.post('http://localhost:3000/studygroup/createGroup', formData)
                     .then(response => {

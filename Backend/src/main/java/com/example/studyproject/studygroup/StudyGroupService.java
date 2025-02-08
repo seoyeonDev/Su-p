@@ -119,4 +119,9 @@ public class StudyGroupService {
 	public List<?> getStudyGroups(String title, Boolean isSortByViews, Boolean isSortByLatest){
 		return groupDao.getStudyGroups(title, isSortByViews, isSortByLatest);
 	}
+
+	// 회원 탈퇴 가능 여부 (해당 기간에 포함되는 데이터 개수 반환)
+	public int countActiveStudyGroups(String user_id){
+		return groupDao.countActiveStudyGroups(user_id);
+	}
 }

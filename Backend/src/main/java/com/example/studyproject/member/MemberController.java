@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.example.studyproject.studygroup.StudyGroupService;
+import com.example.studyproject.studylogs.StudyLogsService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -50,6 +52,12 @@ public class MemberController {
 	private MemberService memberService;
 	@Autowired
 	private SupFilesService filesService;
+
+	@Autowired
+	private StudyGroupService studyGroupService;
+
+	@Autowired
+	private StudyLogsService studyLogsService;
 	
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
@@ -481,16 +489,32 @@ public class MemberController {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@DeleteMapping("/delete/{user_id}")
-	public boolean deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
+	public Map<String, Object>  deleteMember (@PathVariable String user_id, @RequestParam String password) throws NoSuchAlgorithmException {
+		Map<String, Object> map = new HashMap<>();
+		boolean success = false;
+		String msg = "";
 
-		boolean success;
 		if(memberService.isPasswordCorrect(user_id, password)){	// 비밀번호 일치
-			success = memberService.deleteMember(user_id);
+			int countActive = studyGroupService.countActiveStudyGroups(user_id);
+
+			if(countActive > 0){
+				success=false;
+				msg = "운영중인 스터디가 존재하여 탈퇴가 불가능 합니다.";
+			} else {
+				success = memberService.deleteMember(user_id);
+				if(success){
+					// studylogs 알 수 없음으로 변경
+					studyLogsService.anonymizeUserId(user_id);
+					msg = "탈퇴가 완료되었습니다.";
+				}
+			}
 		} else{
+			msg = "비밀번호가 일치하지 않습니다.";
 			success = false;
 		}
-		
-		return success;
+		map.put("success", success);
+		map.put("msg",msg);
+		return map;
 	}
 
 }

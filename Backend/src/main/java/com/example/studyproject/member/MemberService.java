@@ -1,9 +1,16 @@
 package com.example.studyproject.member;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
 
+import com.example.studyproject.files.SupFilesService;
+import com.example.studyproject.studylogs.StudyLogsService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.studyproject.util.Sha256;
@@ -30,6 +37,15 @@ public class MemberService {
 	public MemberService(MemberDao memberDao) {
 		this.memberDao = memberDao;
 	}
+
+
+	@Value("${spring.servlet.multipart.location}")
+	private String path;
+
+	@Autowired
+	private SupFilesService filesService;
+
+
 
 	// 회원가입
 	public void insertMember(Member vo) throws NoSuchAlgorithmException {
@@ -129,9 +145,30 @@ public class MemberService {
 		memberDao.changePwd(vo);
 	}
     
-	// 회원 탈퇴
+	// 회원 탈퇴 진행
 	public boolean deleteMember(String user_id) {
+		// 프로필 파일 조회하기
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("fileId", user_id);
+		List<HashMap<String, Object>> list = filesService.getProfileFile(map);
+		// 프로필 파일 삭제하기
+		if(list.size()>0){
+			filesService.delProfileFile(map);
+
+			String img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
+			String oldImg = path + "user_img/" + user_id + "/" + img_name;
+			File dir = new File(path);	// 파일 경로 존재 여부 확인
+			if (!dir.exists() && !dir.mkdirs()) {
+				LOGGER.error("Failed to create directory: " + oldImg);
+				throw new RuntimeException("Failed to create directory for user images");
+			}
+			File imgDel = new File(oldImg);
+			imgDel.delete();
+		}
+
+		// joinedgroup, penaltylog, member 데이터 삭제
 		int rowsAffected = memberDao.deleteMember(user_id);
+
 		return rowsAffected > 0;
 	}
 

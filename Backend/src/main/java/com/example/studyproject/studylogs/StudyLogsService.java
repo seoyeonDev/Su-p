@@ -77,6 +77,11 @@ public class StudyLogsService {
         studyLogsDao.updateStudyLogs(vo);
     }
 
+    // 회원 탈퇴 : 알수 없음으로 변경
+    public void anonymizeUserId(String user_id) {
+        studyLogsDao.anonymizeUserId(user_id);
+    }
+
     // 스터디로그 
     public ArrayList<StudyLogs> selectList() {
         return studyLogsDao.selectList();
