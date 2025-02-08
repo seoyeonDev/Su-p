@@ -83,10 +83,13 @@ function CreateStudygroup() {
     // 날짜 포맷팅 함수 (LocalDateTime에 맞게 변환)
     const formatDateForServer = (date, isStart = true) => {
         const updatedDate = new Date(date);
-        updatedDate.setHours(isStart ? 0 : 23, isStart ? 0 : 59, isStart ? 0 : 59, isStart ? 0 : 999);
 
+        // 시작일과 종료일에 따라 시간 조정
+        updatedDate.setHours(isStart ? 0 : 23, isStart ? 0 : 59, isStart ? 0 : 59, isStart ? 0 : 999);
+        updatedDate.setHours(updatedDate.getHours() + 9); // 한국 표준시로 바꾸기
         // 'yyyy-MM-dd'T'HH:mm:ss' 포맷으로 반환
         return updatedDate.toISOString().slice(0, 19); // 마지막 초, 밀리초 제거
+
     };
 
     // 시작일 선택
