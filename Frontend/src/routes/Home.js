@@ -37,19 +37,15 @@ function Home() {
 
         <div>
           
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        <input type="text" value={inputValue} onChange={handleChange}/>
-                    </label>
-                    <button type="submit">제출</button>
-                </form>
-            </div>
+            {/*<div>*/}
+            {/*    <form onSubmit={handleSubmit}>*/}
+            {/*        <label>*/}
+            {/*            <input type="text" value={inputValue} onChange={handleChange}/>*/}
+            {/*        </label>*/}
+            {/*        <button type="submit">제출</button>*/}
+            {/*    </form>*/}
+            {/*</div>*/}
 
-            <div>
-                서연
-                {/* <JoinedList/> */}
-            </div>
 
             <main>
               <StudyList/>

@@ -63,6 +63,16 @@ const StudyList = () => {
         setIsSortByLatest(true);
     };
 
+    // 날짜 포맷 함수
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        }).replace(/\./g, '.'); // .으로 구분
+    };
+
     return (
         <div className='common-content-container'>
             <div className='common-content'>
@@ -83,6 +93,8 @@ const StudyList = () => {
 
                                 <h4>{item.title}</h4>
                                 <p>{item.study_desc}</p>
+                                <p>{formatDate(item.startdate)}</p>
+                                <p>{formatDate(item.enddate)}</p>
 
                             </div>
                         ))
