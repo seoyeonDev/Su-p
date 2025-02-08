@@ -50,7 +50,8 @@ function Header() {
         const {value, expireTime } = JSON.parse(item);
         if (Date.now() > expireTime) {
             localStorage.removeItem(key);
-            alert("로그인이 만료되었습니다. 재로그인 해 주세요.")
+            logout();
+            alert("로그인이 만료되었습니다. 재로그인 해 주세요.");
             navigate('/');
             return null;
         }
@@ -82,6 +83,8 @@ function Header() {
             // alert(localStorage.getItem("user_id"));
 
             // removeCookie("user_id");
+
+            logout();
             navigate('/');
 
         } else {
@@ -90,6 +93,13 @@ function Header() {
         }
 
     };
+
+    const logout =() => {
+        axios.post(`http://localhost:3000/member/logout`)
+            .then(response => {
+                console.log(response.data);
+            });
+    }
 
     return (
         <header id="sup-header">
