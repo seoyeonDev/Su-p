@@ -39,6 +39,7 @@ public class StudyGroup {
     private LocalDateTime enddate;  	// 스터디종료일
     private int view_cnt;       	// 조회수
     private String chk_m;   	    // 제출기준 => 코드 테이블 참조
+    private String chk_m_nm;
     private int chk_min_cnt;		// 제출최소횟수
     private int chk_total_cnt;		// 전체제출회수
     private int penalty;			// 페널티기준

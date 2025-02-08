@@ -10,6 +10,8 @@ const StudygroupDetail = () => {
     const [studyGroupStatus, setStudyGroupStatus] = useState();
     const [studyGroupStartdate, setStudyGroupStartdate] = useState();
     const [studyGroupEnddate, setStudyGroupEnddate] = useState();
+    const [studygroupSubM, setStudygroupSubM] = useState();
+    const [studygroupMinCnt, setStudygroupMinCnt] = useState();
     const user_id = getIdFromLocalStorage();
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}.${String(currentDate.getMonth() + 1).padStart(2, '0')}.${String(currentDate.getDate()).padStart(2, '0')}`;
@@ -32,6 +34,8 @@ const StudygroupDetail = () => {
             setStudyGroupItems(response.data.vo);
             setStudyGroupStartdate(response.data.vo.startdate.split('T')[0]);
             setStudyGroupEnddate(response.data.vo.enddate.split('T')[0]);
+            setStudygroupSubM(response.data.vo.chk_m_nm);
+            setStudygroupMinCnt(response.data.vo.chk_min_cnt);
             setStudyGroupStatus(response.data.status);
         } catch (error) {
             console.error('Error fetching data:', error)
@@ -121,6 +125,8 @@ const StudygroupDetail = () => {
                 <h4>모집인원 &ensp;&nbsp; {studyGroupItems.mem_cnt}</h4>
                 <h4>시작일 &emsp;&ensp; {studyGroupStartdate}</h4>
                 <h4>종료일 &emsp;&ensp; {studyGroupEnddate}</h4>
+                <h4>제출기준 &emsp;&ensp; {studygroupSubM}</h4>
+                <h4>제출횟수 &emsp;&ensp; {studygroupMinCnt}</h4>
             </div>
             <div>
                 {studyGroupStatus === 'STAT00' && (
