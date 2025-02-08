@@ -46,6 +46,7 @@ function Join() {
     const [messages, setMessages] = useState({
         idCheckMsg: '',
         passwordCheckMsg: '',
+        pwdValidChk:'',
         nicknameMsg: '',
         emailSendMsg: '',
         emailMsg: '',
@@ -91,16 +92,16 @@ function Join() {
         const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         setPassword(e.target.value);
         if (whitespaceCheck(password)) {
-            setMessage('passwordCheckMsg', '공백을 입력할 수 없습니다.');
+            setMessage('pwdValidChk', '공백을 입력할 수 없습니다.');
             joinCheckAll("checkInvalidPwd", false);
         } else if (password.length < 8) {
-            setMessage('passwordCheckMsg', '8자 이상 입력해주세요.');
+            setMessage('pwdValidChk', '8자 이상 입력해주세요.');
             joinCheckAll("checkInvalidPwd", false);
         } else if (!regex.test(password)) {
-            setMessage('passwordCheckMsg', '영문, 숫자, 특수문자 3가지 이상을 조합하여 비밀번호를 생성해주세요.');
+            setMessage('pwdValidChk', '영문, 숫자, 특수문자 3가지 이상을 조합하여 비밀번호를 생성해주세요.');
             joinCheckAll("checkInvalidPwd", false);
         } else {
-            setMessage('passwordCheckMsg', '');
+            setMessage('pwdValidChk', '');
             joinCheckAll("checkInvalidPwd", true);
         }
     };
@@ -241,18 +242,31 @@ function Join() {
         }
     }
 
+    // 파일 타입 유효성 검사
+    const fileTypes = [
+        'image'
+    ]
     // 파일 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        setFile(file);
 
         if (file) {
+            // 파일 타입 유효성 검사
+            const type = file.type;
+            if (!fileTypes.includes(type.substring(0,type.indexOf('/')))) {
+                event.target.value = '';
+                alert('사진 파일만 첨부가 가능합니다.');
+                return;
+            }
+
             const reader = new FileReader();
             reader.onloadend = () => {
                 setSelectedImage(reader.result);
             };
             reader.readAsDataURL(file);
         }
+
+        setFile(file);
     }
 
     // 파일 삭제 
@@ -283,13 +297,15 @@ function Join() {
                 <div>
                     {/* 이미지 */}
                     <div className={"img"} id={"img"}>
-                        <input type="file" ref={fileInputRef} onChange={handleFileChange} />
-                        {selectedImage && (
-                            <div>
-                                <img src={selectedImage} alt="Selected" />
-                                <button onClick={handleFileRemove}>파일 삭제</button>
-                            </div>
-                        )}
+                        <div>
+                            <input type="file" ref={fileInputRef} onChange={handleFileChange} />
+                            {selectedImage && (
+                                <div>
+                                    <img src={selectedImage} alt="Selected" style={ {width: '40%', height: 'auto'}}/>
+                                </div>
+                            )}
+                        </div>
+                            <button onClick={handleFileRemove}>파일 삭제</button>
                     </div>
 
                     {/* 가입란 */}
@@ -305,6 +321,7 @@ function Join() {
                         <div>
                             <label>비밀번호</label>
                             <input id="password" name={"password"} type="password" placeholder={"비밀번호를 입력하세요."} value={password} onChange={handlePasswordChange} />
+                            <div>{messages.pwdValidChk}</div>
                         </div>
                         <div>
                             <label>비밀번호 재확인</label>
@@ -320,6 +337,7 @@ function Join() {
                             <input name={"nickname"} type="text" placeholder={"닉네임을 입력하세요."} value={nickname} onChange={(e) => setNickname(e.target.value)} />
                             <button type="button" onClick={nicknameChk} >중복확인</button>
                             <div>{messages.nicknameMsg}</div>
+                            <div>{messages.checkNickname}</div>
                         </div>
                         <div>
                             <label>이메일</label>
