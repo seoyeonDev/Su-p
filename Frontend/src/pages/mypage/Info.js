@@ -202,7 +202,7 @@ const Info = () => {
 
                     {!isDefaultImg && (
                         <>
-                            <button onClick={handleDeleteImage}>프로필 삭제</button>
+                            <button onClick={handleDeleteImage}>기본 이미지로 변경</button>
                         </>
                     )}
                 </>
