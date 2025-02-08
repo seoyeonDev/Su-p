@@ -25,7 +25,7 @@ const Info = () => {
     }, [emailTime])
 
     useEffect(() => {
-        const fetchData = async () => { 
+        const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/member/mypage', {
                     params: {
@@ -39,7 +39,7 @@ const Info = () => {
                 setEmail(response.data.member.email);
                 localStorage.setItem('userName', response.data.member.name);
                 localStorage.setItem('userEmail', response.data.member.email);
-                
+
                 setImgUrl('http://localhost:3000/member/getImage/' + user_id);
             } catch(error) {
                 console.log("error: " + error);
@@ -115,7 +115,7 @@ const Info = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("vo", new Blob([JSON.stringify(vo)], { type: "application/json" })); 
+    formData.append("vo", new Blob([JSON.stringify(vo)], { type: "application/json" }));
 
     const changeInfo = () => {
         console.log("editEmail: " + editEmail);
@@ -135,16 +135,29 @@ const Info = () => {
         }
     };
 
+    const fileTypes = [
+        'image'
+    ]
+
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
+            console.log(selectedFile.type);
+
+            // 파일 타입이 사진일 경우에만 등록 가능
+            const type = selectedFile.type;
+            if (!fileTypes.includes(type.substring(0,type.indexOf('/')))) {
+                event.target.value = '';
+                alert('사진 파일만 첨부가 가능합니다.');
+                return;
+            }
           // 미리보기 이미지 업데이트
           const reader = new FileReader();
           reader.onloadend = () => {
             setImgUrl(reader.result);
           };
           reader.readAsDataURL(selectedFile);
-    
+
           // 파일 상태 업데이트
           setFile(selectedFile);
         }

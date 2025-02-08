@@ -46,12 +46,31 @@
 		FROM supfiles
 		WHERE file_id = #{fileId}
 	</select>
+
+	<select id="getProfileFile" parameterType="HashMap" resultMap="FileMap">
+		SELECT
+			file_seq,
+			file_id,
+			file_name,
+			file_ext,
+			file_type
+		FROM supfiles
+		WHERE file_id = #{fileId}
+		AND file_type = 'profile'
+	</select>
 	
 	<delete id="delFile" parameterType="HashMap">
 		DELETE
 		FROM supfiles
 		WHERE file_id = #{fileId}
 		AND file_seq = #{fileSeq}
+	</delete>
+
+	<delete id="delProfileFile" parameterType="HashMap">
+		DELETE
+		FROM supfiles
+		WHERE file_id = #{fileId}
+		  AND file_type = 'profile'
 	</delete>
 
 	<!-- 여러 파일 삽입 -->

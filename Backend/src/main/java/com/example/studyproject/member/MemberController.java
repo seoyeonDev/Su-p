@@ -49,7 +49,7 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	@Autowired
-	private SupFilesService filesSerivce;
+	private SupFilesService filesService;
 	
 	@Value("${spring.servlet.multipart.location}")
 	private String path;
@@ -86,58 +86,69 @@ public class MemberController {
 	@PostMapping("/join")
 	public void join(@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 		Member member = memberService.getMemberById(vo.getUser_id());
-		String realPath = path;
-		if(member == null) {
 
-			// 파일이 등록될 경우
-			if (f != null){
-				path = path + "user_img/" + vo.getUser_id();
-				LOGGER.info("File path: " + path);
-				File dir = new File(path);
-				dir.mkdir();
-				String fname = f.getOriginalFilename();
+		if (member == null) {
+			// 사용자별 경로 생성
+			String userPath = path + "user_img/" + vo.getUser_id();
+			LOGGER.info("File path: " + userPath);
+			File dir = new File(userPath);
 
-				String imgPath = "";
-				if(fname != null && !fname.equals("")) {
-					imgPath = path + "/" + fname;
-					File imgSave = new File(imgPath);
-					try {
-						f.transferTo(imgSave);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-				}
-				vo.setProfile_img(imgPath);
-
-				// 파일 테이블에 이미지 정보 추가
-				SupFiles files = new SupFiles();
-				String[] parts = fname.split("\\.");
-				String fileName = parts[0]; // 원본파일명
-				String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
-				LocalDateTime now = LocalDateTime.now();
-
-				files.setFile_seq(UUID.randomUUID().toString());
-				files.setFile_id(vo.getUser_id());
-				files.setFile_name(fileName);
-				files.setFile_ext(fileExtension);
-				files.setIns_id(vo.getUser_id());
-				files.setIns_date(now);
-				filesSerivce.insertFiles(files);
-			} else {
-				vo.setProfile_img(realPath + "default.jpg");
+			// 디렉토리 생성
+			if (!dir.exists() && !dir.mkdirs()) {
+				LOGGER.error("Failed to create directory: " + userPath);
+				throw new RuntimeException("Failed to create directory for user images");
 			}
+
+			String fname = f != null ? f.getOriginalFilename() : null;
+			String imgPath = null;
+
+			// 파일 처리
+			if (fname != null && !fname.isEmpty()) {
+				try {
+					imgPath = userPath + "/" + fname;
+					File imgSave = new File(imgPath);
+					f.transferTo(imgSave);
+				} catch (Exception e) {
+					LOGGER.error("Error while saving file: " + fname, e);
+					throw new RuntimeException("File save failed: " + fname, e);
+				}
+			}
+
+			// 사용자 정보에 이미지 경로 설정
+			vo.setProfile_img(imgPath);
 			memberService.insertMember(vo);
 
+			// 파일 테이블에 이미지 정보 추가
+			if (imgPath != null) {
+				try {
+					SupFiles files = new SupFiles();
+					String[] parts = fname.split("\\.");
+					String fileName = parts.length > 1 ? parts[0] : fname; // 확장자가 없을 경우
+					String fileExtension = parts.length > 1 ? parts[parts.length - 1].toLowerCase() : ""; // 확장자 추출
+
+					LocalDateTime now = LocalDateTime.now();
+
+					files.setFile_seq(UUID.randomUUID().toString());
+					files.setFile_id(vo.getUser_id());
+					files.setFile_name(fileName);
+					files.setFile_ext(fileExtension);
+					files.setIns_id(vo.getUser_id());
+					files.setIns_date(now);
+					files.setFile_type("profile");
+
+					filesService.insertFiles(files);
+				} catch (Exception e) {
+					LOGGER.error("Error while inserting file metadata", e);
+					throw new RuntimeException("File metadata insertion failed", e);
+				}
+			}
 
 
-      path = realPath;
-      LOGGER.info("================path: " + path);
-			LOGGER.info("================ " + "Join");
-			LOGGER.info("================ " + vo);
-		} else {	
-			LOGGER.info("================ " + "Join failed");
+			LOGGER.info("Join successful for user: " + vo);
+		} else {
+			LOGGER.info("Join failed: User already exists");
 		}
+
 	}
 
 	/**
@@ -224,7 +235,7 @@ public class MemberController {
     public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
 		ResponseEntity rtn = null;
     	map.put("fileId", user_id);
-    	List<HashMap<String, Object>> list = filesSerivce.getFile(map);
+    	List<HashMap<String, Object>> list = filesService.getProfileFile(map);
 		String imagePath = null;
 		String fileExtension = null;
 
@@ -288,21 +299,35 @@ public class MemberController {
 			@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 		
 		map.put("fileId", vo.getUser_id());
-		List<HashMap<String, Object>> list = filesSerivce.getFile(map);
-		String img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
-		
+		List<HashMap<String, Object>> list = filesService.getProfileFile(map);
+
+		String img_name = null;
 		String realPath = path;
-		String oldImg = path + "user_img/" + vo.getUser_id() + "/" + img_name;
+		String oldImg = null;
+		if (list.isEmpty()){	// img 가 없을 경우
+			oldImg = path + "default.jpeg";
+		} else {
+			img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
+			oldImg = path + "user_img/" + vo.getUser_id() + "/" + img_name;
+		}
+
 		String fname = f.getOriginalFilename();
 		
 		String imgPath = "";
 		if(fname != null && !fname.equals("")) {
 			path = path + "user_img/" + vo.getUser_id();
+
+			File dir = new File(path);	// 파일 경로 존재 여부 확인
+			if (!dir.exists() && !dir.mkdirs()) {
+				LOGGER.error("Failed to create directory: " + path);
+				throw new RuntimeException("Failed to create directory for user images");
+			}
+
 			imgPath = path + "/" + fname;
 			File imgSave = new File(imgPath);
 			File imgDel = new File(oldImg);
 			imgDel.delete();
-			filesSerivce.delFile(map);
+			filesService.delProfileFile(map);
 			try {
 				f.transferTo(imgSave);
 				vo.setProfile_img(imgPath);
@@ -327,8 +352,9 @@ public class MemberController {
 		files.setFile_ext(fileExtension);
 		files.setIns_id(vo.getUser_id());
 		files.setIns_date(now);
+		files.setFile_type("profile");
 		
-		filesSerivce.insertFiles(files);
+		filesService.insertFiles(files);
 		path = realPath;
 	}
 	

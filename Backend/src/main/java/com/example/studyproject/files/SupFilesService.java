@@ -19,7 +19,8 @@ import java.util.List;
  * @ 수정일           수정자        수정내용
  * @ -----------    --------    ---------------------------
  * @ 2024.07.13     봉선호        최초 생성
- * @ 2024.11.15     김혜원
+ * @ 2024.11.15     김혜원         파일 정보 불러오기 내용 수정
+ * @ 2025.02.01		이서연		프로필 사진 조회, 삭제 추가
  */
 
 @Service
@@ -56,10 +57,20 @@ public class SupFilesService {
         }
         return fileList;
     }
+
+    // 프로필 사진 조회
+    public List<HashMap<String, Object>> getProfileFile(HashMap<String, Object> map) {
+        return filesDao.getProfileFile(map);
+    }
     
     // 파일 삭제
     public void delFile(HashMap<String, Object> map) {
     	filesDao.delFile(map);
+    }
+
+    // 프로필 사진 삭제
+    public void delProfileFile(HashMap<String, Object> map) {
+        filesDao.delProfileFile(map);
     }
 
 }

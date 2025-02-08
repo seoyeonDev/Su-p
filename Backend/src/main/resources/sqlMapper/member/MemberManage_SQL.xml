@@ -48,7 +48,8 @@
 		UPDATE member
 		SET
 			nickname = #{nickname},
-			email = #{email}
+			email = #{email},
+			profile_img = #{profile_img}
 		WHERE user_id = #{user_id}
 	</update>
 	
