@@ -27,8 +27,7 @@ const StudygroupDetail = () => {
         try {
             const response = await axios.get('http://localhost:3000/studygroup/studyDetail', {
                 params: {
-                    group_id: groupId,
-                    user_id
+                    group_id: groupId
                 }
             });
             setStudyGroupItems(response.data.vo);
