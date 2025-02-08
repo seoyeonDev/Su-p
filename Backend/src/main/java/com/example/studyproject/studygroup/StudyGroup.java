@@ -32,6 +32,7 @@ public class StudyGroup {
     private String study_desc;        	// 스터디 소개
     private String kind;        	// 스터디 종류 => 코드 테이블 참조
     private String status;   	  	// 활성화상태 => 코드 테이블 참조
+    private String status_nm;
     private int mem_cnt;        	// 최대멤버수
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startdate;	// 스터디시작일
