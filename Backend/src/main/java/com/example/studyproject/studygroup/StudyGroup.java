@@ -32,7 +32,7 @@ public class StudyGroup {
     private String study_desc;        	// 스터디 소개
     private String kind;        	// 스터디 종류 => 코드 테이블 참조
     private String status;   	  	// 활성화상태 => 코드 테이블 참조
-    private String status_nm;
+    private String status_nm;       // 활성화상태명
     private int mem_cnt;        	// 최대멤버수
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startdate;	// 스터디시작일
@@ -40,7 +40,7 @@ public class StudyGroup {
     private LocalDateTime enddate;  	// 스터디종료일
     private int view_cnt;       	// 조회수
     private String chk_m;   	    // 제출기준 => 코드 테이블 참조
-    private String chk_m_nm;
+    private String chk_m_nm;        // 제출기준명
     private int chk_min_cnt;		// 제출최소횟수
     private int chk_total_cnt;		// 전체제출회수
     private int penalty;			// 페널티기준
