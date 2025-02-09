@@ -198,7 +198,7 @@ public class StudyGroupController {
 		map.put("vo", vo);
 		
 		int userCnt = joinedgroupService.selectJoinedListSize(group_id);
-		if(vo.getLeader_id().equals(loginId)) {
+		if(vo.getLeader_id().equals(loginId)) {	// TODO if 부분 있어야 하는 로직이 맞는지 확인 필요
 			// 상세 조회 클릭을 그룹장이 했을 때,
 			LOGGER.info("0");
 			if(userCnt > 1) {
@@ -214,10 +214,10 @@ public class StudyGroupController {
 			Joinedgroup jgVo = joinedgroupService.getByUserIdAndGroupId(loginId, group_id);
 			if(jgVo != null) {
 				// 일반 유저가 이미 이 그룹에 신청을 했을 때,
-				map.put("status", JoinStatus.PERM10); // 2
+				map.put("perm", JoinStatus.PERM10); // 2
 			} else {
 				// 일반 유저가 이 그룹에 신청을 아직 안했을 때,
-				map.put("status", JoinStatus.PERM00); // 3
+				map.put("perm", JoinStatus.PERM00); // 3
 			}
 		}
 		return map;

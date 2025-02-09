@@ -12,6 +12,7 @@ const StudygroupDetail = () => {
     const [studyGroupEnddate, setStudyGroupEnddate] = useState();
     const [studygroupSubM, setStudygroupSubM] = useState();
     const [studygroupMinCnt, setStudygroupMinCnt] = useState();
+    const [studygroupPerm, setStudygroupPerm] = useState();
     const user_id = getIdFromLocalStorage();
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}.${String(currentDate.getMonth() + 1).padStart(2, '0')}.${String(currentDate.getDate()).padStart(2, '0')}`;
@@ -35,11 +36,13 @@ const StudygroupDetail = () => {
             setStudyGroupEnddate(response.data.vo.enddate.split('T')[0]);
             setStudygroupSubM(response.data.vo.chk_m_nm);
             setStudygroupMinCnt(response.data.vo.chk_min_cnt);
-            setStudyGroupStatus(response.data.status);
+            setStudygroupPerm(response.data.perm);
+            setStudyGroupStatus(response.data.vo.status);
         } catch (error) {
             console.error('Error fetching data:', error)
         }
     }
+
 
     /**
      * 관리자 전용 - 수정 페이지로 이동
@@ -134,8 +137,9 @@ const StudygroupDetail = () => {
                         <button onClick={() => handleDeleteGroup(studyGroupItems.group_id, studyGroupItems.leader_id)}>삭제</button>
                     </>
                 )}
-                {studyGroupStatus === 'PERM10' && studyGroupStatus === 'STAT10' && <button onClick={() => handleCancleJoin(studyGroupItems.group_id, user_id)}>가입취소</button>}
-                {studyGroupStatus === 'PERM00' && studyGroupStatus === 'STAT10' && <button onClick={() => handleJoinGroup(studyGroupItems.group_id, user_id)}>가입하기</button>}
+                {studygroupPerm === 'PERM10' && studyGroupStatus === 'STAT10' && <button onClick={() => handleCancleJoin(studyGroupItems.group_id, user_id)}>가입취소</button>}
+                {studygroupPerm === 'PERM00' && studyGroupStatus === 'STAT10'
+                    && <button onClick={() => handleJoinGroup(studyGroupItems.group_id, user_id)}>가입하기</button>}
             </div>
             <div>
                 <textarea value={studyGroupItems.study_desc} style={{width:'600px', height:'300px', resize:'none' }}/>
