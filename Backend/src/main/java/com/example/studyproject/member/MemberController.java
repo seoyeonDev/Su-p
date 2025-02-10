@@ -2,6 +2,7 @@ package com.example.studyproject.member;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -230,23 +231,64 @@ public class MemberController {
 		return map;
 	}
 
-	// 멤버 - 이미지
-    @GetMapping("/getImage/{user_id}")
-    public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
-		ResponseEntity rtn = null;
-    	map.put("fileId", user_id);
-    	List<HashMap<String, Object>> list = filesService.getProfileFile(map);
+	/**
+	 * 기본 이미지를 가져온다.
+	 * @param map
+	 * @return
+	 */
+	@GetMapping("/getDefaultImage")
+	public ResponseEntity<byte[]> getDefaultImage(@RequestParam HashMap<String, Object> map) {
+		String defaultImg = "uploads/default.jpeg"; // 기본 이미지 경로
+
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(defaultImg);
+		byte[] imageBytes;
+		try {
+			imageBytes = inputStream.readAllBytes();
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.setContentType(MediaType.IMAGE_JPEG);
+			headers.setContentLength(imageBytes.length);
+
+			return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	/**
+	 * 사용자의 프로필 이미지를 가져온다.
+	 * @param map
+	 * @param user_id
+	 * @return
+	 */
+	@GetMapping("/getImage/{user_id}")
+	public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
+		map.put("fileId", user_id);
+		List<HashMap<String, Object>> list = filesService.getProfileFile(map);
 		String imagePath = null;
 		String fileExtension = null;
 
+		String defaultImg = "uploads/default.jpeg"; // 기본 이미지 경로
+
 		if (list.isEmpty()){	// default 이미지일 경우
-			imagePath = path + "default.jpeg";
-			fileExtension = "jpeg";
+			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(defaultImg);
+			byte[] imageBytes;
+			try {
+				imageBytes = inputStream.readAllBytes();
+				HttpHeaders headers = new HttpHeaders();
+
+				headers.setContentType(MediaType.IMAGE_JPEG);
+				headers.setContentLength(imageBytes.length);
+
+				return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		} else {				// default 이미지가 아닐 경우 / supfiles 에 파일이 있을 경우
 			String img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
 			imagePath = path + "user_img/" + user_id + "/" + img_name;
 			fileExtension = (String) list.get(0).get("fileExt"); // 이미지 확장자
-		}
 
 			// 파일이 존재하는지 확인
 			Path imageFilePath = Paths.get(imagePath);
@@ -268,9 +310,6 @@ public class MemberController {
 			// 응답에 이미지 데이터와 헤더 설정
 			HttpHeaders headers = new HttpHeaders();
 
-
-//			String fileExtension = (String) list.get(0).get("fileExt"); // 이미지 확장자
-
 			MediaType mediaType;
 			if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension)) {
 				mediaType = MediaType.IMAGE_JPEG;
@@ -285,9 +324,9 @@ public class MemberController {
 			headers.setContentLength(imageBytes.length);
 
 			return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-//		return rtn;
-    }
-	
+		}
+	}
+
 	/**
 	 * 내 정보 수정
 	 * @param vo
