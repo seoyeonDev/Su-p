@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Link, useNavigate} from "react-router-dom";
+import {showMsgAlert} from "../Common.js";
 
 
 function FindId () {
@@ -34,9 +34,11 @@ function FindId () {
         })
             .then(response => {
                 if(response.status === 200 && response.data !== '존재하지 않는 회원 정보입니다.'){
-                    alert(response.data + " 입니다.");
+                    showMsgAlert("아이디 찾기 성공", response.data + " 입니다.");
+                    //alert(response.data + " 입니다.");
                 } else if (response.data === '존재하지 않는 회원 정보입니다.'){
-                    alert(response.data);
+                    showMsgAlert("아이디 찾기 실패", response.data);
+                    //alert(response.data);
                 }
             })
             .catch((err)=> {
@@ -46,18 +48,21 @@ function FindId () {
 
     const emailSend = () => {
         if (!userEmail.includes("@")){
-            alert("유효한 이메일을 입력해주세요.");
+            showMsgAlert("이메일 형식 오류", "유효한 이메일을 입력해주세요.");
+            //alert("유효한 이메일을 입력해주세요.");
 
         } else {
             axios.post(`http://localhost:3000/mail/mailSend?mail=${userEmail}`)
                 .then(response => {
                     console.log(response);
                     if(response.data.success){
-                        alert('메일을 발송했습니다.')
+                        showMsgAlert("이메일 인증", "메일을 발송했습니다.");
+                        //alert('메일을 발송했습니다.')
                         setShowUserNumber(true);
                         startTimer();
                     }else {
-                        alert('인증번호 발송에 실패하였습니다.')
+                        showMsgAlert("이메일 인증", "인증번호 발송에 실패하였습니다.");
+                        //alert('인증번호 발송에 실패하였습니다.')
                     }
                 })
                 .catch(error => {
@@ -72,7 +77,8 @@ function FindId () {
             .then(response => {
                 if (response.status === 200 ){
                     if (response.data){
-                        alert('번호가 일치합니다.');
+                        showMsgAlert("이메일 인증", "이메일 인증에 성공하였습니다.");
+                        //alert('번호가 일치합니다.');
                         setShowFindId(true);
                     } else {
                         console.log(response.data)

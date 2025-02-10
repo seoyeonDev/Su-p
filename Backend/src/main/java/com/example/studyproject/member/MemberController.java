@@ -193,7 +193,6 @@ public class MemberController {
 			}
 
 			LOGGER.info("================ " + msg);
-			map.put("msg", msg);
 			map.put("loginId", member.getUser_id());
 			response.addCookie(cookie);
 //			response.getWriter().println(cookie + " cookie");
@@ -201,13 +200,14 @@ public class MemberController {
 
 		} else if(member != null && member.getLock_yn().equals("Y")){
 			msg = "잠금된 계정입니다. 비밀번호 찾기로 잠금 해제해주세요.";
-//			msg = "unlocked";
 			LOGGER.info("================ " + msg);
-			map.put("msg", msg);
+
 			return map;
 		} else {
 			msg = "존재하지 않는 계정입니다. 회원가입을 진행해주세요.";
 		}
+		map.put("msg", msg);
+
 		LOGGER.info("================ " + msg);
 		return map;
 	}

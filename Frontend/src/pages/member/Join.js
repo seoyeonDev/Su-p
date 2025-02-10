@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/components/Member.css';
+import {showIconAlert, showMsgAlert} from "../Common.js";
 
 
 function Join() {
@@ -234,6 +235,7 @@ function Join() {
                 .then(response => {
                     console.log(response);
                     if (response.status === 200) { // 가입 성공
+                        showIconAlert('회원가입 성공', '', 'success');
                         navigate('/login');
                     }
                 }).catch(error => {
@@ -255,7 +257,8 @@ function Join() {
             const type = file.type;
             if (!fileTypes.includes(type.substring(0,type.indexOf('/')))) {
                 event.target.value = '';
-                alert('사진 파일만 첨부가 가능합니다.');
+                showMsgAlert('프로필 사진 오류', '사진 파일만 첨부가 가능합니다.');
+                //alert('사진 파일만 첨부가 가능합니다.');
                 return;
             }
 
