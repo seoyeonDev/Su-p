@@ -180,7 +180,16 @@
 		WHERE 1=1
 		  AND group_id = #{group_id};
 	</select>
-	
+
+	<!-- 회원 탈퇴 가능 여부  (운영중인 스터디의 개수 반환) -->
+	<select id="countActiveStudyGroups" resultType="int">
+		SELECT COUNT(*)
+		FROM studygroup
+		WHERE leader_id = #{user_id}
+		AND NOW() BETWEEN startdate AND enddate;
+	</select>
+
+
 	<!-- 조회수 업데이트 -->
 	<update id="updateViewCnt">
 		UPDATE studygroup

@@ -17,6 +17,9 @@ public interface StudyLogsDao {
     // 결과물 업데이트
     void updateStudyLogs(StudyLogs vo);
 
+    // 회원 탈퇴 : 알수 없음으로 변경
+    void anonymizeUserId(String user_id);
+
 	  // 스터디로그 상세 조회
 	  StudyLogs selectStudyLogs(String post_id);
 

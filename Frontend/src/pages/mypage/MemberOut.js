@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {getIdFromLocalStorage} from '../Common.js';
 
 const MemberOut = () => {
     const [terms, setTerms] = useState('');
     const [agreed, setAgreed] = useState(false);
     const navigate = useNavigate();
-    const user_id = localStorage.getItem('loginId');
+    const user_id = getIdFromLocalStorage();
 
     useEffect(() => {
       // withdrawalTerms.txt 파일을 불러와서 내용을 상태에 저장
@@ -30,14 +31,24 @@ const MemberOut = () => {
                 }
             })
             .then(response => {
-                if(response.data) {
-                    alert('탈퇴가 완료되었습니다.');
+                console.log(response.data); 
+            
+                // 응답이 성공한 경우 (탈퇴 성공)
+                if (response.data.success) {
+                    alert(response.data.msg);  // TODO. sweet alert로 수정
                     localStorage.clear();
-                    navigate('/home');
+                    navigate('/'); 
                 } else {
-                    alert('비밀번호가 일치하지 않습니다.');
+                    // 탈퇴 불가능한 경우 (비밀번호 오류, 스터디 그룹이 존재하는 경우 등)
+                    alert(response.data.msg); // TODO. sweet alert로 수정
                 }
+            })
+            .catch(error => {
+                // 네트워크 오류 또는 서버 오류 처리
+                console.error('탈퇴 처리 중 오류 발생:', error);
+                alert('탈퇴 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
             });
+            
         } else {
             alert('탈퇴 약관에 동의해주세요.');
         }

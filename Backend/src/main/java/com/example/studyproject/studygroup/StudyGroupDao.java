@@ -48,4 +48,7 @@ public interface StudyGroupDao {
 
 	// 제목 & (날짜 or 조회수) 조회
 	List<?> getStudyGroups(String title, Boolean isSortByViews, Boolean isSortByLatest);
+
+	// 회원 탈퇴 가능 여부 (운영중인 스터디의 개수 반환)
+	int countActiveStudyGroups(String user_id);
 }

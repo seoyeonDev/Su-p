@@ -120,7 +120,11 @@
 	<!-- 회원 탈퇴 -->
 	<delete id="deleteMember">
 		DELETE FROM member
-		WHERE user_id = #{user_id}
+		WHERE user_id = #{user_id};
+		DELETE FROM joinedgroup
+		WHERE user_id = #{user_id};
+		DELETE FROM penaltylog
+		WHERE user_id = #{user_id};
 	</delete>
 
 
