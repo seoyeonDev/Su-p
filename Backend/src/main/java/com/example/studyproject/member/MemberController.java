@@ -2,6 +2,7 @@ package com.example.studyproject.member;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -238,23 +239,64 @@ public class MemberController {
 		return map;
 	}
 
-    // 멤버 - 이미지
-    @GetMapping("/getImage/{user_id}")
-    public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
-		ResponseEntity rtn = null;
-    	map.put("fileId", user_id);
-    	List<HashMap<String, Object>> list = filesService.getProfileFile(map);
+	/**
+	 * 기본 이미지를 가져온다.
+	 * @param map
+	 * @return
+	 */
+	@GetMapping("/getDefaultImage")
+	public ResponseEntity<byte[]> getDefaultImage(@RequestParam HashMap<String, Object> map) {
+		String defaultImg = "uploads/default.jpeg"; // 기본 이미지 경로
+
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(defaultImg);
+		byte[] imageBytes;
+		try {
+			imageBytes = inputStream.readAllBytes();
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.setContentType(MediaType.IMAGE_JPEG);
+			headers.setContentLength(imageBytes.length);
+
+			return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	/**
+	 * 사용자의 프로필 이미지를 가져온다.
+	 * @param map
+	 * @param user_id
+	 * @return
+	 */
+	@GetMapping("/getImage/{user_id}")
+	public ResponseEntity<byte[]> getImage(@RequestParam HashMap<String, Object> map, @PathVariable String user_id) {
+		map.put("fileId", user_id);
+		List<HashMap<String, Object>> list = filesService.getProfileFile(map);
 		String imagePath = null;
 		String fileExtension = null;
 
+		String defaultImg = "uploads/default.jpeg"; // 기본 이미지 경로
+
 		if (list.isEmpty()){	// default 이미지일 경우
-			imagePath = path + "default.jpeg";
-			fileExtension = "jpeg";
+			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(defaultImg);
+			byte[] imageBytes;
+			try {
+				imageBytes = inputStream.readAllBytes();
+				HttpHeaders headers = new HttpHeaders();
+
+				headers.setContentType(MediaType.IMAGE_JPEG);
+				headers.setContentLength(imageBytes.length);
+
+				return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		} else {				// default 이미지가 아닐 경우 / supfiles 에 파일이 있을 경우
 			String img_name = list.get(0).get("fileName") + "." +list.get(0).get("fileExt");
 			imagePath = path + "user_img/" + user_id + "/" + img_name;
 			fileExtension = (String) list.get(0).get("fileExt"); // 이미지 확장자
-		}
 
 			// 파일이 존재하는지 확인
 			Path imageFilePath = Paths.get(imagePath);
@@ -276,9 +318,6 @@ public class MemberController {
 			// 응답에 이미지 데이터와 헤더 설정
 			HttpHeaders headers = new HttpHeaders();
 
-
-//			String fileExtension = (String) list.get(0).get("fileExt"); // 이미지 확장자
-
 			MediaType mediaType;
 			if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension)) {
 				mediaType = MediaType.IMAGE_JPEG;
@@ -293,24 +332,42 @@ public class MemberController {
 			headers.setContentLength(imageBytes.length);
 
 			return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-//		return rtn;
-    }
-	
+		}
+	}
+
 	/**
-	 * 수정
+	 * 내 정보 수정
 	 * @param vo
+	 * @param isDeleteImg - 이미지 기본으로 변경 여부
 	 * @param f
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PostMapping("/update")
-	public void update(@RequestParam HashMap<String, Object> map,
-			@RequestPart("vo") Member vo, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
-		
-		map.put("fileId", vo.getUser_id());
-		List<HashMap<String, Object>> list = filesService.getProfileFile(map);
+	public void update(@RequestPart("vo") Member vo, @RequestPart("isDeleteImg") Boolean isDeleteImg, @RequestParam(value="file", required=false) MultipartFile f) throws NoSuchAlgorithmException {
 
+		// 1. 파일이 없으면 기존 데이터만 업데이트 (기본 이미지)
+		if(f == null && !isDeleteImg) {
+			memberService.updateMember(vo);
+			return;
+		}
+
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("fileId", vo.getUser_id());
+
+		String updatePath = ""; // 최종 업데이트 파일 경로
+
+		List<HashMap<String, Object>> list = filesService.getProfileFile(map); // 기존 프로필 이미지 정보 조회
+
+		// 2. 사진 → 기본 이미지로 변경
+		if (f== null && isDeleteImg){ // 사진 → 기본 이미지로 변경
+			vo.setProfile_img(null);
+			filesService.delProfileFile(map);
+			memberService.updateMember(vo);
+			return;
+		}
+
+		// 3. 사진 → 사진 or 기본 → 사진
 		String img_name = null;
-		String realPath = path;
 		String oldImg = null;
 		if (list.isEmpty()){	// img 가 없을 경우
 			oldImg = path + "default.jpeg";
@@ -319,22 +376,27 @@ public class MemberController {
 			oldImg = path + "user_img/" + vo.getUser_id() + "/" + img_name;
 		}
 
-		String fname = f.getOriginalFilename();
-		
+		String fname = f != null ? f.getOriginalFilename() : null;
+
 		String imgPath = "";
-		if(fname != null && !fname.equals("")) {
-			path = path + "user_img/" + vo.getUser_id();
+		if(fname != null && !fname.isEmpty()) {
+			updatePath = path + "user_img/" + vo.getUser_id(); // 최종 저장될 프로필 파일 경로
 
 			File dir = new File(path);	// 파일 경로 존재 여부 확인
 			if (!dir.exists() && !dir.mkdirs()) {
-				LOGGER.error("Failed to create directory: " + path);
+				LOGGER.error("Failed to create directory: " + updatePath);
 				throw new RuntimeException("Failed to create directory for user images");
 			}
 
-			imgPath = path + "/" + fname;
+			imgPath = updatePath + "/" + fname;
 			File imgSave = new File(imgPath);
-			File imgDel = new File(oldImg);
-			imgDel.delete();
+
+			// default 이미지는 삭제 대상에서 제외
+			if(!oldImg.contains("default")){
+				File imgDel = new File(oldImg);
+				imgDel.delete();
+			}
+
 			filesService.delProfileFile(map);
 			try {
 				f.transferTo(imgSave);
@@ -342,28 +404,43 @@ public class MemberController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		} else {
 			vo.setProfile_img(oldImg);
 		}
+
+		// member 정보 update
 		memberService.updateMember(vo);
-		
+
 		// 파일 테이블에 이미지 정보 추가
-		SupFiles files = new SupFiles();
-		String[] parts = fname.split("\\.");
-		String fileName = parts[0]; // 원본파일명
-        String fileExtension = parts[parts.length - 1].toLowerCase(); // 확장자 추출 및 소문자로 변환
-        LocalDateTime now = LocalDateTime.now();
-		
-		files.setFile_id(vo.getUser_id());
-		files.setFile_name(fileName);
-		files.setFile_ext(fileExtension);
-		files.setIns_id(vo.getUser_id());
-		files.setIns_date(now);
-		files.setFile_type("profile");
-		
-		filesService.insertFiles(files);
-		path = realPath;
+		try {
+			SupFiles files = new SupFiles();
+			String[] parts = null;
+
+			if(fname != null){
+				parts =  fname.split("\\.");
+			} else {
+				parts = new String[] {"default", "jpeg"};
+			}
+
+			String fileName = parts.length > 1 ? parts[0] : fname; // 확장자가 없을 경우
+			String fileExtension = parts.length > 1 ? parts[parts.length - 1].toLowerCase() : ""; // 확장자 추출
+
+			LocalDateTime now = LocalDateTime.now();
+
+			files.setFile_seq(UUID.randomUUID().toString());
+			files.setFile_id(vo.getUser_id());
+			files.setFile_name(fileName);
+			files.setFile_ext(fileExtension);
+			files.setIns_id(vo.getUser_id());
+			files.setIns_date(now);
+			files.setFile_type("profile");
+
+			filesService.insertFiles(files);
+		} catch (Exception e) {
+			LOGGER.error("Error while inserting file metadata", e);
+			throw new RuntimeException("File metadata insertion failed", e);
+		}
 	}
 	
   /**
