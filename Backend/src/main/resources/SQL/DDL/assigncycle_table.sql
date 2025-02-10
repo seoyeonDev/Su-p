@@ -22,3 +22,8 @@ COMMENT ON TABLE public.sg_assigncycle
 alter table public.sg_assigncycle
     add constraint sg_assigncycle_pk
         primary key (group_id, assigncycle);
+
+-- group_id char > varchar 로 타입 변경
+alter table public.sg_assigncycle
+    alter column group_id type varchar(255) using group_id::varchar(255);
+

@@ -6,6 +6,7 @@ import '../styles/components/Common.css';
 import {Cookies, useCookies} from 'react-cookie';
 import {useNavigate} from "react-router-dom";
 import {getIdFromLocalStorage} from "../pages/Common";
+import {showIconAlert} from "../pages/Common.js";
 
 
 function Header() {
@@ -51,7 +52,7 @@ function Header() {
         if (Date.now() > expireTime) {
             localStorage.removeItem(key);
             logout();
-            alert("로그인이 만료되었습니다. 재로그인 해 주세요.");
+            showIconAlert("로그인 만료", "로그인이 만료되었습니다. 재로그인 해 주세요.", "warning");
             navigate('/');
             return null;
         }
@@ -72,24 +73,18 @@ function Header() {
     // }
 
     const handleLogout = () => { // TODO 서버쪽 /logout으로 보내기
-
-        // alert(localStorage.getItem("user_id") + " 전");
         const user_id = getLoginExpireChk("user_id");
-        alert(user_id);
         if (user_id) {
-            // if (localStorage.getItem("user_id") != null){
-            // alert(localStorage.getItem("user_id"));
-            localStorage.removeItem("user_id")
-            // alert(localStorage.getItem("user_id"));
+            localStorage.removeItem("user_id");
 
             // removeCookie("user_id");
 
             logout();
+            showIconAlert("로그아웃 성공", "", "success");
             navigate('/');
 
         } else {
             alert("로그인 상태가 아닙니다. 재로그인 해 주세요.")
-
         }
 
     };

@@ -101,8 +101,25 @@
   <!-- 그룹 리스트 호출 -->
 	<select id="selectListStudyGroup" resultType="hashmap">
 		SELECT
-			<include refid="studyGroupColumns"/>
-		FROM studygroup
+			A.group_id,
+			A.leader_id,
+			A.title,
+			A.name,
+			A.study_desc,
+			A.kind,
+			A.status,
+			A.mem_cnt,
+			A.startdate,
+			A.enddate,
+			A.view_cnt,
+			A.chk_m,
+			A.chk_min_cnt,
+			A.chk_total_cnt,
+			A.penalty,
+			B.comm_cdnm status_nm
+		FROM studygroup A
+		JOIN code_d B
+			ON A.status = B.comm_cd
 		WHERE 1=1
 			AND (status LIKE 'STAT10'
 			OR status LIKE 'STAT20')
@@ -112,8 +129,25 @@
 	<!-- 그룹 제목으로 리스트 호출 --> 
 	<select id="selectListByTitle" resultType="hashmap">
 		SELECT
-			<include refid="studyGroupColumns"/>
-		FROM studygroup
+			A.group_id,
+			A.leader_id,
+			A.title,
+			A.name,
+			A.study_desc,
+			A.kind,
+			A.status,
+			A.mem_cnt,
+			A.startdate,
+			A.enddate,
+			A.view_cnt,
+			A.chk_m,
+			A.chk_min_cnt,
+			A.chk_total_cnt,
+			A.penalty,
+			B.comm_cd status_nm
+		FROM studygroup A
+		 JOIN code_d B
+			  ON A.status = B.comm_cd
 		WHERE 1=1
 			AND title like '%'||#{title}||'%'
 			AND (status LIKE 'STAT10'
@@ -123,11 +157,28 @@
     
 	<!-- 그룹 상세 조회 -->
 	<select id="selectStudyGroup" resultType="com.example.studyproject.studygroup.StudyGroup">
-		SELECT
-			<include refid="studyGroupColumns"/>
-		FROM studygroup
+		select
+			A.group_id,
+			A.leader_id,
+			A.title,
+			A.name,
+			A.study_desc,
+			A.kind,
+			A.status,
+			A.mem_cnt,
+			A.startdate,
+			A.enddate,
+			A.view_cnt,
+			A.chk_m,
+			B.comm_cdnm chk_m_nm,
+			A.chk_min_cnt,
+			A.chk_total_cnt,
+			A.penalty
+		FROM studygroup A
+				 JOIN code_d B
+					  on chk_m = B.comm_cd
 		WHERE 1=1
-		AND group_id = #{group_id};
+		  AND group_id = #{group_id};
 	</select>
 	
 	<!-- 조회수 업데이트 -->

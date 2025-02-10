@@ -27,6 +27,8 @@ import com.example.studyproject.enums.JoinStatus;
 import com.example.studyproject.enums.StudygroupStatus;
 import com.example.studyproject.joinedgroup.Joinedgroup;
 import com.example.studyproject.joinedgroup.JoinedgroupService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -180,9 +182,13 @@ public class StudyGroupController {
 	
 	// 그룹 상세 조회 + 조회수 증가
 	@GetMapping("/studyDetail")
-	public Map<String, Object> studyDetail(@RequestParam String group_id, @RequestParam String user_id) {
+	public Map<String, Object> studyDetail(@RequestParam String group_id, HttpServletRequest request) {
 
 		Map<String, Object> map = new HashMap<>();
+
+		HttpSession session = request.getSession();
+		String loginId = (String) session.getAttribute("loginId");
+//		if (loginId.isEmpty()) loginId = null;
 
 		// 조회수 +1 카운트
 		groupService.updateViewCnt(group_id);
@@ -192,7 +198,7 @@ public class StudyGroupController {
 		map.put("vo", vo);
 		
 		int userCnt = joinedgroupService.selectJoinedListSize(group_id);
-		if(vo.getLeader_id().equals(user_id)) {
+		if(vo.getLeader_id().equals(loginId)) {	// TODO if 부분 있어야 하는 로직이 맞는지 확인 필요
 			// 상세 조회 클릭을 그룹장이 했을 때,
 			LOGGER.info("0");
 			if(userCnt > 1) {
@@ -205,13 +211,13 @@ public class StudyGroupController {
 		} else {
 			// 상세 조회 클릭을 일반 유저가 했을 때,
 			LOGGER.info("1");
-			Joinedgroup jgVo = joinedgroupService.getByUserIdAndGroupId(user_id, group_id);
+			Joinedgroup jgVo = joinedgroupService.getByUserIdAndGroupId(loginId, group_id);
 			if(jgVo != null) {
 				// 일반 유저가 이미 이 그룹에 신청을 했을 때,
-				map.put("status", JoinStatus.PERM10); // 2
+				map.put("perm", JoinStatus.PERM10); // 2
 			} else {
 				// 일반 유저가 이 그룹에 신청을 아직 안했을 때,
-				map.put("status", JoinStatus.PERM00); // 3
+				map.put("perm", JoinStatus.PERM00); // 3
 			}
 		}
 		return map;
