@@ -15,7 +15,7 @@ function Login () {
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
     const [cookies, setCookie] = useCookies(['user_id']);
-    const [sessionTime, setSessionTime] = useState(3600);
+    const [sessionTime, setSessionTime] = useState(30*60);
 
     const memberVo = {
         user_id : userId,
