@@ -106,7 +106,7 @@ const Info = () => {
             console.log("error: " + error);
         }
     };
-   
+
 
     const handleInputNickName = (event) => {
         setInputNickNm(event.target.value);
@@ -131,6 +131,7 @@ const Info = () => {
         setEditEmail(0);
     }
 
+    // 이메일 변경
     const changeEmail = () => {
         setEditEmail(0);
         if(!email.includes("@") || email.includes(" ")) {
@@ -154,15 +155,28 @@ const Info = () => {
         }
     };
 
+    // 이메일 인증번호 확인
     const checkCode = () => {
-        if((inputEmailNum === emailNum) && inputEmailNum !== '' && (minutes > 0 || seconds > 0)) {
-            setEditEmail(1);
-            alert('이메일 인증에 성공하였습니다.');
-        } else if(minutes === 0 && seconds === 0) {
-            alert('이메일 유효 시간을 확인해주세요.');
-        } else {
-            alert('이메일 인증에 실패하였습니다.');
-        }
+        axios.get(`http://localhost:3000/mail/mailCheck`,{
+            params: {
+                userNumber : inputEmailNum
+            }
+        })
+        .then(response => {
+            if (response.data === true && (minutes > 0 || seconds > 0)) {
+                setEditEmail(1)
+                alert('이메일 인증에 성공하였습니다.');
+                setEmailSent(false);
+            } else if(minutes === 0 && seconds === 0) {
+                alert('이메일 유효 시간을 확인해주세요.');
+                setEmailSent(false);
+            } else {
+                alert('이메일 인증에 실패하였습니다.');
+                setEmailSent(false);
+            }
+        }). catch(error => {
+            console.log(error);
+        })
     };
 
     const vo = {
