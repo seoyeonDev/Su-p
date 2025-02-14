@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../../styles/components/Member.css';
 import { getIdFromLocalStorage } from "../Common";
 
 const Info = () => {
@@ -7,10 +8,12 @@ const Info = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [editNickNm, setEditNickNm] = useState('');
     const [editEmail, setEditEmail] = useState('');
+    const [editName, setEditName] = useState('');
     const [inputNickNm, setInputNickNm] = useState('');
+    const [inputEmailNum, setInputEmailNum] = useState('');
+    const [inputName, setInputName] = useState('');
     const [email, setEmail] = useState('');
     const [emailNum, setEmailNum] = useState('');
-    const [inputEmailNum, setInputEmailNum] = useState('');
     const [file, setFile] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [emailTime, setEmailTime] = useState(10 * 60);        // 이메일 10분
@@ -93,6 +96,7 @@ const Info = () => {
             setEditEmail(1);
             setUserInfo(response.data);
             setInputNickNm(response.data.member.nickname);
+            setInputName(response.data.member.name);
             setEmail(response.data.member.email);
 
             if(response.data.member.profile_img === null){
@@ -111,6 +115,11 @@ const Info = () => {
     const handleInputNickName = (event) => {
         setInputNickNm(event.target.value);
         setEditNickNm(0);
+    }
+
+    const handleInputName = (event) => {
+        setInputName(event.target.value);
+        // setEditName(0);
     }
 
     const checkNickNm = () => {
@@ -181,6 +190,7 @@ const Info = () => {
 
     const vo = {
         user_id : user_id,
+        name : inputName,
         nickname : inputNickNm,
         email : email,
         profile_img: ""
@@ -283,9 +293,9 @@ const Info = () => {
                 <div className='info-area-type'>
                     <div className='info-area-type-visible'>
                         아이디  <br/>
-                        이름    <br/>
-                        닉네임  <br/>
-                        이메일  <br/>
+                        <span className='highlight'> 이름</span>    <br/>
+                        <span className='highlight'> 닉네임 </span>  <br/>
+                        <span className='highlight'> 이메일 </span> <br/>
                     </div>
                     <div className='info-area-type-invisible'>
                         인증번호
@@ -295,7 +305,7 @@ const Info = () => {
                 <div className='info-area-myinfo'>
                     <div className='info-area-myinfo-visible'>
                         <input type='text' id='userId' name='userId' value={member.user_id} readOnly /> <br/>
-                        <input type='text' id='userName' name='userName' value={member.name} readOnly /> <br/>
+                        <input type='text' id='userName' name='userName' onChange={handleInputName} defaultValue={member.name}  /> <br/>
                         <input type='text' id='userNickNm' name='userNickNm' onChange={handleInputNickName} defaultValue={member.nickname} /> <br/>
                         <input type='text' id='userEmail' name='userEmail' onChange={handleInputEmail} defaultValue={member.email} /> <br/>
                     </div>
