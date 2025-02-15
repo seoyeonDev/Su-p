@@ -227,7 +227,7 @@ function UpdateStudygroup() {
                 </div>
                 <div>
                     <div>
-                        <label>소개</label>
+                        <label>스터디 설명</label>
                         <textarea name="study_desc" value={formData.study_desc} onChange={handleChange}></textarea>
                     </div>
                 </div>
