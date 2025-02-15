@@ -186,7 +186,11 @@ function CreateStudygroup() {
                             selected={formData.startdate ? new Date(formData.startdate) : null}
                             onChange={startDateChange}
                             dateFormat="yyyy-MM-dd"
-                            minDate={new Date()}
+                            minDate={(() => {
+                                const today = new Date();
+                                today.setDate(today.getDate() + 1);
+                                return today;
+                            })()}
                         />
                     </div>
                     <div>
