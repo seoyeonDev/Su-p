@@ -171,7 +171,7 @@ function UpdateStudygroup() {
         <div>
             <div>
                 <div>
-                    <label>제목</label>
+                    <label>모집글 제목</label>
                     <input type="text" name="title" value={formData.title} onChange={handleChange} />
                 </div>
                 <div>
