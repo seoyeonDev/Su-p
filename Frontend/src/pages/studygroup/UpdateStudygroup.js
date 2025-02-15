@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { showMsgAlert } from "../Common";
 
 function UpdateStudygroup() {
     const [formData, setFormData] = useState({
@@ -161,7 +162,7 @@ function UpdateStudygroup() {
                         }
                     });
             } else {
-                alert('그룹 수정에 필요한 모든 정보를 입력해주세요.');
+                showMsgAlert('스터디 그룹 생성 실패', '그룹 수정에 필요한 모든 정보를 입력해주세요.');
             }
             setIsSubmitting(false);
         }
