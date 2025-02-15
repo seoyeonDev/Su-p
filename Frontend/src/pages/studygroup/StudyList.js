@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import '../../styles/studygroup/StudyList.css';
+import { getIdFromLocalStorage, showConfirmationAlert } from "../Common";
 
 const StudyList = () => {
     const navigate = useNavigate();
@@ -9,6 +10,7 @@ const StudyList = () => {
     const [title, setTitle] = useState('');
     const [isSortByViews, setIsSortByViews] = useState(false);
     const [isSortByLatest, setIsSortByLatest] = useState(false);
+    const user_id = getIdFromLocalStorage();
 
     useEffect(() => {
         const fecthData = async () => {
@@ -45,19 +47,23 @@ const StudyList = () => {
         fetchData();
     }, [title, isSortByViews, isSortByLatest]);
     
+    // 스터디그룹 상세보기
     const handleStudyGroupDetail = (groupId) => {
         navigate(`/studygroupDetail/${groupId}`);
     }
 
+    // 스터디그룹 검색하기
     const handleInputChange = (event) => {
         setTitle(event.target.value);
     }
 
+    // 조회순으로 정렬
     const handleSortByViews = () => {
         setIsSortByViews(true);
         setIsSortByLatest(false);
     };
 
+    // 최신순으로 정렬
     const handleSortByLatest = () => {
         setIsSortByViews(false);
         setIsSortByLatest(true);
@@ -73,6 +79,7 @@ const StudyList = () => {
         }).replace(/\./g, '.'); // .으로 구분
     };
 
+    // 스터디 D-day - dateString와 현재 날짜의 차이를 일(day) 단위로 계산하기
     const chkDate = (dateString) => {
         const date = new Date(dateString);
         const now = new Date();
@@ -83,6 +90,22 @@ const StudyList = () => {
             return null;
         }
         return diff;
+    }
+
+    // 스터디 그룹 생성 버튼 클릭 시, 사용자가 로그인하지 않은 경우 모달창이 나타난다.
+    const handleCreateStudygroup = () => {
+        if(user_id === null){
+            showConfirmationAlert("", "로그인이 필요한 서비스입니다. 지금 로그인하시겠습니까?", "warning", "예", "아니오")
+            .then((result) => {
+                if (result) {
+                    navigate("/login");
+                } 
+            }).catch((error) => {
+                console.error("에러 발생:", error);
+            });
+        } else {
+            navigate("/createStudygroup");
+        }
     }
 
     return (
@@ -97,7 +120,7 @@ const StudyList = () => {
                 <button onClick={handleSortByLatest}>
                     최신순
                 </button>
-                <div><Link to={"/createStudygroup"}>글쓰기</Link><br /></div>
+                <div><button onClick={handleCreateStudygroup}>글쓰기</button><br /></div>
                 <div className='study-card-container'>
                     {studyItems.length > 0 ? (
                         studyItems.map(item => {
