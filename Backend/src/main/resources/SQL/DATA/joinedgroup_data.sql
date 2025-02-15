@@ -51,3 +51,90 @@ VALUES
 ('SGsooyeon275240601000000', 'jiwoo322', 'ROLE20', 'PERM20', 0),
 ('SGdonghyuk301240701000000', 'jiho334', 'ROLE20', 'PERM10', 0),
 ('SGdonghyuk301240701000000', 'yuna362', 'ROLE20', 'PERM20', 0);
+
+
+-- 테스트를 위한 새로운 joiendgroup DATA 추가
+-- 종료된 스터디
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010001', 'yujin2025', 'ROLE10', 'PERM20', 35);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010001', 'minji2025', 'ROLE20', 'PERM20', 35);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010001', 'hyein2025', 'ROLE20', 'PERM20', 38);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010001', 'danielle2025', 'ROLE20', 'PERM40', 10); -- 강퇴
+
+-- 운영중인 스터디
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010002', 'yujin2025', 'ROLE10', 'PERM20', 2);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010002', 'minji2025', 'ROLE20', 'PERM20', 2);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010002', 'rei2025', 'ROLE20', 'PERM20', 2);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010002', 'gaeul2025', 'ROLE20', 'PERM20', 2);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010002', 'yujin2025', 'ROLE20', 'PERM20', 1);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010002', 'hyein2025', 'ROLE20', 'PERM20', 1);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010002', 'haerin2025', 'ROLE20', 'PERM30', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010002', 'danielle2025', 'ROLE20', 'PERM40', 0); -- 강퇴
+
+-- 모집중인 스터디
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'yujin2025', 'ROLE10', 'PERM20', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'minji2025', 'ROLE20', 'PERM10', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'leeseo2025', 'ROLE20', 'PERM10', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'liz2025', 'ROLE20', 'PERM10', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'wonyoung2025', 'ROLE20', 'PERM10', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'gaeul2025', 'ROLE20', 'PERM20', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'hyein2025', 'ROLE20', 'PERM20', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'haerin2025', 'ROLE20', 'PERM30', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010004', 'danielle2025', 'ROLE20', 'PERM30', 0);
+
+
+-- 종료된 스터디
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010005', 'minji2025', 'ROLE10', 'PERM20', 21);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010005', 'yujin2025', 'ROLE20', 'PERM20', 21);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010005', 'rei2025', 'ROLE20', 'PERM20', 20);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010005', 'gaeul2025', 'ROLE20', 'PERM20', 18);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010005', 'hyein2025', 'ROLE20', 'PERM40', 10); -- 강퇴
+
+-- 운영중인 스터디
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010006', 'minji2025', 'ROLE10', 'PERM20', 5);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010006', 'yujin2025', 'ROLE20', 'PERM20', 4);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010006', 'leeseo2025', 'ROLE20', 'PERM20', 5);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010006', 'liz2025', 'ROLE20', 'PERM20', 4);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010006', 'wonyoung2025', 'ROLE20', 'PERM40', 2); -- 강퇴
+
+-- 모집중인 스터디
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010008', 'minji2025', 'ROLE10', 'PERM20', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010008', 'yujin2025', 'ROLE20', 'PERM10', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010008', 'hyein2025', 'ROLE20', 'PERM10', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010008', 'haerin2025', 'ROLE20', 'PERM20', 0);
+INSERT INTO public.joinedgroup(group_id, user_id, role, joinstatus, submission_cnt)
+VALUES ('2401010008', 'danielle2025', 'ROLE20', 'PERM30', 0);
