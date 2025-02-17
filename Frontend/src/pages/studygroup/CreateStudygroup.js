@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { getIdFromLocalStorage } from "../Common";
+import { getIdFromLocalStorage, showConfirmationAlert } from "../Common";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -31,30 +31,33 @@ function CreateStudygroup() {
     const [availableDate, setAvailableDate] = useState([]); // 종료일 선택 가능 날짜 
 
     useEffect(() => {
-        if (isSubmitting) {
-            // TODO. SWEETALERT으로 변경하기
-            if (!window.confirm("스터디 생성 후 종료일까지 탈퇴 불가합니다. 진행할까요?")) {
-                console.log("스터디 생성 안 함");
-                return;
-            } 
-
-            if (formData.title && formData.name && formData.mem_cnt && formData.chk_m && formData.chk_min_cnt && formData.startdate && formData.enddate && formData.study_desc) {
-                axios.post('http://localhost:3000/studygroup/createGroup', formData)
-                    .then(response => {
+        const createStudyGroup = async () => {
+            if (isSubmitting) {
+                try {
+                    const result = await showConfirmationAlert("", "스터디 생성 후 종료일까지 탈퇴 불가합니다. 진행할까요?", "warning", "예", "아니오");
+                    if (!result) {
+                        return;
+                    }
+    
+                    if (formData.title && formData.name && formData.mem_cnt && formData.chk_m && formData.chk_min_cnt && formData.startdate && formData.enddate && formData.study_desc) {
+                        const response = await axios.post('http://localhost:3000/studygroup/createGroup', formData);
                         if (response.status === 200) {
                             navigate('/');
                         }
-                    })
-                    .catch(error => {
-                        alert('서버 요청에 실패했습니다.' + error);
-                        console.log(error);
-                    });;
-            } else {
-                alert('그룹 생성에 필요한 모든 정보를 입력해주세요.');
+                    } else {
+                        alert('그룹 생성에 필요한 모든 정보를 입력해주세요.');
+                    }
+                } catch (error) {
+                    console.error("에러 발생:", error);
+                } finally {
+                    setIsSubmitting(false);
+                }
             }
-            setIsSubmitting(false);
-        }
+        };
+    
+        createStudyGroup();
     }, [formData, isSubmitting, navigate]);
+    
 
     // 기타 정보 핸들링
     const handleChange = (e) => {
@@ -156,7 +159,7 @@ function CreateStudygroup() {
         <div>
             <div>
                 <div>
-                    <label>제목</label>
+                    <label>모집글 제목</label>
                     <input type="text" name="title" value={formData.title} onChange={handleChange} />
                 </div>
                 <div>
@@ -210,7 +213,7 @@ function CreateStudygroup() {
                 </div>
                 <div>
                     <div>
-                        <label>소개</label>
+                        <label>스터디 설명</label>
                         <textarea name="study_desc" value={formData.study_desc} onChange={handleChange}></textarea>
                     </div>
                 </div>
