@@ -45,6 +45,11 @@
     flex: 1;
 }
 
+.highlight {
+    color: #2467cb; /* 원하는 색상으로 변경 */
+    font-weight: bold; /* 선택 사항: 글씨를 굵게 */
+}
+
 /* 마이페이지 - 비밀번호 변경 */
 .changePwd-area {
     display:flex;
@@ -57,3 +62,4 @@
 .changePwd-input {
     flex: 2;
 }
+

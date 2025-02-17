@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {showMsgAlert} from "../Common.js";
+import {useNavigate} from "react-router-dom";
 
 
 function FindId () {
@@ -11,6 +12,7 @@ function FindId () {
     const [showUserNumber, setShowUserNumber] = useState(false);
     const [showFindId, setShowFindId] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(0);
+    const navigate = useNavigate();
 
     const handleUserNameChange = (e) => {
         setUserName(e.target.value);
@@ -35,6 +37,7 @@ function FindId () {
             .then(response => {
                 if(response.status === 200 && response.data !== '존재하지 않는 회원 정보입니다.'){
                     showMsgAlert("아이디 찾기 성공", response.data + " 입니다.");
+                    navigate('/login');
                     //alert(response.data + " 입니다.");
                 } else if (response.data === '존재하지 않는 회원 정보입니다.'){
                     showMsgAlert("아이디 찾기 실패", response.data);
@@ -122,7 +125,7 @@ function FindId () {
             <h1>아이디 찾기</h1>
             <div>
                 이름
-                <input type="text" id="userName" name={"userName"} placeholder={"이름을 입력하세."} onChange={handleUserNameChange} />
+                <input type="text" id="userName" name={"userName"} placeholder={"이름을 입력하세요."} onChange={handleUserNameChange} />
             </div>
             <div>
                 이메일
