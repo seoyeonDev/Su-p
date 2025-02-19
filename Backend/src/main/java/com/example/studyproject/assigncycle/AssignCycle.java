@@ -19,6 +19,9 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
@@ -27,10 +30,10 @@ import lombok.*;
 public class AssignCycle {
 
 	private String group_id;
-	private String startdate;
-	private String enddate;
-	private String assigncycle;
-	
+	private LocalDateTime startdate;
+	private LocalDateTime enddate;
+	private int assigncycle;
+
 //	public AssignCycle() {
 //		// TODO Auto-generated constructor stub
 //	}
