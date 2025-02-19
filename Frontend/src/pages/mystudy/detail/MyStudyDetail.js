@@ -25,6 +25,7 @@ const MyStudyDetail = () => {
 
 
     const [groupInfo, setGroupInfo] = useState(null);           // studygroup 정보
+    const [groupName, setGroupName] = useState();   // studygroup 이름
     const currentDate = useState(new Date()); // 현재 날짜 (startDate과 비교)
 
     const location = useLocation();
@@ -100,6 +101,7 @@ const MyStudyDetail = () => {
             if(response.status === 200){
                 console.log(response.data);
                 setGroupInfo(response.data.vo);
+                setGroupName(response.data.vo.name);
                 console.log(groupInfo+ "detailinfo")
             }
 
@@ -125,7 +127,8 @@ const MyStudyDetail = () => {
         <div className={'common-content-container'}>
             <div className={'common-content'}>
                 <h1>나의 스터디</h1>
-                <MyStudyDetailHeader title="스터디명" selectedContent={selectedContent} onSelect={handleContentChange} isAdmin={groupInfo ? groupInfo.leader_id === user_id : false} group_id={group_id}/>
+                <h2>{groupName}</h2>
+                <MyStudyDetailHeader selectedContent={selectedContent} onSelect={handleContentChange} isAdmin={groupInfo ? groupInfo.leader_id === user_id : false} group_id={group_id}/>
 
                 {groupInfo ? (
                     <MyStudyDetailHome selectedContent={selectedContent} groupInfo={groupInfo} group_id={group_id} user_id={user_id} onPostSelect={(postId, authorId) => handlePostSelect(postId, authorId, 'MyStudyDetailHome')}/>
