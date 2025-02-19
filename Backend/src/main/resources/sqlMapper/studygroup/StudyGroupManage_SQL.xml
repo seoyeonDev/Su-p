@@ -176,9 +176,9 @@
 			A.penalty
 		FROM studygroup A
 				 JOIN code_d B
-					  on chk_m = B.comm_cd
+					  on A.chk_m = B.comm_cd
 		WHERE 1=1
-		  AND group_id = #{group_id};
+		  AND A.group_id = #{group_id};
 	</select>
 
 	<!-- 회원 탈퇴 가능 여부  (운영중인 스터디의 개수 반환) -->
