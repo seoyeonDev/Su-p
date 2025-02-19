@@ -27,3 +27,12 @@ alter table public.sg_assigncycle
 alter table public.sg_assigncycle
     alter column group_id type varchar(255) using group_id::varchar(255);
 
+-- 컬럼 타입 변경
+alter table public.sg_assigncycle
+    alter column startdate type date using startdate::date;
+
+alter table public.sg_assigncycle
+    alter column enddate type date using enddate::date;
+
+alter table public.sg_assigncycle
+    alter column assigncycle type int using assigncycle::int;
